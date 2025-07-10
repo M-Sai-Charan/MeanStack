@@ -1,0 +1,120 @@
+<div
+  class="header invoice-header flex align-items-center justify-content-between mb-4 p-3 bg-primary text-white border-round shadow-2">
+  <img src="olp-logo.png" alt="Logo" height="30" class="mr-3">
+  <h2 style="text-align: center;
+    margin: 10px;
+    padding-left: 100px;">OLP Event Team Assign</h2>
+  <small class="italic">Delivering timeless moments beautifully</small>
+</div>
+<p-card>
+  <p-table [value]="OLPEventTeamData" dataKey="olpId" [expandedRowKeys]="expandedOlpRows">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>OLP ID</th>
+        <th>Bride</th>
+        <th>Groom</th>
+        <th>Contact</th>
+        <th>Email</th>
+        <th>Status</th>
+        <th>Team Status</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-expanded="expanded" let-olp>
+      <tr>
+        <td>{{ olp.olpId }}</td>
+        <td>{{ olp.bride }}</td>
+        <td>{{ olp.groom }}</td>
+        <td>{{ olp.contactNumber }}</td>
+        <td>{{ olp.email }}</td>
+        <td> <p-tag [value]="olp.callStatus.name" [severity]="getStatusSeverity(olp.callStatus.name)"></p-tag></td>
+        <td>
+          <p-tag [value]="olp.teamStatus" [severity]="getStatusSeverity(olp.teamStatus)"></p-tag>
+        </td>
+        <td>
+          <button pButton type="button" icon="pi pi-chevron-down" class="p-button-text" [pRowToggler]="olp">
+            {{ expanded ? 'Hide Events' : 'Show Events' }}
+          </button>
+          <button pButton type="button" icon="pi pi-save" class="p-button-success p-ml-1"
+            *ngIf="areAllTeamsAssigned(olp)" (click)="submitOlpTeam(olp)">
+          </button>
+        </td>
+      </tr>
+    </ng-template>a
+
+    <!-- Expanded row to show events for the selected OLP -->
+    <ng-template pTemplate="rowexpansion" #expandedrow let-olp>
+      <tr>
+        <td colspan="8">
+          <p-table [value]="olp.events" [responsive]="true" class="p-mt-3">
+            <ng-template pTemplate="header">
+      <tr>
+        <th>Event Name</th>
+        <th>Date</th>
+        <th>Location</th>
+        <th>Assigned Team</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-event>
+      <tr>
+        <td>{{ event.eventName.name }}</td>
+        <td>{{ event.eventDate | date:'dd/MM/yyyy' }}</td>
+        <td>{{ event.eventLocation }}</td>
+        <td>
+          <ng-container *ngIf="event.eventTeams.length > 0; else noTeam">
+            <div class="assigned-team">
+              <div *ngFor="let member of event.eventTeams" class="avatar tooltip" [ngClass]="getRoleClass(member.role)">
+                {{ getInitials(member.name) }}
+                <span class="tooltiptext">{{ member.name }} - {{ member.value }}</span>
+              </div>
+            </div>
+          </ng-container>
+          <ng-template #noTeam>
+            <span class="p-text-secondary">No team assigned</span>
+          </ng-template>
+        </td>
+        <td>
+          <button pButton type="button" label="Assign Team" icon="pi pi-users" class="p-button-sm p-button-outlined"
+            (click)="openAssignDialog(olp, event)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  </td>
+  </tr>
+  </ng-template>
+  </p-table>
+  <div *ngIf="OLPEventTeamData?.length === 0" class="no-data-container">
+    <!-- <svg class="no-data-icon" xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 64 64"
+      fill="none">
+      <path d="M8 20h48v28a4 4 0 01-4 4H12a4 4 0 01-4-4V20z" fill="#F0F0F0" stroke="#3F51B5" stroke-width="2" />
+      <path d="M24 20l2.667-4h10.666L40 20" fill="#3F51B5" />
+      <circle cx="32" cy="34" r="9" fill="#fff" stroke="#3F51B5" stroke-width="2" />
+      <circle cx="32" cy="34" r="5" fill="#3F51B5" />
+      <rect x="46" y="25" width="6" height="6" rx="1" fill="#3F51B5" />
+      <path d="M8 20l8-10h14l2 2h12l2-2h10l8 10" stroke="#3F51B5" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" />
+    </svg>
+    <p class="no-data-text">No team assign entries found for any events.</p> -->
+     <p class="no-data-text">No team assign entries found for any<span style="position: relative;top: 22px;"><img src="olp-logo.png" alt="Logo" height="60"></span>events.</p>
+  </div>
+</p-card>
+<p-dialog header="Assign Team" [(visible)]="displayDialog" [modal]="true" [style]="{ width: '85vw', maxHeight: '90vh' }"
+  [breakpoints]="{ '1199px': '75vw', '575px': '95vw' }" [closable]="false">
+  <div class="p-fluid grid formgrid surface-card p-4 border-round shadow-2 mb-4" *ngIf="selectedEvent">
+    <div class="field col-12 md:col-6 lg:col-4" *ngFor="let role of roles">
+      <div class="p-field p-mb-3">
+        <label>Select {{ role }}</label>
+        <p-dropdown [options]="getAvailableEmployees(role)" [(ngModel)]="selectedAssignments[role]" optionLabel="name"
+          placeholder="Select {{ role }}" [filter]="true" appendTo="body" [showClear]="true"></p-dropdown>
+      </div>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <button pButton label="Cancel" icon="pi pi-times" (click)="displayDialog = false" class="p-button-text"></button>
+    <button pButton label="Save" icon="pi pi-check" (click)="assignTeam()" class="p-button-success"></button>
+  </ng-template>
+</p-dialog>
+
+<p-toast></p-toast>

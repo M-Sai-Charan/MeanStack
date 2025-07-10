@@ -1,0 +1,91 @@
+<div class="enquiry-wrapper">
+    <div class="enquiry-container">
+        <img src="olp-logo.png" class="logo" alt="OLP Logo" />
+        <p class="subtitle">
+            Thank you for trusting us. Please provide a couple of details to help us understand your requirements
+            better.
+        </p>
+
+        <form [formGroup]="contactForm" class="p-fluid formgrid grid">
+            <!-- Bride & Groom -->
+            <div class="field col-12 md:col-6 lg:col-3">
+                <label for="firstName">Bride 👰🏻 & Groom 🤵🏻 *</label>
+                <input pInputText id="firstName" formControlName="firstName" />
+                <small class="p-error"
+                    *ngIf="contactForm.get('firstName')?.touched && contactForm.get('firstName')?.invalid">
+                    Required. Format: Bride & Groom
+                </small>
+            </div>
+
+            <!-- Phone -->
+            <div class="field col-12 md:col-6 lg:col-3">
+                <label for="phone">Phone *</label>
+                <input pInputText id="phone" type="tel" formControlName="phone" />
+                <small class="p-error" *ngIf="contactForm.get('phone')?.touched && contactForm.get('phone')?.invalid">
+                    Valid 10-digit number required
+                </small>
+            </div>
+
+            <!-- Email -->
+            <div class="field col-12 md:col-6 lg:col-3">
+                <label for="email">Email *</label>
+                <input pInputText id="email" type="email" formControlName="email" />
+                <small class="p-error" *ngIf="contactForm.get('email')?.touched && contactForm.get('email')?.invalid">
+                    Valid email required
+                </small>
+            </div>
+
+            <!-- Location -->
+            <div class="field col-12 md:col-6 lg:col-3">
+                <label for="location">Venue / Location *</label>
+                <input pInputText id="location" formControlName="location" />
+                <small class="p-error"
+                    *ngIf="contactForm.get('location')?.touched && contactForm.get('location')?.invalid">
+                    Location required
+                </small>
+            </div>
+
+            <!-- Message -->
+            <div class="field col-12">
+                <label for="message">What do you have in mind?</label>
+                <textarea pInputTextarea id="message" formControlName="message" rows="3"></textarea>
+                <small class="p-error"
+                    *ngIf="contactForm.get('message')?.touched && contactForm.get('message')?.invalid">
+                    Message is required
+                </small>
+            </div>
+
+            <!-- PreShoot Events -->
+            <div class="field col-12 md:col-6">
+                <label>Are you interested?</label>
+                <p-multiSelect [options]="olpEventsLists" formControlName="preShoot" placeholder="Rotues"
+                    styleClass="w-full"></p-multiSelect>
+            </div>
+            <!-- Source -->
+            <div class="field col-12 md:col-6">
+                <label class="section-label">How did you know about us?</label>
+                <div class="radio-row">
+                    <p-radioButton name="source" value="Referral" formControlName="source"
+                        inputId="referral"></p-radioButton>
+                    <label for="referral">Referral</label>
+
+                    <p-radioButton name="source" value="SocialMedia" formControlName="source"
+                        inputId="socialMedia"></p-radioButton>
+                    <label for="socialMedia">Social Media</label>
+
+                    <p-radioButton name="source" value="Others" formControlName="source"
+                        inputId="others"></p-radioButton>
+                    <label for="others">Others</label>
+                </div>
+            </div>
+
+
+
+            <!-- Submit Button -->
+            <div class="field col-12 text-center">
+                <button pButton type="submit" label="Submit Enquiry" class="p-button-rounded p-button-success"
+                    (click)="onSubmit()"></button>
+            </div>
+        </form>
+    </div>
+</div>

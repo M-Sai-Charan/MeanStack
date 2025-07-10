@@ -1,0 +1,83 @@
+<p-toast></p-toast>
+
+<div
+  class="header invoice-header flex align-items-center justify-content-between mb-4 p-3 bg-primary text-white border-round shadow-2">
+  <img src="olp-logo.png" alt="Logo" height="30">
+  <h2 style="text-align: center;
+    margin: 10px;
+    padding-left: 100px;">OLP Inventory Assign</h2>
+  <small class="italic">Delivering timeless moments beautifully</small>
+</div>
+<div class="p-grid">
+  <div *ngFor="let booking of bookings" class="p-col-12 p-md-6 p-lg-4">
+    <p-panel [header]="'Booking ID: ' + booking.olpId" [toggleable]="true" [collapsed]="true" class="booking-panel m-2">
+      <div *ngFor="let event of booking.events" class="event-block mb-3">
+        <p-panel [header]="event.eventName.name + ' - ' + (event.eventTime?.name || '')" [toggleable]="true"
+          [collapsed]="true">
+          <p><strong>Date:</strong> {{ event.eventDate | date: 'longDate' }}</p>
+          <p><strong>Location:</strong> {{ event.eventLocation }}</p>
+          <p><strong>Guests:</strong> {{ event.eventGuests }}</p>
+
+          <ng-container *ngIf="event.eventTeams?.length; else noTeam">
+            <p-table [value]="event.eventTeams" class="p-datatable-sm p-datatable-gridlines"
+              [responsiveLayout]="'scroll'">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Name</th>
+                  <th>Role</th>
+                  <th>Assign Inventory</th>
+                  <th>Assigned</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-member>
+                <tr>
+                  <td>{{ member.name }}</td>
+                  <td>{{ member.value }}</td>
+                  <td>
+                    <p-select [options]="groupedInventories" optionLabel="name" optionGroupLabel="label"
+                      optionGroupChildren="items" [group]="true" [(ngModel)]="member.tempSelectedInventory"
+                      (onChange)="assignInventory(member, $event.value)" placeholder="Select Inventory"
+                      [showClear]="true" [style]="{ width: '250px' }" [filter]="true" appendTo="body"></p-select>
+
+                  </td>
+                  <td>
+                    <ng-container *ngIf="member.assignedInventory?.length > 0; else noneAssigned">
+                      <span *ngFor="let item of member.assignedInventory" class="p-chip p-mr-2 p-mb-1">
+                        {{ item.name }}
+                        <i class="pi pi-times ml-2 text-red-500 cursor-pointer"
+                          (click)="removeInventory(member, item.id)"></i>
+                      </span>
+                    </ng-container>
+                    <ng-template #noneAssigned>
+                      <span class="text-muted">None</span>
+                    </ng-template>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+          <ng-template #noTeam>
+            <p class="text-muted text-sm italic">No team assigned for this event.</p>
+          </ng-template>
+        </p-panel>
+
+      </div>
+      <div class="text-center mt-3">
+        <button pButton type="button" label="Submit All" class="p-button-success" (click)="submitAll(booking)"></button>
+      </div>
+    </p-panel>
+  </div>
+</div>
+<div *ngIf="bookings?.length === 0" class="no-data-container">
+  <!-- <svg class="no-data-icon" xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 64 64" fill="none">
+    <path d="M8 20h48v28a4 4 0 01-4 4H12a4 4 0 01-4-4V20z" fill="#F0F0F0" stroke="#3F51B5" stroke-width="2" />
+    <path d="M24 20l2.667-4h10.666L40 20" fill="#3F51B5" />
+    <circle cx="32" cy="34" r="9" fill="#fff" stroke="#3F51B5" stroke-width="2" />
+    <circle cx="32" cy="34" r="5" fill="#3F51B5" />
+    <rect x="46" y="25" width="6" height="6" rx="1" fill="#3F51B5" />
+    <path d="M8 20l8-10h14l2 2h12l2-2h10l8 10" stroke="#3F51B5" stroke-width="2" stroke-linecap="round"
+      stroke-linejoin="round" />
+  </svg>
+  <p class="no-data-text">No Inventory assign entries found for any events.</p> -->
+   <p class="no-data-text">No Inventory assign entries found for any<span style="position: relative;top: 22px;"><img src="olp-logo.png" alt="Logo" height="60"></span>events.</p>
+</div>

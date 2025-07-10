@@ -1,0 +1,31 @@
+<!-- employees.component.html -->
+<div class="">
+  <p-organization-chart
+    [value]="data"
+    selectionMode="multiple"
+    [(selection)]="selectedNodes"
+    [collapsible]="true"
+  >
+    <ng-template let-node pTemplate="person">
+      <div class="chart-node relative" [pTooltip]="node.data.title" tooltipPosition="top">
+        <div class="chart-node-content">
+          <!-- Delete Icon -->
+          <button
+            pButton
+            type="button"
+            icon="pi pi-trash"
+            class="p-button-rounded p-button-danger p-button-sm absolute top-0 right-0 m-1"
+            (click)="confirmDelete(node)"
+          ></button>
+
+          <img [src]="node.data.image" class="chart-image" />
+          <div class="chart-name">{{ node.data.name }}</div>
+          <!-- <p-tag [severity]="getRoleSeverity(node.data.title)" [value]="node.data.title" class="chart-title"></p-tag> -->
+        </div>
+      </div>
+    </ng-template>
+  </p-organization-chart>
+
+  <p-confirmDialog></p-confirmDialog>
+  <p-toast></p-toast>
+</div>

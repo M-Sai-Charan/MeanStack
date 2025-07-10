@@ -1,0 +1,45 @@
+<div class="dashboard-shell">
+  <header class="header enhanced-header">
+    <div class="brand">
+      <span class="header-text">OLP</span>
+    </div>
+    <div class="header-right">
+      <div class="color-picker-wrapper">
+        <div class="color-picker-bg" pTooltip="Pick Theme Color" tooltipPosition="bottom">
+          <i class="pi pi-palette color-icon"></i>
+          <p-colorPicker [(ngModel)]="selectedColor" (onChange)="applyThemeColor()"
+            [style]="{ width: '1.5rem', height: '1.5rem' }" [appendTo]="'body'" />
+        </div>
+      </div>
+
+      <span class="welcome-text">Welcome, {{ employeeName }}</span>
+      <div class="profile-section" [ngClass]="{ 'dropdown-open': profileDropdownOpen }"
+        (click)="toggleProfileDropdown()">
+        <img class="avatar" [src]="employeeAvatarUrl" alt="Employee Avatar">
+        <i class="pi pi-chevron-down"></i>
+        <ul class="profile-dropdown" *ngIf="profileDropdownOpen">
+          <!-- <li><a routerLink="/profile"><i class="pi pi-user"></i> Profile</a></li>
+          <li><a routerLink="/settings"><i class="pi pi-cog"></i> Settings</a></li> -->
+          <li><a (click)="logout()"><i class="pi pi-sign-out"></i> Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <div class="dashboard-layout">
+    <nav class="sidebar">
+      <ul>
+        <li *ngFor="let item of allowedMenuItems">
+          <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [routerLink]="item.route">
+            <i [class]="item.icon"></i>
+            <span class="menu-label">{{ item.label }}</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
+<p-toast></p-toast>

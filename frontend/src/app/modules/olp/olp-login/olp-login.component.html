@@ -1,0 +1,73 @@
+<div class="login-wrapper">
+  <!-- Preloader -->
+  <div *ngIf="loading" class="preloader">
+    <i class="pi pi-spin pi-camera"></i>
+    <span>Loading Studio...</span>
+  </div>
+
+  <!-- Main content (slideshow + login) only visible after loading -->
+  <ng-container *ngIf="!loading">
+    <!-- Left: Slideshow Images only -->
+    <div class="login-left slideshow">
+      <div class="slideshow-image" *ngFor="let image of slideshowImages; let i = index" [class.active]="i === currentSlide">
+        <img [src]="image" alt="Photography Slide {{ i + 1 }}" />
+      </div>
+    </div>
+
+    <!-- Right: Branding Text + Login Form -->
+    <div class="login-right">
+      <div class="branding-text">
+        <h1 class="olp-text" [class.glow]="isHovered">
+          <!-- <i class="pi pi-camera" style="margin-right: 10px;"></i> -->
+          <span>One</span>Look<span>Photography</span>
+        </h1>
+        <h2 class="neon">
+          <div *ngIf="userName">Welcome, <span class="glow-text1" [class.glow]="isHovered">{{ userName }}</span></div>
+          Every <span class="glow-text2" [class.glow]="isHovered">moment</span> begins
+          <span class="glow-text3" [class.glow]="isHovered">here</span>
+        </h2>
+      </div>
+
+      <div class="login-container animate-fade-in">
+        <form *ngIf="olpLoginForm" [formGroup]="olpLoginForm" (ngSubmit)="onLogin()">
+          <div class="p-fluid">
+            <!-- Username -->
+            <div class="p-field p-float-label">
+              <input id="username" type="text" pInputText formControlName="userName" [(ngModel)]="userName" placeholder="Photographer ID" />
+              <small style="color: red;" *ngIf="olpLoginForm.get('userName')?.invalid && olpLoginForm.get('userName')?.touched" class="p-error">
+                Photographer ID is required.
+              </small>
+            </div>
+
+            <!-- Password -->
+            <div class="p-field p-float-label">
+              <p-password id="password" formControlName="password" [toggleMask]="true" inputStyleClass="w-full" [feedback]="false" placeholder="Secret Code" />
+              <small style="color: red;" *ngIf="olpLoginForm.get('password')?.invalid && olpLoginForm.get('password')?.touched" class="p-error">
+                Secret Code is required.
+              </small>
+            </div>
+
+            <!-- Forgot Password -->
+            <div class="forgot-password">
+              <a href="/forgot-password">Forgot your secret code?</a>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="p-field" *ngIf="!olpLoginForm.invalid">
+              <button
+                pButton
+                type="submit"
+                (mouseenter)="isHovered = true"
+                (mouseleave)="isHovered = false"
+                class="login-button p-button-rounded p-button-primary w-full animate-button-hover"
+              >
+                Enter Studio
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </ng-container>
+</div>
+<p-toast></p-toast>

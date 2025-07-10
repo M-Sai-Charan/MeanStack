@@ -1,0 +1,35 @@
+{
+        "EnquiryID": 58,
+        "Bride": "read",
+        "Groom": "unread",
+        "ContactNumber": "6301587956",
+        "Email": "read@gmail.com",
+        "comments": "tresting",
+        "Location": "hyd",
+        "Status": "New",
+        "EnquirySubmissionDate": "2025-07-08T02:19:52.460",
+        "ReferredFrom": "Instagram",
+        "OLPID": "58O7L25P",
+        "events": [
+            {
+                "EventDetailsID": 106,
+                "EnquiryID": 58,
+                "EventName": "Bride Mangalsnanam",
+                "Date": "2025-07-28", 
+                "Time": "Early Morning", 
+                "Location": "Banglore", 
+                "Guests": 200 ,
+                "invoice":25000
+            },
+            {
+                "EventDetailsID": 107,
+                "EnquiryID": 58,
+                "EventName": "Groom Mangalsnanam",
+                "Date": "2025-07-29", 
+                "Time": "Afternoon", 
+                "Location": "Chennai", 
+                "Guests": 400,
+                "invoice":45000
+            }
+        ]
+    }

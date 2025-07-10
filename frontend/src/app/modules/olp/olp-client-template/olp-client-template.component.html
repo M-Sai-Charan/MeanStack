@@ -1,0 +1,86 @@
+<!-- wedding-estimate.component.html -->
+<div class="wedding-template-container">
+  <!-- Header -->
+  <div class="header text-center">
+    <h1>Bride <span class="heart">❤️</span> Groom</h1>
+    <p class="date">Submitted on: {{ enquiry?.EnquirySubmissionDate | date: 'longDate' }}</p>
+  </div>
+
+  <!-- Client Details -->
+  <div class="section">
+    <h2>Client Details</h2>
+    <div class="details-grid">
+      <p><strong>Location:</strong> {{ enquiry?.Location }}</p>
+      <p><strong>Contact:</strong> {{ enquiry?.ContactNumber }}</p>
+      <p><strong>Email:</strong> {{ enquiry?.Email }}</p>
+      <p><strong>Referred From:</strong> {{ enquiry?.ReferredFrom }}</p>
+      <p><strong>OLPID:</strong> {{ enquiry?.OLPID }}</p>
+    </div>
+  </div>
+
+  <!-- About Us -->
+  <div class="section about">
+    <h2>About Us</h2>
+    <p>
+      We are passionate photographers, dedicated to creating the finest memories and giving emotional value to your
+      special day. From haldi to reception, we preserve your moments with artistic storytelling.
+    </p>
+  </div>
+
+  <!-- Gallery Grid with OLPID in Center -->
+  <div class="section">
+    <h2>Our Work</h2>
+    <div class="gallery-grid">
+      <ng-container *ngFor="let img of galleryImages; let i = index">
+        <!-- Center cell displays OLPID -->
+        <div class="gallery-cell" *ngIf="i === centerIndex">
+          <div class="olpid-card glass animate-logo">
+            <img src="olp-logo.png" alt="OLP Logo" class="olp-logo" />
+          </div>
+        </div>
+
+
+        <!-- Image cells -->
+        <div class="gallery-cell" *ngIf="i !== centerIndex">
+          <img [src]="img" alt="Gallery Image" />
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- Wedding Events -->
+  <div class="section">
+    <h2>Wedding Events</h2>
+    <div class="event-card" *ngFor="let event of enquiry?.events">
+      <div>
+        <h4>{{ event.EventName }}</h4>
+        <p>{{ event.Date }} | {{ event.Time }}</p>
+        <p>Location: {{ event.Location }} | Guests: {{ event.Guests }}</p>
+      </div>
+      <div class="price">₹{{ event.invoice | number }}</div>
+    </div>
+  </div>
+
+  <!-- Total Estimate -->
+  <div class="section total">
+    <h3>Grand Total:</h3>
+    <div class="total-badge">₹{{ totalInvoiceAmount | number }}</div>
+  </div>
+
+  <!-- Terms -->
+  <div class="section">
+    <h2>Terms & Conditions</h2>
+    <ul class="terms">
+      <li>50% advance payment required.</li>
+      <li>Final payment before delivery.</li>
+      <li>Travel & stay not included (if outstation).</li>
+      <li>This estimate is valid for 48 hours only.</li>
+    </ul>
+  </div>
+
+  <!-- Buttons -->
+  <div class="button-row">
+    <button class="btn-approve">Approve Estimate</button>
+    <button class="btn-reject">Request Changes</button>
+  </div>
+</div>
