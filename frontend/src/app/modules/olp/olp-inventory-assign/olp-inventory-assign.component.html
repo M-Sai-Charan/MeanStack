@@ -10,16 +10,15 @@
 </div>
 <div class="p-grid">
   <div *ngFor="let booking of bookings" class="p-col-12 p-md-6 p-lg-4">
-    <p-panel [header]="'Booking ID: ' + booking.olpId" [toggleable]="true" [collapsed]="true" class="booking-panel m-2">
-      <div *ngFor="let event of booking.events" class="event-block mb-3">
-        <p-panel [header]="event.eventName.name + ' - ' + (event.eventTime?.name || '')" [toggleable]="true"
-          [collapsed]="true">
-          <p><strong>Date:</strong> {{ event.eventDate | date: 'longDate' }}</p>
-          <p><strong>Location:</strong> {{ event.eventLocation }}</p>
-          <p><strong>Guests:</strong> {{ event.eventGuests }}</p>
+    <p-panel [header]="'Booking ID: ' + booking.OLPID" [toggleable]="true" [collapsed]="true" class="booking-panel m-2">
+      <div *ngFor="let event of booking.Events" class="event-block mb-3">
+        <p-panel [header]="event.EventName + ' - ' + (event.EventTime || '')" [toggleable]="true" [collapsed]="true">
+          <p><strong>Date:</strong> {{ event.EventDate | date: 'longDate' }}</p>
+          <p><strong>Location:</strong> {{ event.EventLocation }}</p>
+          <p><strong>Guests:</strong> {{ event.EventGuests }}</p>
 
-          <ng-container *ngIf="event.eventTeams?.length; else noTeam">
-            <p-table [value]="event.eventTeams" class="p-datatable-sm p-datatable-gridlines"
+          <ng-container *ngIf="event.AssignedTeam?.length; else noTeam">
+            <p-table [value]="event.AssignedTeam" class="p-datatable-sm p-datatable-gridlines"
               [responsiveLayout]="'scroll'">
               <ng-template pTemplate="header">
                 <tr>
@@ -32,12 +31,13 @@
               <ng-template pTemplate="body" let-member>
                 <tr>
                   <td>{{ member.name }}</td>
-                  <td>{{ member.value }}</td>
+                  <td>{{ member.role }}</td>
                   <td>
-                    <p-select [options]="groupedInventories" optionLabel="name" optionGroupLabel="label"
-                      optionGroupChildren="items" [group]="true" [(ngModel)]="member.tempSelectedInventory"
-                      (onChange)="assignInventory(member, $event.value)" placeholder="Select Inventory"
-                      [showClear]="true" [style]="{ width: '250px' }" [filter]="true" appendTo="body"></p-select>
+                    <p-select [options]="roleInventoryMap[member.role] || []" optionLabel="name"
+                      [(ngModel)]="member.tempSelectedInventory" (onChange)="assignInventory(member, $event.value)"
+                      placeholder="Select Inventory" [showClear]="true" [style]="{ width: '250px' }"
+                      appendTo="body"></p-select>
+
 
                   </td>
                   <td>
@@ -79,5 +79,6 @@
       stroke-linejoin="round" />
   </svg>
   <p class="no-data-text">No Inventory assign entries found for any events.</p> -->
-   <p class="no-data-text">No Inventory assign entries found for any<span style="position: relative;top: 22px;"><img src="olp-logo.png" alt="Logo" height="60"></span>events.</p>
+  <p class="no-data-text">No Inventory assign entries found for any<span style="position: relative;top: 22px;"><img
+        src="olp-logo.png" alt="Logo" height="60"></span>events.</p>
 </div>

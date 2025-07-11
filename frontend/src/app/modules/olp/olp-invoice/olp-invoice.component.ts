@@ -15,12 +15,13 @@ import autoTable from 'jspdf-autotable';
 export class OlpInvoiceComponent implements OnInit {
   invoiceData: any[] = [];
   groupedData: { [key: string]: any[] } = {};
-  budgetStatuses = ['New', 'In-progress', 'Closed', 'Pending'];
+  budgetStatuses: any = [];
   selectedOlp: any = null;
   selectedForm: FormGroup | null = null;
   dialogVisible = false;
   activeTabIndex = 0;
-  olpStatusLists: any = []
+  olpStatusLists: any = [];
+  olpEmployeesLists: any = [];
   constructor(
     private fb: FormBuilder,
     private messageService: MessageService,
@@ -29,40 +30,48 @@ export class OlpInvoiceComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadDummyData();
-    this.getOLPMaster();
   }
 
   loadDummyData() {
-    this.olpService.getAllOLPEnquires('WeddingEvents').subscribe((data: any) => {
-      this.invoiceData = data || [];
-      this.groupedData = {};
-      for (const status of this.budgetStatuses) {
-        this.groupedData[status] = this.invoiceData.filter(i => i.callStatus.name === status);
-      }
+    this.olpService.getAllOLPEnquires('invoices').subscribe((data: any) => {
+      this.getOLPMasterData();
+      setTimeout(() => {
+        this.invoiceData = data.data || [];
+        this.groupedData = {};
+        for (const status of this.budgetStatuses) {
+          this.groupedData[status] = this.invoiceData.filter(i => i.InvoiceMeta?.InvoiceStatus === status);
+        }
+      }, 1000);
     });
   }
-  getOLPMaster() {
-    this.olpService.getOLPMaster('OlpMaster/getOlpMaster').subscribe((data: any) => {
-      this.olpStatusLists = data.statuses;
-    })
+  getOLPMasterData() {
+    this.olpService.getOLPMaster('masterdata').subscribe((res: any) => {
+      this.olpStatusLists = res.data.invoiceStatus;
+      this.budgetStatuses = res.data.invoiceStatus;
+      this.olpEmployeesLists = res.data.callInitiates;
+    });
   }
   openOlpDialog(olp: any) {
+    console.log(olp)
     this.selectedOlp = olp;
     this.selectedForm = this.fb.group({
-      olpId: [{ value: olp.olpId, disabled: true }],
-      callStatus: [{ value: olp.callStatus || '', disabled: olp.callStatus?.name !== 'In-progress' }],
+      olpId: [{ value: olp.OLPID, disabled: true }],
+      InvoiceBy: [{ value: olp.InvoiceMeta?.InvoiceCreatedBy, disabled: olp.InvoiceMeta?.InvoiceStatus !== 'New' }],
+      callStatus: [{ value: olp.InvoiceMeta?.InvoiceStatus || '', disabled: olp.InvoiceMeta?.InvoiceStatus !== 'New' }],
       events: this.fb.array(
-        olp.events.map((event: any) =>
+        olp.Events.map((event: any) =>
           this.fb.group({
-            eventName: [event.eventName.name],
-            eventDate: [{ value: new Date(event.eventDate), disabled: true }],
-            eventLocation: [{ value: event.eventLocation, disabled: true }],
-            eventTime: [{ value: event.eventTime.name, disabled: true }],
-            eventGuests: [{ value: event.eventGuests, disabled: true }],
+            eventName: [event.EventName],
+            eventDate: [{ value: new Date(event.EventDate), disabled: true }],
+            eventLocation: [{ value: event.EventLocation, disabled: true }],
+            eventTime: [{ value: event.EventTime, disabled: true }],
+            eventGuests: [{ value: event.EventGuests, disabled: true }],
             eventBudget: [
-              { value: event.eventBudget || '', disabled: olp.callStatus?.name !== 'In-progress' },
-              olp.callStatus?.name === 'In-progress' ? [Validators.required, Validators.min(1)] : []
-            ]
+              { value: event.InvoiceAmount || '', disabled: olp.InvoiceMeta?.InvoiceStatus !== 'New' },
+              olp.InvoiceMeta?.InvoiceStatus === 'New' ? [Validators.required, Validators.min(1)] : []
+            ],
+            FinalApprovedAmount: [{ value: event.FinalApprovedAmount }],
+            Remarks: [{ value: event.Remarks }],
           })
         )
       )
@@ -77,20 +86,21 @@ export class OlpInvoiceComponent implements OnInit {
   saveBudget() {
     if (this.selectedForm?.valid && this.selectedOlp) {
       const rawData = this.selectedForm.getRawValue();
-
       const updatedOlp = { ...this.selectedOlp };
-      updatedOlp.callStatus = rawData.callStatus;
-      updatedOlp.events = updatedOlp.events.map((event: any, index: number) => ({
+      updatedOlp.Events = updatedOlp.Events.map((event: any, index: number) => ({
         ...event,
-        eventBudget: `${rawData.events[index].eventBudget}`
+        InvoiceAmount: rawData.events[index].eventBudget || 0
       }));
-
-      this.olpService.updateOLPEnquiry(updatedOlp.id, updatedOlp).subscribe({
+      updatedOlp.InvoiceMeta.InvoiceStatus = rawData.callStatus;
+      updatedOlp.InvoiceMeta.InvoiceCreatedBy = rawData.InvoiceBy;
+      updatedOlp.InvoiceMeta.InvoiceCreatedAt = new Date().toISOString();
+      updatedOlp.InvoiceMeta.TotalEstimatedAmount = this.getTotalAmount(updatedOlp.Events);
+      this.olpService.updateOlPEnquiries(updatedOlp._id, updatedOlp).subscribe({
         next: () => {
           this.messageService.add({
             severity: 'success',
             summary: 'Updated',
-            detail: 'Invoice saved and moved to Budget successfully.'
+            detail: 'Invoice saved successfully.'
           });
           this.dialogVisible = false;
           this.loadDummyData();
@@ -107,6 +117,42 @@ export class OlpInvoiceComponent implements OnInit {
       this.selectedForm?.markAllAsTouched();
     }
 
+  }
+  updateApprovedBudget() {
+    if (this.selectedForm?.valid && this.selectedOlp) {
+      const rawData = this.selectedForm.getRawValue();
+      const updatedOlp = { ...this.selectedOlp };
+      updatedOlp.InvoiceMeta.InvoiceStatus = 'Closed';
+       updatedOlp.Events = updatedOlp.Events.map((event: any, index: number) => ({
+        ...event,
+      }));
+        this.olpService.updateOlPEnquiries(updatedOlp._id, updatedOlp).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Updated',
+            detail: 'Invoice Updated successfully.'
+          });
+          this.dialogVisible = false;
+          this.loadDummyData();
+        },
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Failed',
+            detail: 'Something went wrong while saving.'
+          });
+        }
+      });
+    }
+  }
+  getTotalAmount(events: any[]): number {
+    const total = events.reduce((acc, event) => {
+      const amount = parseFloat(event.InvoiceAmount) || 0;
+      return acc + amount;
+    }, 0);
+
+    return total;
   }
 
   getSeverity(status: string): string {

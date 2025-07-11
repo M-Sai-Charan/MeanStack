@@ -25,24 +25,22 @@ export class OlpBudgetComponent implements OnInit {
 
   ngOnInit() {
     this.getOLPBudgetData();
-    this.getOLPMaster();
+    // this.getOLPMaster();
     this.budgetForm = this.fb.group({
       customer: [null, Validators.required]
     });
   }
   getOLPBudgetData() {
-    this.olpService.getAllOLPEnquires('WeddingEvents').subscribe((data: any) => {
-      if (data) {
-        data = data.filter((i: any) => i.callStatus.name === 'Pending')
-        this.olpBudgetLists = data
-      }
-    })
+    this.olpService.getAllOLPEnquires('invoices').subscribe((data: any) => {
+      data = data.data.filter((i: any) => i.InvoiceMeta.InvoiceStatus === 'In-progress')
+      this.olpBudgetLists = data
+    });
   }
   get formModeTitle() {
     if (!this.selectedCustomer) return '';
-    switch (this.selectedCustomer.callStatus.name) {
+    switch (this.selectedCustomer.InvoiceMeta.InvoiceStatus) {
       case 'New': return 'Add Budget';
-      case 'Pending': return 'Review & Approve Budget';
+      case 'In-progress': return 'Review & Approve Budget';
       case 'Closed': return 'View Approved Budget';
       case 'Undo': return 'Rejected Budget (Undo Available)';
       default: return '';
@@ -68,8 +66,8 @@ export class OlpBudgetComponent implements OnInit {
 
   calculateTotalBudget() {
     if (this.selectedCustomer)
-      this.totalBudget = this.selectedCustomer.events.reduce(
-        (sum: number, e: any) => sum + (+e.eventBudget || 0), 0
+      this.totalBudget = this.selectedCustomer.Events.reduce(
+        (sum: number, e: any) => sum + (+e.InvoiceAmount || 0), 0
       );
   }
   getOLPMaster() {
@@ -92,13 +90,21 @@ export class OlpBudgetComponent implements OnInit {
   }
 
   approve(customer: any) {
-    customer['callStatus'] = { name: "Closed", value: "Closed" }
-    this.olpService.updateOLPEnquiry(customer.id, customer).subscribe({
+    customer.InvoiceMeta.InvoiceApprovedBy = 'Admin';
+    customer.InvoiceMeta.InvoiceApprovedAt = new Date().toISOString();
+    customer.InvoiceMeta.InvoiceStatus = 'Closed';
+    customer.Events = customer.Events.map((event: any) => ({
+      ...event,
+      FinalApprovedAmount: event.InvoiceAmount,
+      Remarks: 'Proceed'
+    }));
+    customer.InvoiceMeta.TotalApprovedAmount = customer.InvoiceMeta.TotalEstimatedAmount;
+    this.olpService.updateOlPEnquiries(customer._id, customer).subscribe({
       next: () => {
         this.messageService.add({
           severity: 'success',
           summary: 'Approved',
-          detail: 'Budget approved and moved to Team Assign successfully.'
+          detail: 'Budget approved successfully.'
         });
         this.selectedCustomer = null;
         this.getOLPBudgetData();
@@ -113,17 +119,25 @@ export class OlpBudgetComponent implements OnInit {
       }
     });
   }
+  getTotalApprovedAmount(events: any[]): number {
+    const total = events.reduce((acc, event) => {
+      const amount = parseFloat(event.FinalApprovedAmount) || 0;
+      return acc + amount;
+    }, 0);
 
+    return total;
+  }
   reject(customer: any) {
-    this.rejectComment = '';
-    this.showRejectDialog = true;
-     customer['callStatus'] = {name: "In-progress", value: "In-progress"}
-    this.olpService.updateOLPEnquiry(customer.id, customer).subscribe({
+    customer.InvoiceMeta.InvoiceApprovedBy = 'Admin';
+    customer.InvoiceMeta.InvoiceApprovedAt = new Date().toISOString();
+    customer.InvoiceMeta.InvoiceStatus = 'Pending';
+    customer.InvoiceMeta.TotalApprovedAmount = this.getTotalApprovedAmount(customer.Events);
+    this.olpService.updateOlPEnquiries(customer._id, customer).subscribe({
       next: () => {
         this.messageService.add({
-          severity: 'danger',
-          summary: 'Rejected',
-          detail: 'Budget rejected and moved to Invoice successfully.'
+          severity: 'success',
+          summary: 'Reject',
+          detail: 'Budget Rejected successfully.'
         });
         this.selectedCustomer = null;
         this.getOLPBudgetData();

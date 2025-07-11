@@ -10,9 +10,6 @@ import { OlpService } from '../modules/olp/olp.service';
   standalone: false
 })
 export class OlpTeamAssignComponent implements OnInit {
-
-
-
   roles: any = [];
   expandedOlpRows = {};
   selectedOlp: any = null;
@@ -20,38 +17,26 @@ export class OlpTeamAssignComponent implements OnInit {
   selectedAssignments: { [role: string]: any } = {};
   displayDialog: boolean = false;
   OLPEventTeamData: any = [];
-  olpTeamLists: any = []
+  olpTeamLists: any = [];
+  olpStatusLists: any = [];
   constructor(private messageService: MessageService, private olpService: OlpService) {
   }
 
   ngOnInit(): void {
     this.getOLPEventTeamData();
-    this.getOLPMaster();
   }
   getOLPEventTeamData() {
-    this.olpService.getAllOLPEnquires('WeddingEvents').subscribe((data: any) => {
-      if (data) {
-        data.forEach((lead: any) => {
-          if (lead.events && Array.isArray(lead.events)) {
-            lead.events = lead.events.map((event: any) => ({
-              ...event,
-              eventTeams: event.eventTeams ?? []
-            }));
-          }
-          const allAssigned = lead.events.every((ev: any) => ev.eventTeams.length > 0);
-          lead.teamStatus = allAssigned ? 'Closed' : 'New';
-        });
-
-        data = data.filter((i: any) => i.callStatus.name === 'Closed' && i.teamStatus === 'New')
-        this.OLPEventTeamData = data
-      }
-    })
+    this.olpService.getAllOLPEnquires('team/new').subscribe((data: any) => {
+      this.getOLPMasterData();
+      this.OLPEventTeamData = data.data.filter((val: any) => val.TeamMeta.TeamStatus === 'New')
+    });
   }
-  getOLPMaster() {
-    this.olpService.getOLPMaster('OlpMaster/getOlpMaster').subscribe((data: any) => {
-      this.olpTeamLists = data.olpAssignTeams;
-      this.roles = [...new Set(this.olpTeamLists.map((member: any) => member.value))];
-    })
+  getOLPMasterData() {
+    this.olpService.getOLPMaster('masterdata').subscribe((res: any) => {
+      this.olpStatusLists = res.data.invoiceStatus;
+      this.olpTeamLists = res.data.teamMembers;
+      this.roles = [...new Set(this.olpTeamLists.map((member: any) => member.role))];
+    });
   }
   openAssignDialog(olp: any, event: any) {
     this.selectedOlp = olp;
@@ -59,7 +44,7 @@ export class OlpTeamAssignComponent implements OnInit {
     this.selectedAssignments = {};
 
     for (const role of this.roles) {
-      const assigned = event.eventTeams.find((m: any) => m.value === role);
+      const assigned = event.AssignedTeam.find((m: any) => m.role === role);
       this.selectedAssignments[role] = assigned || null;
     }
 
@@ -71,14 +56,14 @@ export class OlpTeamAssignComponent implements OnInit {
 
     return this.olpTeamLists.filter(
       (e: any) =>
-        e.value === role &&
-        !this.isAlreadyAssigned(e.id, role)
+        e.role === role &&
+        !this.isAlreadyAssigned(e.name, role)
     );
   }
 
   isAlreadyAssigned(employeeId: number, roleToAssign: string): boolean {
-    return this.selectedEvent.eventTeams.some(
-      (m: any) => m.id === employeeId && m.value !== roleToAssign
+    return this.selectedEvent.assignTeam?.some(
+      (m: any) => m.name === employeeId && m.role !== roleToAssign
     );
   }
 
@@ -88,7 +73,7 @@ export class OlpTeamAssignComponent implements OnInit {
     for (const role of this.roles) {
       const employee = this.selectedAssignments[role];
       if (employee) {
-        if (assigned.some((e) => e.id === employee.id)) {
+        if (assigned.some((e) => e.name === employee.id)) {
           this.messageService.add({
             severity: 'warn',
             summary: 'Duplicate Assignment',
@@ -100,11 +85,11 @@ export class OlpTeamAssignComponent implements OnInit {
       }
     }
 
-    this.selectedEvent.eventTeams = assigned;
+    this.selectedEvent.AssignedTeam = assigned;
     this.messageService.add({
       severity: 'success',
       summary: 'Team Assigned',
-      detail: `Team assigned to ${this.selectedEvent.eventName.name}`,
+      detail: `Team assigned to ${this.selectedEvent.EventName}`,
     });
 
     // Optionally update OLP team status if all events have teams
@@ -114,8 +99,8 @@ export class OlpTeamAssignComponent implements OnInit {
   }
 
   updateOlpTeamStatus(olp: any) {
-    const allAssigned = olp.events.every((ev: any) => ev.eventTeams.length > 0);
-    olp.teamStatus = allAssigned ? 'Closed' : 'In-progress';
+    const allAssigned = olp.Events.every((ev: any) => ev.AssignedTeam && ev.AssignedTeam.length > 0);
+    olp.TeamStatus = allAssigned ? 'Closed' : 'In-progress';
   }
 
   getInitials(name: string): string {
@@ -148,12 +133,16 @@ export class OlpTeamAssignComponent implements OnInit {
     }
   }
   areAllTeamsAssigned(olp: any): boolean {
-    return olp.events.every((ev: any) => ev.eventTeams && ev.eventTeams.length > 0);
+    return olp.Events.every((ev: any) => ev.AssignedTeam && ev.AssignedTeam.length > 0);
   }
 
   submitOlpTeam(olp: any): void {
-    console.log(olp)
-    this.olpService.updateOLPEnquiry(olp.id, olp).subscribe({
+    olp.TeamMeta = {
+      "AssignedBy": 'Admin',
+      "AssignedAt": new Date().toISOString(),
+      "TeamStatus": "Closed"
+    }
+    this.olpService.updateOlPEnquiries(olp._id, olp).subscribe({
       next: () => {
         this.messageService.add({
           severity: 'success',
@@ -161,7 +150,6 @@ export class OlpTeamAssignComponent implements OnInit {
           detail: 'Team Assign and moved to Inventory Assign successfully.'
         });
         this.getOLPEventTeamData();
-        this.getOLPMaster();
       },
       error: () => {
         this.messageService.add({

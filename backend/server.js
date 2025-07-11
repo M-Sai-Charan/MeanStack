@@ -12,6 +12,18 @@ app.use('/api/masterdata', masterdataRoutes);
 const enquiryRoutes = require('./routes/enquiry.routes');
 app.use('/api/enquiry', enquiryRoutes);
 
+const invoiceRoutes = require('./routes/invoice.routes');
+app.use('/api/invoices', invoiceRoutes);
+
+const teamRoutes = require('./routes/team.routes');
+app.use('/api/team', teamRoutes);
+
+const inventoryRoutes = require('./routes/inventory.routes');
+app.use('/api/inventory', inventoryRoutes);
+
+const clientRoutes = require('./routes/clientRoutes');
+app.use('/api/clients', clientRoutes);
+
 app.get('/', (req, res) => {
   res.send('API is working 🚀');
 });

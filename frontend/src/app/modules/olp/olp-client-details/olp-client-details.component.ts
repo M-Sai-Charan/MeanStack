@@ -23,13 +23,9 @@ export class OlpClientDetailsComponent implements OnInit {
     this.getOLPClients();
   }
   getOLPClients() {
-    this.olpService.getAllOLPEnquires('WeddingEvents').subscribe((data: any) => {
-      if (data) {
-        data = data.filter((i: any) => i.callStatus.name === 'Closed' && i.teamStatus === 'Closed' && i.inventoryStatus === "Closed")
-        this.clients = data
-        this.clients = this.clients.map((client: any) => ({ ...client, expanded: false }));
-      }
-    })
+    this.olpService.getAllOLPEnquires('clients/final-approved').subscribe((data: any) => {
+      this.clients = data.data
+    });
   }
 
   getIcon(type: string): string {

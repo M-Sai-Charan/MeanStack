@@ -86,10 +86,10 @@ export class OlpUsersComponent implements OnInit {
 
   getSeverity(status: string): string {
     switch (status) {
-      case 'New': return 'success';
-      case 'In-progress': return 'warning';
-      case 'Pending': return 'danger';
-      case 'Closed': return 'info';
+      case 'New': return 'info';
+      case 'Pending': return 'secondary';
+      case 'Rejected': return 'danger';
+      case 'Approved': return 'success';
       case 'Blocked': return 'secondary';
       default: return '';
     }

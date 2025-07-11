@@ -5,7 +5,7 @@ import { OlpService } from '../olp.service';
 interface TeamMember {
   id: number;
   name: string;
-  value: string; // role
+  role: string; // role
   assignedInventory?: any[];
   tempSelectedInventory?: any;
 }
@@ -35,31 +35,53 @@ export class OlpInventoryAssignComponent {
   ];
 
   groupedInventories: any[] = [];
-
+  roleInventoryMap: Record<string, any[]> = {};
   constructor(private olpService: OlpService, private toast: MessageService) { }
 
   ngOnInit(): void {
     this.groupedInventories = this.groupInventoryOptions();
     this.getOLPEnquires();
+    this.getOLPMasterData();
   }
 
   getOLPEnquires() {
-    this.olpService.getAllOLPEnquires('WeddingEvents').subscribe((data: any) => {
-      if (data) {
-        this.bookings = data
-          .filter((i: any) => i.callStatus.name === 'Closed' && i.teamStatus === 'Closed' && i.inventoryStatus === "")
-          .map((booking: any) => ({
-            ...booking,
-            events: booking.events.map((event: any) => ({
-              ...event,
-              eventTeams: (event.eventTeams || []).map((member: any) => ({
-                ...member,
-                assignedInventory: [],
-                tempSelectedInventory: null
-              }))
-            }))
-          }));
-      }
+    this.olpService.getAllOLPEnquires('inventory/new').subscribe((data: any) => {
+      this.bookings = data.data.filter((val: any) => val.InventoryMeta.InventoryStatus === 'New')
+    });
+    // this.olpService.getAllOLPEnquires('WeddingEvents').subscribe((data: any) => {
+    //   if (data) {
+    //     this.bookings = data
+    //       .filter((i: any) => i.callStatus.name === 'Closed' && i.teamStatus === 'Closed' && i.inventoryStatus === "")
+    //       .map((booking: any) => ({
+    //         ...booking,
+    //         events: booking.events.map((event: any) => ({
+    //           ...event,
+    //           eventTeams: (event.eventTeams || []).map((member: any) => ({
+    //             ...member,
+    //             assignedInventory: [],
+    //             tempSelectedInventory: null
+    //           }))
+    //         }))
+    //       }));
+    //   }
+    // });
+  }
+
+  getOLPMasterData() {
+    this.olpService.getOLPMaster('masterdata').subscribe((res: any) => {
+      const masters = res.data.inventoryMasters || [];
+
+      // Create a role-to-inventory map for quick access
+      this.roleInventoryMap = {};
+      masters.forEach((entry: any) => {
+        this.roleInventoryMap[entry.role] = entry.inventory.map((inv: string, i: number) => ({
+          id: `${entry.role}-${i}`,
+          name: inv,
+          role: entry.role
+        }));
+      });
+
+      this.olpInventories = masters; // keep if you use it elsewhere
     });
   }
 
@@ -67,19 +89,33 @@ export class OlpInventoryAssignComponent {
     if (!member.assignedInventory) {
       member.assignedInventory = [];
     }
-    if (!member.assignedInventory.some(inv => inv.id === inventory.id)) {
+    if (inventory.role !== member.role) {
+      this.toast.add({
+        severity: 'warn',
+        summary: 'Invalid',
+        detail: `This inventory is not allowed for ${member.role}`
+      });
+      return;
+    }
+    if (!member.assignedInventory.some(i => i.id === inventory.id)) {
       member.assignedInventory.push(inventory);
     }
     member.tempSelectedInventory = null;
   }
+
 
   removeInventory(member: TeamMember, inventoryId: number) {
     member.assignedInventory = (member.assignedInventory || []).filter(i => i.id !== inventoryId);
   }
 
   submitAll(olp: any) {
-    olp['inventoryStatus'] = "Closed";
-    this.olpService.updateOLPEnquiry(olp.id, olp).subscribe({
+     olp.InventoryMeta = {
+      "InventoryAssignedBy": 'Admin',
+      "InventoryAssignedAt": new Date().toISOString(),
+      "InventoryStatus": "Closed"
+    }
+    olp.Events = this.transformAssignedInventory(olp.Events)
+    this.olpService.updateOlPEnquiries(olp._id, olp).subscribe({
       next: () => {
         this.toast.add({
           severity: 'success',
@@ -97,6 +133,15 @@ export class OlpInventoryAssignComponent {
       }
     });
   }
+  transformAssignedInventory(events: any[]) {
+  return events.map(event => ({
+    ...event,
+    AssignedTeam: event.AssignedTeam.map((member:any) => ({
+      ...member,
+      assignedInventory: (member.assignedInventory || []).map((item:any) => item.name)
+    }))
+  }));
+}
 
   groupInventoryOptions(): any[] {
     const grouped = this.olpInventories.reduce((acc, item) => {

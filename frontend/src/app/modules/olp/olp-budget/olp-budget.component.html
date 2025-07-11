@@ -22,26 +22,26 @@
             </ng-template>
             <ng-template pTemplate="body" let-cust>
                 <tr class="row-fade">
-                    <td>{{ cust.bride }} & {{cust.groom}}</td>
-                    <td>{{ cust.contactNumber }}</td>
-                    <td>{{ cust.email }}</td>
+                    <td>{{ cust.Bride }} & {{cust.Groom}}</td>
+                    <td>{{ cust.ContactNumber }}</td>
+                    <td>{{ cust.Email }}</td>
                     <td>
                         <ul>
-                            <li *ngFor="let e of cust.events">{{ e.eventName.name }}</li>
+                            <li *ngFor="let e of cust.Events">{{ e.EventName }}</li>
                         </ul>
                     </td>
                     <td>
-                        <p-tag [value]="cust.callStatus.name"
-                            [severity]="getStatusSeverity(cust.callStatus.name)"></p-tag>
+                        <p-tag [value]="cust.InvoiceMeta.InvoiceStatus"
+                            [severity]="getStatusSeverity(cust.InvoiceMeta.InvoiceStatus)"></p-tag>
                     </td>
                     <td>
-                        <ng-container [ngSwitch]="cust.callStatus.name">
+                        <ng-container [ngSwitch]="cust.InvoiceMeta.InvoiceStatus">
                             <button *ngSwitchCase="'new'" pButton icon="pi pi-plus-circle"
                                 class="p-button-text p-ml-2 bounce-hover" pTooltip="Add Budget"
                                 (click)="startBudgeting(cust)">
                             </button>
 
-                            <button *ngSwitchCase="'Pending'" pButton icon="pi pi-search"
+                            <button *ngSwitchCase="'In-progress'" pButton icon="pi pi-search"
                                 class="p-button-text p-ml-2 bounce-hover" pTooltip="Approve/Reject"
                                 (click)="reviewCustomer(cust)" tooltipPosition="top">
                             </button>
@@ -71,8 +71,9 @@
                 <path d="M8 20l8-10h14l2 2h12l2-2h10l8 10" stroke="#3F51B5" stroke-width="2" stroke-linecap="round"
                     stroke-linejoin="round" />
             </svg> -->
-            
-            <p class="no-data-text">No budget entries found for any<span style="position: relative;top: 22px;"><img src="olp-logo.png" alt="Logo" height="60"></span>events.</p>
+
+            <p class="no-data-text">No budget entries found for any<span style="position: relative;top: 22px;"><img
+                        src="olp-logo.png" alt="Logo" height="60"></span>events.</p>
         </div>
 
         <div *ngIf="selectedCustomer" class="slide-in-form">
@@ -81,25 +82,38 @@
                     <div class="col-12 budget-header">
                         <h4 class="mb-2">
                             {{ formModeTitle }} for
-                            <span style="color: #10b981;">{{ selectedCustomer?.bride }} & {{
-                                selectedCustomer?.groom}}</span>
+                            <span style="color: #10b981;">{{ selectedCustomer?.Bride }} & {{
+                                selectedCustomer?.Groom}}</span>
                         </h4>
                     </div>
 
                     <div class="col-12">
                         <p-tabView>
-                            <p-tabPanel *ngFor="let event of selectedCustomer.events; let i = index"
-                                [header]="event.eventName.name">
+                            <p-tabPanel *ngFor="let event of selectedCustomer.Events; let i = index"
+                                [header]="event.EventName">
                                 <div class="grid">
                                     <div class="col-12 md:col-4">
-                                        <label for="budget-{{ i }}">Budget (₹)</label>
+                                        <label for="budget-{{ i }}">Invoice Budget (₹)</label>
                                     </div>
                                     <div class="col-12 md:col-8">
-                                        <p-inputNumber inputId="budget-{{ i }}" [(ngModel)]="event.eventBudget"
+                                        <p-inputNumber inputId="budget-{{ i }}" [(ngModel)]="event.InvoiceAmount"
                                             mode="currency" currency="INR" locale="en-IN" [step]="1000" [min]="0"
                                             [showButtons]="true" [disabled]="formDisabled" class="w-full"
                                             (onInput)="calculateTotalBudget()"
                                             [ngModelOptions]="{ standalone: true }"></p-inputNumber>
+                                    </div>
+                                    <div class="col-12 md:col-4">
+                                        <label for="budget-{{ i }}">Approve / Reject Budget (₹)</label>
+                                    </div>
+                                    <div class="col-12 md:col-4">
+                                        <p-inputNumber inputId="final-{{ i }}" [(ngModel)]="event.FinalApprovedAmount"
+                                            mode="currency" currency="INR" locale="en-IN" [min]="0" [showButtons]="true"
+                                            class="w-full" [ngModelOptions]="{ standalone: true }"></p-inputNumber>
+                                    </div>
+                                    <div class="col-12 md:col-4">
+                                        <input pInputText id="remarks -{{ i }}" class="w-full"
+                                            placeholder="Enter comments" [ngModelOptions]="{ standalone: true }"
+                                            [(ngModel)]="event.Remarks" />
                                     </div>
                                 </div>
                             </p-tabPanel>
@@ -110,14 +124,14 @@
                             Total Budget: <strong>₹{{ totalBudget | number: '1.2-2' }}</strong>
                         </span>
 
-                        <ng-container [ngSwitch]="selectedCustomer.callStatus.name">
+                        <ng-container [ngSwitch]="selectedCustomer.InvoiceMeta.InvoiceStatus">
                             <button *ngSwitchCase="'new'" pButton type="submit" icon="pi pi-check"
                                 label="Generate Quote" [disabled]="!isAllBudgetsEntered()"
                                 class="bounce-hover"></button>
 
-                            <button *ngSwitchCase="'Pending'" pButton icon="pi pi-check" label="Approve"
+                            <button *ngSwitchCase="'In-progress'" pButton icon="pi pi-check" label="Approve"
                                 class="p-button-success mr-2 bounce-hover" (click)="approve(selectedCustomer)"></button>
-                            <button *ngSwitchCase="'Pending'" pButton icon="pi pi-times" label="Reject"
+                            <button *ngSwitchCase="'In-progress'" pButton icon="pi pi-times" label="Reject"
                                 class="p-button-danger bounce-hover" (click)="reject(selectedCustomer)"></button>
                         </ng-container>
                     </div>

@@ -30,6 +30,9 @@ export class OlpService {
   updateOlPEnquiries(id: number, payload: any): Observable<any> {
     return this.httpService.put<any>(`${this.baseUrl}/enquiry/update/${id}`, payload);
   }
+  getEnquiryById(id: string) {
+  return this.httpService.get(`${this.baseUrl}/enquiry/${id}`);
+}
   saveOLPEmployee(url: string, payload: any, mode: 'Add' | 'Edit'): Observable<any> {
     if (mode === 'Add') {
       return this.httpService.post<any>(`${this.baseUrl}/${url}`, payload);

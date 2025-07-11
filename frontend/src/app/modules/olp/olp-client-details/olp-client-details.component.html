@@ -14,16 +14,16 @@
         <p-card class="olp-card">
             <ng-template pTemplate="header">
                 <div class="card-header flex justify-content-between align-items-center">
-                    <span class="status-badge" [ngClass]="client.status.toLowerCase()">{{ client.olpId }}</span>
+                    <span class="status-badge" [ngClass]="client.CallStatus.toLowerCase()">{{ client.OLPID }}</span>
                 </div>
             </ng-template>
 
-            <!-- <div class="bride-groom text-lg mb-2">
-                {{ client.bride[0] }} ❤️ {{ client.groom[0] }}
-            </div> -->
+            <div class="bride-groom text-lg mb-2">
+                {{ client.Bride[0] }} ❤️ {{ client.Groom[0] }}
+            </div>
 
-            <button pButton type="button" (click)="selectedClient = client" label="Show" icon="pi pi-eye"  pTooltip="{{ client.bride}} ❤️ {{client.groom}}"
-            tooltipPosition="top"
+            <button pButton type="button" (click)="selectedClient = client" label="Show" icon="pi pi-eye"
+                pTooltip="{{ client.Bride}} ❤️ {{client.Groom}}" tooltipPosition="top"
                 class="p-button-sm p-button-outlined view-btn">
             </button>
         </p-card>
@@ -35,38 +35,35 @@
         <!-- Client Info -->
         <div class="p-grid grid formgrid mb-3">
             <div class="p-col-12 sm:p-col-12 md:p-col-6 lg:p-col-4">
-                📍 <b>Location:</b> {{ selectedClient.location }} |
+                📍 <b>Location:</b> {{ selectedClient.Location }} |
             </div>
             <div class="p-col-12 sm:p-col-12 md:p-col-6 lg:p-col-4">
-                📞 <b>Phone:</b> {{ selectedClient.contactNumber }} |
+                📞 <b>Phone:</b> {{ selectedClient.ContactNumber }} |
             </div>
             <div class="p-col-12 sm:p-col-12 md:p-col-6 lg:p-col-4">
-                📧 <b>Email:</b> {{ selectedClient.email }} |
+                📧 <b>Email:</b> {{ selectedClient.Email }} |
             </div>
             <div class="p-col-12 sm:p-col-12 md:p-col-6 lg:p-col-4">
-                📆 <b>Created:</b> {{ selectedClient.createdOn | date:'dd MMM yyyy' }} |
+                📆 <b>Created:</b> {{ selectedClient.createdAt | date:'dd MMM yyyy hh:mm a' }} |
             </div>
             <div class="p-col-12 sm:p-col-12 md:p-col-6 lg:p-col-4">
-                ☎️ <b>Called By:</b> {{ selectedClient.calledBy.name }} | 
-            </div>
-             <div class="p-col-12 sm:p-col-12 md:p-col-6 lg:p-col-4">
-                🔁 <b>Status:</b> {{ selectedClient.callStatus.name }}
+                ☎️ <b>Called By:</b> {{ selectedClient.AssignedEmployee }}
             </div>
         </div>
 
         <!-- Events List -->
         <div class="event-list">
             <p-accordion [multiple]="true">
-                <p-accordionTab *ngFor="let event of selectedClient.events"
-                    [header]="event.eventName.name + ' | ' + (event.eventDate | date:'dd MMM yyyy')">
+                <p-accordionTab *ngFor="let event of selectedClient.Events"
+                    [header]="event.EventName + ' | ' + (event.EventDate | date:'dd MMM yyyy')">
                     <div class="mb-2">
-                        🕒 <b>Time:</b> {{ event.eventTime.name }} |
-                        👥 <b>Guests:</b> {{ event.eventGuests }} |
-                        💰 <b>Budget:</b> ₹{{ event.eventBudget }}
+                        🕒 <b>Time:</b> {{ event.EventTime }} |
+                        👥 <b>Guests:</b> {{ event.EventGuests }} |
+                        💰 <b>Budget:</b> ₹{{ event.FinalApprovedAmount }}
                     </div>
 
                     <!-- Team Table -->
-                    <p-table [value]="event.eventTeams" class="p-datatable-sm shadow-1 mt-2">
+                    <p-table [value]="event.AssignedTeam" class="p-datatable-sm shadow-1 mt-2">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Role</th>
@@ -76,12 +73,12 @@
                         </ng-template>
                         <ng-template pTemplate="body" let-team>
                             <tr>
-                                <td>{{ team.value }}</td>
+                                <td>{{ team.role }}</td>
                                 <td>{{ team.name }}</td>
                                 <td>
                                     <ng-container *ngFor="let item of team.assignedInventory">
                                         <span class="p-chip p-mr-1 p-mb-1">
-                                            <span class="p-chip-text">{{ item.name }}</span>
+                                            <span class="p-chip-text">{{ item }}</span>
                                         </span>
                                     </ng-container>
                                 </td>

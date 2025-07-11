@@ -22,11 +22,11 @@
           <i class="pi pi-file-pdf text-red-600 absolute right-2 top-2 cursor-pointer"
             style="font-size: 1.2rem; right: 10px; top: 10px;" (click)="downloadPdf($event, olp)">
           </i>
-          <p-avatar [label]="olp.bride.charAt(0) + olp.groom.charAt(0)" shape="circle"
+          <p-avatar [label]="olp.Bride.charAt(0) + olp.Groom.charAt(0)" shape="circle"
             class="avatar bg-indigo-100 text-indigo-700">
           </p-avatar>
-          <div class="olp-id">{{ olp.olpId }}</div>
-          <div class="names">{{ olp.bride }} & {{ olp.groom }}</div>
+          <div class="olp-id">{{ olp.OLPID }}</div>
+          <div class="names">{{ olp.Bride }} & {{ olp.Groom }}</div>
         </div>
       </div>
     </div>
@@ -48,15 +48,28 @@
   <form [formGroup]="selectedForm" *ngIf="selectedForm" class="p-4 space-y-4">
 
     <!-- View-only Message -->
-    <p *ngIf="selectedOlp?.callStatus?.name !== 'In-progress'" class="text-gray-600 text-sm italic">
-      This entry is view-only as it is <strong>{{ selectedOlp?.callStatus?.name }}</strong>.
+    <p *ngIf="selectedOlp?.InvoiceMeta?.InvoiceStatus === 'Pending'" class="text-gray-600 text-sm italic">
+      This Invoice is rejected by <strong>{{selectedOlp?.InvoiceMeta?.InvoiceApprovedBy}} </strong>.
+    </p>
+    <p *ngIf="selectedOlp?.InvoiceMeta?.InvoiceStatus === 'In-progress'" class="text-gray-600 text-sm italic">
+      This Details is view-only as it is <strong>{{ selectedOlp?.InvoiceMeta?.InvoiceStatus }}</strong>.
     </p>
 
-    <div class="grid formgrid p-fluid">
+    <div class="grid formgrid p-fluid mt-2">
       <div class="field col-12 md:col-6 lg:col-4">
         <div class="p-float-label">
           <label for="olpId">OLP ID</label>
           <input pInputText id="olpId" formControlName="olpId" />
+        </div>
+      </div>
+      <div class="field col-12 md:col-6 lg:col-4">
+        <div class="p-float-label">
+          <label for="callStatus">
+            Invoice By
+          </label>
+          <p-dropdown inputId="employeesLists" [options]="olpEmployeesLists" formControlName="InvoiceBy"
+            placeholder="Select Employee">
+          </p-dropdown>
         </div>
       </div>
       <div class="field col-12 md:col-6 lg:col-4">
@@ -69,7 +82,7 @@
               </i>
             </span>
           </label>
-          <p-dropdown inputId="callStatus" [options]="olpStatusLists" formControlName="callStatus" optionLabel="name"
+          <p-dropdown inputId="callStatus" [options]="olpStatusLists" formControlName="callStatus"
             placeholder="Select Status">
           </p-dropdown>
         </div>
@@ -116,7 +129,14 @@
 
           <div class="field col-12 md:col-6 lg:col-4">
             <div class="p-float-label">
-              <label for="budget{{ i }}">Budget</label>
+              <label for="budget{{ i }}">Budget
+                <span *ngIf="selectedOlp?.InvoiceMeta?.InvoiceStatus === 'Pending' || selectedOlp?.InvoiceMeta?.InvoiceStatus === 'Closed'">
+                  <i style="color: #0a6f4d; font-size: 11px;" class="pi pi-info-circle"
+                    pTooltip="New Budget: {{event.value.FinalApprovedAmount?.value}}&#10;Comments: {{event.value.Remarks?.value}}"
+                    tooltipPosition="top">
+                  </i>
+                </span>
+              </label>
               <input type="number" pInputText id="budget{{ i }}" formControlName="eventBudget" />
             </div>
           </div>
@@ -126,8 +146,11 @@
     </div>
 
     <!-- Save Button -->
-    <div class="text-right mt-3" *ngIf="selectedOlp?.callStatus?.name === 'In-progress'">
+    <div class="text-right mt-3" *ngIf="selectedOlp?.InvoiceMeta?.InvoiceStatus === 'New'">
       <button pButton label="Save" icon="pi pi-check" class="p-button-success" (click)="saveBudget()"></button>
+    </div>
+     <div class="text-right mt-3" *ngIf="selectedOlp?.InvoiceMeta?.InvoiceStatus === 'Pending'">
+      <button pButton label="Update Invoice with New Amount" icon="pi pi-check" class="p-button-success" (click)="updateApprovedBudget()"></button>
     </div>
   </form>
 </p-dialog>

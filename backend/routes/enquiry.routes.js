@@ -7,4 +7,5 @@ router.get('/getallenquires', enquiryController.getAllEnquires);
 router.delete('/deleteAll', enquiryController.deleteAllEnquiries);
 router.put('/markasread/:id', enquiryController.markAsRead);
 router.put('/update/:id', enquiryController.updateEnquiry);
+router.get('/:id', enquiryController.getEnquiryById);
 module.exports = router;

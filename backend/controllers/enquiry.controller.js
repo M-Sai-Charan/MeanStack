@@ -73,29 +73,37 @@ exports.updateEnquiry = async (req, res) => {
       CallInitiatedOn,
       CallStatus,
       Events = [],
+      InvoiceMeta = {},
       ...rest
     } = req.body;
 
-    // Fetch the current enquiry
     const enquiry = await Enquiry.findById(enquiryId);
     if (!enquiry) {
       return res.status(404).json({ message: 'Enquiry not found' });
     }
 
-    // Step 1: Update top-level fields
+    // ✅ Top-level updates
     enquiry.AssignedEmployee = AssignedEmployee;
     enquiry.CallInitiatedOn = CallInitiatedOn;
     enquiry.CallStatus = CallStatus;
     enquiry.Status = CallStatus;
     enquiry.updatedAt = new Date();
 
-    // Step 2: Handle events
+    // ✅ InvoiceMeta update logic
+    if (CallStatus === 'Approved') {
+      enquiry.InvoiceMeta = {
+        ...(enquiry.InvoiceMeta || {}),
+        ...InvoiceMeta,
+        InvoiceStatus: InvoiceMeta?.InvoiceStatus || 'New'
+      };
+    }
+
+    // ✅ Handle Events update
     const updatedEvents = [];
     const existingEventIds = new Set();
 
     for (const event of Events) {
       if (event._id && event._id !== 0) {
-        // Update existing event
         const existingEvent = enquiry.Events.id(event._id);
         if (existingEvent) {
           existingEvent.EventName = event.EventName;
@@ -103,35 +111,96 @@ exports.updateEnquiry = async (req, res) => {
           existingEvent.EventLocation = event.EventLocation;
           existingEvent.EventTime = event.EventTime;
           existingEvent.EventGuests = event.EventGuests;
+          existingEvent.InvoiceAmount = event.InvoiceAmount || existingEvent.InvoiceAmount;
+          existingEvent.FinalApprovedAmount = event.FinalApprovedAmount || existingEvent.FinalApprovedAmount;
+          existingEvent.Remarks = event.Remarks || existingEvent.Remarks;
+          if (event.AssignedTeam && Array.isArray(event.AssignedTeam)) {
+            existingEvent.AssignedTeam = event.AssignedTeam;
+          }
           existingEventIds.add(event._id.toString());
         }
       } else {
-        // Add new event
         updatedEvents.push({
           EventName: event.EventName,
           EventDate: event.EventDate,
           EventLocation: event.EventLocation,
           EventTime: event.EventTime,
-          EventGuests: event.EventGuests
+          EventGuests: event.EventGuests,
+          InvoiceAmount: event.InvoiceAmount || null,
+          FinalApprovedAmount: event.FinalApprovedAmount || null,
+          Remarks: event.Remarks || '',
+          AssignedTeam: event.AssignedTeam || [] // ✅ Include when adding new events
         });
       }
     }
 
-    // Step 3: Remove events not in updated list
-    enquiry.Events = enquiry.Events.filter((event) =>
+    // ✅ Filter deleted events and push new ones
+    enquiry.Events = enquiry.Events.filter(event =>
       existingEventIds.has(event._id.toString())
     );
-
-    // Step 4: Push new events
     enquiry.Events.push(...updatedEvents);
+
+    // ✅ Intelligent TeamMeta initialization when invoice is Closed
+    if (InvoiceMeta?.InvoiceStatus === 'Closed') {
+      enquiry.TeamMeta = {
+        ...(enquiry.TeamMeta || {}),
+        TeamStatus: enquiry.TeamMeta?.TeamStatus || 'New',
+        AssignedBy: enquiry.TeamMeta?.AssignedBy || null,
+        AssignedAt: enquiry.TeamMeta?.AssignedAt || null
+      };
+    }
+
+    // ✅ Auto-close team if all events have team assigned
+    const allAssigned = enquiry.Events.every(ev =>
+      ev.AssignedTeam && ev.AssignedTeam.length > 0
+    );
+
+    if (allAssigned) {
+      enquiry.TeamMeta = {
+        ...enquiry.TeamMeta,
+        TeamStatus: 'Closed',
+        AssignedBy: req.user?.name || 'Admin',
+        AssignedAt: new Date()
+      };
+    }
+
+    // ✅ Detect if any event has team members with assignedInventory
+    const hasInventoryAssigned = enquiry.Events.some(ev =>
+      ev.AssignedTeam?.some(member =>
+        Array.isArray(member.assignedInventory) && member.assignedInventory.length > 0
+      )
+    );
+
+    if (hasInventoryAssigned) {
+      enquiry.InventoryMeta = {
+        ...(enquiry.InventoryMeta || {}),
+        InventoryStatus: 'Closed',
+        InventoryAssignedBy: req.user?.name || 'Admin',
+        InventoryAssignedAt: new Date()
+      };
+    }
 
     const saved = await enquiry.save();
     res.status(200).json({
       message: 'Enquiry updated successfully',
       data: saved
     });
+
   } catch (error) {
     console.error('Error updating enquiry:', error);
     res.status(500).json({ error: 'Failed to update enquiry' });
+  }
+};
+
+exports.getEnquiryById = async (req, res) => {
+  try {
+    const enquiry = await Enquiry.findById(req.params.id);
+    if (!enquiry) {
+      return res.status(404).json({ message: 'Enquiry not found' });
+    }
+    res.status(200).json(enquiry);
+  } catch (error) {
+    console.error('Error fetching enquiry by ID:', error);
+    res.status(500).json({ error: 'Server error fetching enquiry' });
   }
 };

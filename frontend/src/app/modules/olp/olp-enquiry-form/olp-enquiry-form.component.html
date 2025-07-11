@@ -58,7 +58,7 @@
             <!-- PreShoot Events -->
             <div class="field col-12 md:col-6">
                 <label>Are you interested?</label>
-                <p-multiSelect [options]="olpEventsLists" formControlName="preShoot" placeholder="Rotues"
+                <p-multiSelect [options]="olpEventsLists" formControlName="preShoot" placeholder="Select Events"
                     styleClass="w-full"></p-multiSelect>
             </div>
             <!-- Source -->
@@ -83,7 +83,7 @@
 
             <!-- Submit Button -->
             <div class="field col-12 text-center">
-                <button pButton type="submit" label="Submit Enquiry" class="p-button-rounded p-button-success"
+                <button pButton type="submit" label="Submit Enquiry" class="p-button-rounded p-button-success" [disabled]="!contactForm.valid"
                     (click)="onSubmit()"></button>
             </div>
         </form>
