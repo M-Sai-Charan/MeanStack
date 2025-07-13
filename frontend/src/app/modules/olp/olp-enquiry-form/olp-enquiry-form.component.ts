@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { OlpService } from '../olp.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-olp-enquiry-form',
   templateUrl: './olp-enquiry-form.component.html',
   styleUrls: ['./olp-enquiry-form.component.css'],
-  standalone: false
+  standalone: false,
+  providers: [MessageService]
 })
 export class OlpEnquiryFormComponent implements OnInit {
   contactForm!: FormGroup;
@@ -17,7 +19,8 @@ export class OlpEnquiryFormComponent implements OnInit {
   constructor(
     private olpService: OlpService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private messageService: MessageService
   ) { }
 
   ngOnInit(): void {
@@ -58,12 +61,20 @@ export class OlpEnquiryFormComponent implements OnInit {
       const jsonStr = encodeURIComponent(JSON.stringify(jsonObj));
       // const url = `https://localhost:7167/api/OLP/SetEnquiryDetails?value=${jsonStr}`;
 
-      this.olpService.saveOLPEmployee('enquiry', jsonObj, 'Add').subscribe((data: any) => {
-        if (data) {
-          setTimeout(() => {
-            this.submitted = true;
-            alert(true)
-          }, 300);
+      this.olpService.saveOLPEnquiry('enquiry', jsonObj).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Reject',
+            detail: 'Enquiry Added successfully.'
+          });
+        },
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Failed',
+            detail: 'Something went wrong while saving.'
+          });
         }
       });
     }

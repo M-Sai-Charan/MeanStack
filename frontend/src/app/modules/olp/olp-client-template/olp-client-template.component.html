@@ -1,7 +1,8 @@
-<!-- wedding-estimate.component.html -->
+<!-- Existing Wedding Template -->
 <div class="wedding-template-container">
+  <!-- Header -->
   <div class="header text-center">
-    <h1 style="text-align: center;">{{enquiry?.Bride }} <span class="heart">❤️</span> {{enquiry?.Groom}}</h1>
+    <h1>{{ enquiry?.Bride }} <span class="heart">❤️</span> {{ enquiry?.Groom }}</h1>
   </div>
 
   <!-- Client Details -->
@@ -29,15 +30,11 @@
     <h2>Our Work</h2>
     <div class="gallery-grid">
       <ng-container *ngFor="let img of galleryImages; let i = index">
-        <!-- Center cell displays OLPID -->
         <div class="gallery-cell" *ngIf="i === centerIndex">
           <div class="olpid-card glass animate-logo">
             <img src="olp-logo.png" alt="OLP Logo" class="olp-logo" />
           </div>
         </div>
-
-
-        <!-- Image cells -->
         <div class="gallery-cell" *ngIf="i !== centerIndex">
           <img [src]="img" alt="Gallery Image" />
         </div>
@@ -51,10 +48,10 @@
     <div class="event-card" *ngFor="let event of enquiry?.Events">
       <div>
         <h4>{{ event.EventName }}</h4>
-        <p>{{ event.EventDate }} | {{ event.EventTime }}</p>
+        <p>{{ event.EventDate | date:'mediumDate' }} | {{ event.EventTime }}</p>
         <p>Location: {{ event.EventLocation }} | Guests: {{ event.EventGuests }}</p>
       </div>
-      <div class="price">₹{{ event.invoice | number }}</div>
+      <div class="price">₹{{ event.FinalApprovedAmount | number }}</div>
     </div>
   </div>
 
@@ -77,7 +74,35 @@
 
   <!-- Buttons -->
   <div class="button-row">
-    <button class="btn-approve">Approve Estimate</button>
-    <button class="btn-reject">Request Changes</button>
+    <button class="btn-approve" (click)="approveEstimate()">Approve Estimate</button>
+    <button class="btn-reject" (click)="rejectEstimate()">Request Changes</button>
   </div>
+
+  <!-- 💬 Client Chat Panel -->
+  <!-- 💬 Client Chat Panel -->
+  <!-- 💬 Chat Section -->
+  <div class="section chat-section">
+    <h2>Chat with Our Team</h2>
+
+    <div class="chat-box">
+      <!-- Messages -->
+      <div #chatContainer class="chat-messages">
+        <div *ngFor="let msg of chatMessages"
+          [ngClass]="{ 'chat-me': msg.sender === clientName, 'chat-them': msg.sender !== clientName }"
+          class="chat-bubble">
+          <strong>{{ msg.sender }}</strong>
+          <p>{{ msg.text }}</p>
+          <small>{{ msg.time | date: 'shortTime' }}</small>
+        </div>
+      </div>
+
+      <!-- Input -->
+      <div class="chat-input">
+        <input type="text" [(ngModel)]="chatText" (keydown.enter)="sendChatMessage()" placeholder="Type a message..." />
+        <button (click)="sendChatMessage()">Send</button>
+      </div>
+    </div>
+  </div>
+
+
 </div>

@@ -31,8 +31,11 @@ export class OlpService {
     return this.httpService.put<any>(`${this.baseUrl}/enquiry/update/${id}`, payload);
   }
   getEnquiryById(id: string) {
-  return this.httpService.get(`${this.baseUrl}/enquiry/${id}`);
-}
+    return this.httpService.get(`${this.baseUrl}/enquiry/${id}`);
+  }
+   saveOLPEnquiry(url: string, payload: any): Observable<any> {
+    return this.httpService.post<any>(`${this.baseUrl}/${url}`, payload);
+  }
   saveOLPEmployee(url: string, payload: any, mode: 'Add' | 'Edit'): Observable<any> {
     if (mode === 'Add') {
       return this.httpService.post<any>(`${this.baseUrl}/${url}`, payload);
@@ -40,6 +43,10 @@ export class OlpService {
       return this.httpService.put<any>(`${this.baseUrl}${url}/${payload.id}`, payload);
     }
   }
+getClientNameByOLPID(olpid: string) {
+  return this.httpService.get<any>(`http://localhost:5000/api/clients/${olpid}`);
+}
+
 
 
 }

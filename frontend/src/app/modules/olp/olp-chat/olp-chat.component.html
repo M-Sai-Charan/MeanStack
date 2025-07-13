@@ -1,0 +1,49 @@
+<div class="chat-layout">
+  <!-- Left Sidebar: Clients List -->
+  <div class="chat-sidebar">
+    <h3>Clients</h3>
+    <div
+      class="chat-list-item"
+      *ngFor="let chat of clientChats"
+      (click)="selectRoom(chat.room)"
+      [class.active]="chat.room === selectedRoom"
+    >
+      <div class="chat-list-header">
+        <h4>{{ chat.clientName || 'OLPID: ' + chat.room }}</h4>
+        <span class="time">{{ chat.timestamp | date: 'shortTime' }}</span>
+      </div>
+      <small class="last-message">{{ chat.lastMessage || 'No messages yet' }}</small>
+    </div>
+  </div>
+
+  <!-- Right Panel: Chat Window -->
+  <div class="chat-main" *ngIf="selectedRoom">
+    <div class="chat-header">
+      <h3>
+        Chat with {{ selectedClientName  }}
+      </h3>
+    </div>
+
+<div class="messages-container" style="max-height: 400px; overflow-y: auto;">
+  <div
+    *ngFor="let msg of chatMessages"
+    [ngClass]="{ 'admin-msg': msg.sender === adminName, 'client-msg': msg.sender !== adminName }"
+  >
+    <strong>{{ msg.sender }}:</strong>
+    <p>{{ msg.text }}</p>
+    <small>{{ msg.time | date: 'short' }}</small>
+  </div>
+</div>
+
+
+    <div class="chat-input">
+      <input
+        type="text"
+        [(ngModel)]="chatText"
+        (keydown.enter)="sendChatMessage()"
+        placeholder="Type your message..."
+      />
+      <button (click)="sendChatMessage()">Send</button>
+    </div>
+  </div>
+</div>

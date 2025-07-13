@@ -74,9 +74,9 @@
           <span *ngIf="!user.isRead" class="dot" pTooltip="New Enquiry" tooltipPosition="left"></span>
           <p-button *ngIf="user.Status != 'Approved'" icon="pi pi-eye" (click)="selectOLP(user)" rounded severity="info" [pTooltip]="'View/Edit Events'"
             tooltipPosition="top" styleClass="p-button-sm p-button-rounded"></p-button>
-          <!-- <p-button icon="pi pi-share-alt" (click)="shareInvoiceTemplate(user._id)" rounded severity="success"
+          <p-button icon="pi pi-share-alt" (click)="shareInvoiceTemplate(user._id)" rounded severity="success"
             [pTooltip]="'Share Invoice Template'" tooltipPosition="top"
-            styleClass="p-button-sm p-button-rounded ml-2"></p-button> -->
+            styleClass="p-button-sm p-button-rounded ml-2"></p-button>
         </td>
       </tr>
     </ng-template>

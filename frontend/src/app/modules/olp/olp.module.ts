@@ -28,6 +28,8 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatSelectModule} from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { OlpChatComponent } from './olp-chat/olp-chat.component';
+import { ChatService } from './chat.service';
 @NgModule({
   declarations: [
     OlpDashboardComponent,
@@ -44,7 +46,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     OlpInventoryAssignComponent,
     OlpClientDetailsComponent,
     OlpClientTemplateComponent,
-    OlpEnquiryFormComponent
+    OlpEnquiryFormComponent,
+    OlpChatComponent
   ],
   imports: [
     CommonModule,
@@ -62,6 +65,6 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatTableModule,
     MatCheckboxModule,
   ],
-  providers: [OlpService]
+  providers: [OlpService,ChatService]
 })
 export class OlpModule { }

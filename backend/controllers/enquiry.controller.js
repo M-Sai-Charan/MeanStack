@@ -165,20 +165,28 @@ exports.updateEnquiry = async (req, res) => {
     }
 
     // ✅ Detect if any event has team members with assignedInventory
-    const hasInventoryAssigned = enquiry.Events.some(ev =>
-      ev.AssignedTeam?.some(member =>
-        Array.isArray(member.assignedInventory) && member.assignedInventory.length > 0
-      )
-    );
+    // ✅ Auto-assign inventory if team is closed and inventory not already assigned
+    const teamIsClosed = enquiry.TeamMeta?.TeamStatus === 'Closed';
+    const inventoryNotAssignedYet = !enquiry.InventoryMeta?.InventoryStatus || enquiry.InventoryMeta.InventoryStatus === 'New';
 
-    if (hasInventoryAssigned) {
+    if (teamIsClosed && inventoryNotAssignedYet) {
+      enquiry.Events.forEach(event => {
+        event.AssignedTeam?.forEach(member => {
+          if (!Array.isArray(member.assignedInventory)) {
+            member.assignedInventory = [];
+          }
+        });
+      });
+
+      // ✅ Now mark inventory as closed
       enquiry.InventoryMeta = {
         ...(enquiry.InventoryMeta || {}),
-        InventoryStatus: 'Closed',
+        InventoryStatus: 'New',
         InventoryAssignedBy: req.user?.name || 'Admin',
         InventoryAssignedAt: new Date()
       };
     }
+
 
     const saved = await enquiry.save();
     res.status(200).json({

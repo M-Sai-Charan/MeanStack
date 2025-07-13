@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { OlpService } from '../olp.service';
-
+import { ChatService } from '../chat.service';
+import { ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 @Component({
   selector: 'app-olp-client-template',
   templateUrl: './olp-client-template.component.html',
@@ -10,7 +11,12 @@ import { OlpService } from '../olp.service';
   providers: [MessageService],
   standalone: false,
 })
-export class OlpClientTemplateComponent implements OnInit {
+export class OlpClientTemplateComponent implements OnInit, AfterViewChecked {
+  @ViewChild('chatContainer') private chatContainer!: ElementRef;
+
+  ngAfterViewChecked(): void {
+    this.scrollToBottom();
+  }
   enquiryId: string = '';
   enquiry: any = null;
   totalInvoiceAmount: number = 0;
@@ -29,8 +35,11 @@ export class OlpClientTemplateComponent implements OnInit {
 
   isLinkExpired: boolean = false;
   selectedImage: string | null = null;
+  chatMessages: any[] = [];
+  chatText: string = '';
+  clientName = 'Client'; // You can dynamically set this if needed
 
-  constructor(private olpService: OlpService, private route: ActivatedRoute) { }
+  constructor(private olpService: OlpService, private route: ActivatedRoute, private chatService: ChatService) { }
   openImageModal(imgUrl: string): void {
     this.selectedImage = imgUrl;
   }
@@ -42,6 +51,22 @@ export class OlpClientTemplateComponent implements OnInit {
     this.enquiryId = this.route.snapshot.paramMap.get('id')!;
     this.getOLPEnquiryFromApi(this.enquiryId);
     this.checkLinkExpiry(); // 👈 Add this
+
+    // Join chat room and subscribe
+    this.chatService.joinRoom(this.enquiryId);
+    this.chatService.getChatHistory(this.enquiryId).subscribe(history => {
+      this.chatMessages = history;
+    });
+
+    this.chatService.receiveMessages().subscribe((msg) => {
+      this.chatMessages.push(msg);
+    });
+
+  }
+  private scrollToBottom(): void {
+    try {
+      this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
+    } catch (err) { }
   }
   checkLinkExpiry(): void {
     const expiryDate = new Date('2025-07-10T23:59:59'); // ⏰ Set your expiry dynamically
@@ -59,13 +84,38 @@ export class OlpClientTemplateComponent implements OnInit {
   getOLPEnquiryFromApi(id: string) {
     this.olpService.getEnquiryById(id).subscribe((data: any) => {
       this.enquiry = data;
-
+      if (this.enquiry?.Bride && this.enquiry?.Groom) {
+        this.clientName = `${this.enquiry.Bride} & ${this.enquiry.Groom}`;
+      }
       if (this.enquiry?.Events?.length) {
         this.totalInvoiceAmount = this.enquiry.Events.reduce(
-          (sum: number, ev: any) => sum + (parseInt(ev.invoice) || 0),
+          (sum: number, ev: any) => sum + (parseInt(ev.FinalApprovedAmount) || 0),
           0
         );
       }
     });
   }
+  sendChatMessage() {
+    if (this.chatText.trim()) {
+      const message = {
+        olpid: this.enquiryId,
+        room: this.enquiryId,
+        sender: this.clientName,
+        message: this.chatText,
+        text: this.chatText,
+        time: new Date()
+      };
+      console.log(message)
+      // ✅ Push the message to UI immediately
+      // this.chatMessages.push({ ...message });
+
+      // ✅ Emit to backend via socket
+      this.chatService.sendMessage(message);
+
+      // ✅ Clear input
+      this.chatText = '';
+    }
+  }
+
+
 }
