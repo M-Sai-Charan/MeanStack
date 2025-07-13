@@ -29,7 +29,6 @@ import {MatSelectModule} from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { OlpChatComponent } from './olp-chat/olp-chat.component';
-import { ChatService } from './chat.service';
 @NgModule({
   declarations: [
     OlpDashboardComponent,
@@ -65,6 +64,6 @@ import { ChatService } from './chat.service';
     MatTableModule,
     MatCheckboxModule,
   ],
-  providers: [OlpService,ChatService]
+  providers: [OlpService]
 })
 export class OlpModule { }

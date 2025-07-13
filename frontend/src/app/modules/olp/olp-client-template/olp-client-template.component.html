@@ -77,32 +77,4 @@
     <button class="btn-approve" (click)="approveEstimate()">Approve Estimate</button>
     <button class="btn-reject" (click)="rejectEstimate()">Request Changes</button>
   </div>
-
-  <!-- 💬 Client Chat Panel -->
-  <!-- 💬 Client Chat Panel -->
-  <!-- 💬 Chat Section -->
-  <div class="section chat-section">
-    <h2>Chat with Our Team</h2>
-
-    <div class="chat-box">
-      <!-- Messages -->
-      <div #chatContainer class="chat-messages">
-        <div *ngFor="let msg of chatMessages"
-          [ngClass]="{ 'chat-me': msg.sender === clientName, 'chat-them': msg.sender !== clientName }"
-          class="chat-bubble">
-          <strong>{{ msg.sender }}</strong>
-          <p>{{ msg.text }}</p>
-          <small>{{ msg.time | date: 'shortTime' }}</small>
-        </div>
-      </div>
-
-      <!-- Input -->
-      <div class="chat-input">
-        <input type="text" [(ngModel)]="chatText" (keydown.enter)="sendChatMessage()" placeholder="Type a message..." />
-        <button (click)="sendChatMessage()">Send</button>
-      </div>
-    </div>
-  </div>
-
-
 </div>
