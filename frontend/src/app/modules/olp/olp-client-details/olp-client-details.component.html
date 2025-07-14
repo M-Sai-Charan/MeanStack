@@ -7,10 +7,17 @@
     <small class="italic">Delivering timeless moments beautifully</small>
 </div>
 
+<div class="p-inputgroup mb-4 px-3">
+    <input type="text" pInputText [formControl]="searchControl"
+        placeholder="Search by OLPID, Bride, Groom, or Contact Number" />
+    <button pButton type="button" icon="pi pi-times" class="p-button-sm p-button-text"
+        (click)="searchControl.setValue('')" *ngIf="searchControl.value" label="Clear">
+    </button>
+</div>
 
 <!-- Client Card Grid -->
 <div class="olp-client-list p-grid">
-    <div *ngFor="let client of clients" class="p-col-12 sm:p-col-12 md:p-col-6 lg:p-col-4">
+    <div *ngFor="let client of filteredClients" class="p-col-12 sm:p-col-12 md:p-col-6 lg:p-col-4">
         <p-card class="olp-card">
             <ng-template pTemplate="header">
                 <div class="card-header flex justify-content-between align-items-center">
@@ -28,6 +35,9 @@
             </button>
         </p-card>
     </div>
+     <div *ngIf="filteredClients?.length === 0" class="p-col-12 text-center text-gray-500 p-4">
+    <p><i class="pi pi-info-circle"></i> No results found</p>
+  </div>
 </div>
 <p-dialog [(visible)]="selectedClient" [modal]="true" [style]="{ width: '90vw' }" [breakpoints]="{ '960px': '95vw' }"
     header="Client Details" class="olp-dialog" [dismissableMask]="true" (onHide)="selectedClient = null">
