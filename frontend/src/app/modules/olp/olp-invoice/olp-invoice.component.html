@@ -92,7 +92,7 @@
     <!-- Events -->
     <div formArrayName="events" class="flex flex-column gap-4">
       <div *ngFor="let event of eventsFormArray.controls; let i = index" [formGroupName]="i"
-        class="event-card p-3 border border-gray-300 rounded-lg bg-white shadow-sm animate-fade-in"
+        class="event-card-invoice p-3 border border-gray-300 rounded-lg bg-white shadow-sm animate-fade-in"
         style="border-radius: 10px;">
         <h5 class="text-lg font-semibold text-primary mb-3">{{ event.value.eventName }}</h5>
         <div class="grid formgrid p-fluid">
