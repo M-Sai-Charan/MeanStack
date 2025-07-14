@@ -17,27 +17,39 @@
 
 <!-- Client Card Grid -->
 <div class="olp-client-list p-grid">
-    <div *ngFor="let client of filteredClients" class="p-col-12 sm:p-col-12 md:p-col-6 lg:p-col-4">
-        <p-card class="olp-card">
-            <ng-template pTemplate="header">
-                <div class="card-header flex justify-content-between align-items-center">
-                    <span class="status-badge" [ngClass]="client.CallStatus.toLowerCase()">{{ client.OLPID }}</span>
-                </div>
-            </ng-template>
+    <div class="final-client-wrapper">
+  <div *ngFor="let client of filteredClients" class="final-client-card">
+    <div class="card-inner">
+      <!-- Front Face -->
+      <div class="card-front">
+        <img src="/olp-logo.png" alt="OLP Logo" class="final-client-logo" />
+        <div class="final-client-names">
+          {{ client.Bride[0] }} ❤️ {{ client.Groom[0] }}
+        </div>
+         <div class="final-client-ids">
+         {{ client.OLPID }}
+        </div>
+      </div>
 
-            <div class="bride-groom text-lg mb-2">
-                {{ client.Bride[0] }} ❤️ {{ client.Groom[0] }}
-            </div>
-
-            <button pButton type="button" (click)="selectedClient = client" label="Show" icon="pi pi-eye"
-                pTooltip="{{ client.Bride}} ❤️ {{client.Groom}}" tooltipPosition="top"
-                class="p-button-sm p-button-outlined view-btn">
-            </button>
-        </p-card>
+      <!-- Back Face -->
+      <div class="card-back">
+        <h3>{{ client.Bride }} ❤️ {{ client.Groom }}</h3>
+        <p><strong>Phone:</strong> {{ client.ContactNumber }}</p>
+        <!-- <p>
+          <strong>Status:</strong>
+          <span class="status-badge" [ngClass]="client.CallStatus.toLowerCase()">
+            {{ client.CallStatus }}
+          </span>
+        </p> -->
+        <button class="final-client-btn" (click)="selectedClient = client">Show Details</button>
+      </div>
     </div>
-     <div *ngIf="filteredClients?.length === 0" class="p-col-12 text-center text-gray-500 p-4">
-    <p><i class="pi pi-info-circle"></i> No results found</p>
   </div>
+</div>
+
+    <div *ngIf="filteredClients?.length === 0" class="p-col-12 text-center text-gray-500 p-4">
+        <p><i class="pi pi-info-circle"></i> No results found</p>
+    </div>
 </div>
 <p-dialog [(visible)]="selectedClient" [modal]="true" [style]="{ width: '90vw' }" [breakpoints]="{ '960px': '95vw' }"
     header="Client Details" class="olp-dialog" [dismissableMask]="true" (onHide)="selectedClient = null">
