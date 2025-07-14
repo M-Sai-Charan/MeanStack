@@ -14,7 +14,7 @@ export class OlpClientTemplateComponent implements OnInit {
   enquiry: any = null;
   totalInvoiceAmount: number = 0;
   centerIndex = 4;
-    showEnvelope = true;
+  showEnvelope = true;
   letterVisible = false;
   galleryImages: string[] = [
     '/image1.jpg',
@@ -27,7 +27,9 @@ export class OlpClientTemplateComponent implements OnInit {
     '/image3.jpg',
     '/image7.jpg',
   ];
-
+  remainingPercentage: number = 100;
+  remainingTime: string = '';
+  private countdownInterval: any;
   isLinkExpired: boolean = false;
   selectedImage: string | null = null;
 
@@ -40,19 +42,62 @@ export class OlpClientTemplateComponent implements OnInit {
     this.selectedImage = null;
   }
   ngOnInit(): void {
-      this.letterVisible = true;
-      setTimeout(() => {
-        this.showEnvelope = false;
-      }, 1000);
+    this.letterVisible = true;
+    setTimeout(() => {
+      this.showEnvelope = false;
+    }, 1000);
     this.enquiryId = this.route.snapshot.paramMap.get('id')!;
     this.getOLPEnquiryFromApi(this.enquiryId);
     this.checkLinkExpiry(); // 👈 Add this
   }
   checkLinkExpiry(): void {
-    const expiryDate = new Date('2025-07-10T23:59:59'); // ⏰ Set your expiry dynamically
-    const now = new Date();
-    this.isLinkExpired = now > expiryDate;
+    if (this.enquiry?.InvoiceMeta?.InvoiceApprovedAt) {
+      const approvedAt = new Date(this.enquiry.InvoiceMeta.InvoiceApprovedAt);
+      const expiryDate = new Date(approvedAt.getTime() + 24 * 60 * 60 * 1000); // ⏰ 6 hours in milliseconds
+      // 1 day later
+
+      this.updateCountdown(expiryDate);
+      this.countdownInterval = setInterval(() => {
+        this.updateCountdown(expiryDate);
+      }, 1000);
+    } else {
+      this.remainingTime = '';
+      this.isLinkExpired = false;
+      this.remainingPercentage = 100;
+    }
   }
+
+  updateCountdown(expiryDate: Date): void {
+    const now = new Date().getTime();
+    const totalDuration = 24 * 60 * 60 * 1000; // 24 hours
+    const distance = expiryDate.getTime() - now;
+
+    if (distance <= 0) {
+      this.remainingTime = 'Expired';
+      this.isLinkExpired = true;
+      this.remainingPercentage = 0;
+      clearInterval(this.countdownInterval);
+      return;
+    }
+
+    const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((distance / (1000 * 60)) % 60);
+    const seconds = Math.floor((distance / 1000) % 60);
+
+    this.remainingTime = `${hours}h ${minutes}m ${seconds}s`;
+    this.isLinkExpired = false;
+
+    const elapsed = totalDuration - distance;
+    this.remainingPercentage = Math.max(0, 100 - Math.floor((elapsed / totalDuration) * 100));
+  }
+
+  ngOnDestroy() {
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+    }
+  }
+
+
   approveEstimate() {
     alert("✅ Thank you! Your estimate is approved.");
     // Optionally call API or route to confirmation screen
@@ -70,7 +115,7 @@ export class OlpClientTemplateComponent implements OnInit {
           0
         );
       }
+      this.checkLinkExpiry();
     });
   }
-
 }

@@ -1,4 +1,4 @@
-<div *ngIf="showEnvelope" class="envelope-container">
+<div *ngIf="showEnvelope && !isLinkExpired" class="envelope-container">
   <svg id="envelope-svg" viewBox="0 0 1124 788">
     <g id="dribble-invitation">
       <polygon id="envelop-top" class="st6"
@@ -47,7 +47,7 @@
     <h1>{{ enquiry?.Bride }} <span class="heart">❤️</span> {{ enquiry?.Groom }}</h1>
   </div> -->
 </div>
-<div *ngIf="!showEnvelope" class="wedding-template-container">
+<div *ngIf="!showEnvelope && !isLinkExpired" class="wedding-template-container">
   <h1>{{ enquiry?.Bride }} <span class="heart">❤️</span> {{ enquiry?.Groom }}</h1>
 
   <div class="section" style="position: relative;">
@@ -123,4 +123,45 @@
     <button class="btn-approve" (click)="approveEstimate()">Approve Estimate</button>
     <button class="btn-reject" (click)="rejectEstimate()">Request Changes</button>
   </div>
+ <div *ngIf="!isLinkExpired" class="countdown-wrapper">
+  <p class="countdown-text">
+    ⏳ This link expires in 
+    <span class="highlight">{{ remainingTime }}</span>
+  </p>
+
+  <div class="progress-outer">
+    <div 
+      class="progress-inner" 
+      [ngStyle]="{ width: remainingPercentage + '%' }" 
+      [ngClass]="{ 'critical': remainingPercentage <= 25 }"
+    ></div>
+  </div>
+</div>
+</div>
+<div *ngIf="isLinkExpired" class="expiry-warning">
+  <section class="page_404">
+	<div class="container">
+		<div class="row">	
+		<div class="col-sm-12 ">
+		<div class="col-sm-10 col-sm-offset-1  text-center">
+		<div class="four_zero_four_bg">
+			<h1 class="text-center ">404</h1>
+		
+		
+		</div>
+		
+		<div class="contant_box_404">
+		<h3 class="h2">
+		Look's like link expired
+		</h3>
+		
+		<p>the page you are looking for not available!</p>
+		
+		<a href="https://www.instagram.com/onelookphotography_/?hl=en" target="_blank" class="link_404">Contact Us</a>
+	</div>
+		</div>
+		</div>
+		</div>
+	</div>
+</section>
 </div>
