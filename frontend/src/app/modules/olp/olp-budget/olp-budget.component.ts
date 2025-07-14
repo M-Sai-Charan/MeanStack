@@ -108,7 +108,6 @@ export class OlpBudgetComponent implements OnInit {
         });
         this.selectedCustomer = null;
         this.getOLPBudgetData();
-        this.getOLPMaster();
       },
       error: () => {
         this.messageService.add({
