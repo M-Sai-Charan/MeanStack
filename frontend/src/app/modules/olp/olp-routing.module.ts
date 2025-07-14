@@ -20,6 +20,7 @@ import { OlpChatComponent } from './olp-chat/olp-chat.component';
 const routes: Routes = [
   { path: '', component: OlpLoginComponent },
   { path: 'login', component: OlpLoginComponent },
+   { path: 'clientsTemplate/:id', component: OlpClientTemplateComponent },
   {
     path: '',
     component: OlpMenuComponent,
@@ -35,7 +36,7 @@ const routes: Routes = [
       { path: 'invoice', component: OlpInvoiceComponent, canActivate: [RoleGuard] },
       { path: 'tasks', component: OlpTasksComponent, canActivate: [RoleGuard] },
       { path: 'clients', component: OlpClientDetailsComponent, canActivate: [RoleGuard] },
-      { path: 'clientsTemplate/:id', component: OlpClientTemplateComponent, canActivate: [RoleGuard] },
+      // { path: 'clientsTemplate/:id', component: OlpClientTemplateComponent, canActivate: [RoleGuard] },
       { path: 'enquiry-form', component: OlpEnquiryFormComponent, canActivate: [RoleGuard] },
       { path: 'chat', component: OlpChatComponent, canActivate: [RoleGuard] },
       { path: '', redirectTo: 'login', pathMatch: 'full' }

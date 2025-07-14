@@ -259,6 +259,7 @@ export class OlpUsersComponent implements OnInit {
     }
   }
   shareInvoiceTemplate(enquiryId: number) {
-    this.router.navigate(['/clientsTemplate', enquiryId]);
+    const url = `/clientsTemplate/${enquiryId}`;
+    window.open(url, '_blank'); // Opens in new tab
   }
 }

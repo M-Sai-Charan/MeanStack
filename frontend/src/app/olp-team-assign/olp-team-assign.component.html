@@ -50,7 +50,7 @@
         <tr>
           <td colspan="8">
             <div class="event-cards">
-              <div class="event-card" *ngFor="let event of olp.Events">
+              <div class="event-card-team" *ngFor="let event of olp.Events">
                 <h4>{{ event.EventName }}</h4>
                 <div class="event-details-row">
                   <div><i class="pi pi-calendar"></i>{{ event.EventDate | date: 'dd/MM/yyyy' }}</div>

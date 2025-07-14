@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { OlpService } from '../olp.service';
@@ -32,23 +32,34 @@ export class OlpClientTemplateComponent implements OnInit {
   private countdownInterval: any;
   isLinkExpired: boolean = false;
   selectedImage: string | null = null;
-
-  constructor(private olpService: OlpService, private route: ActivatedRoute) { }
+  animatedTotal: string = '0';
+  constructor(private olpService: OlpService, private route: ActivatedRoute, private renderer: Renderer2) { }
   openImageModal(imgUrl: string): void {
     this.selectedImage = imgUrl;
   }
-
+  animateTotal(finalAmount: number) {
+    let current = 0;
+    const increment = Math.ceil(finalAmount / 120);
+    const interval = setInterval(() => {
+      current += increment;
+      if (current >= finalAmount) {
+        current = finalAmount;
+        clearInterval(interval);
+      }
+      this.animatedTotal = this.formatWithCommas(current);
+    }, 50);
+  }
+  formatWithCommas(x: number): string {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
   closeImageModal(): void {
     this.selectedImage = null;
   }
   ngOnInit(): void {
-    this.letterVisible = true;
-    setTimeout(() => {
-      this.showEnvelope = false;
-    }, 1000);
     this.enquiryId = this.route.snapshot.paramMap.get('id')!;
     this.getOLPEnquiryFromApi(this.enquiryId);
     this.checkLinkExpiry(); // 👈 Add this
+    this.renderer.addClass(document.body, 'scrollable-body');
   }
   checkLinkExpiry(): void {
     if (this.enquiry?.InvoiceMeta?.InvoiceApprovedAt) {
@@ -95,6 +106,7 @@ export class OlpClientTemplateComponent implements OnInit {
     if (this.countdownInterval) {
       clearInterval(this.countdownInterval);
     }
+    this.renderer.removeClass(document.body, 'scrollable-body');
   }
 
 
@@ -114,6 +126,7 @@ export class OlpClientTemplateComponent implements OnInit {
           (sum: number, ev: any) => sum + (parseInt(ev.FinalApprovedAmount) || 0),
           0
         );
+        this.animateTotal(this.totalInvoiceAmount);
       }
       this.checkLinkExpiry();
     });
