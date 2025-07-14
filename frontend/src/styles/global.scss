@@ -3054,7 +3054,7 @@ textarea {
 
 /* Front */
 .card-front {
-  background: linear-gradient(to right, #2b3153, #1e2238);
+  background: var(--main) !important;
   color: white;
 
   .final-client-logo {
