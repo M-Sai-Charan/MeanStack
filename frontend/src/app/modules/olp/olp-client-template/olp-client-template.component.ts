@@ -40,10 +40,10 @@ export class OlpClientTemplateComponent implements OnInit {
     this.selectedImage = null;
   }
   ngOnInit(): void {
-      // this.letterVisible = true;
-      // setTimeout(() => {
-      //   this.showEnvelope = false;
-      // }, 1000);
+      this.letterVisible = true;
+      setTimeout(() => {
+        this.showEnvelope = false;
+      }, 1000);
     this.enquiryId = this.route.snapshot.paramMap.get('id')!;
     this.getOLPEnquiryFromApi(this.enquiryId);
     this.checkLinkExpiry(); // 👈 Add this
