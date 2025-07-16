@@ -29,10 +29,11 @@
   <div class="dashboard-layout">
     <nav class="sidebar">
       <ul>
-        <li *ngFor="let item of allowedMenuItems">
+        <li *ngFor="let item of allowedMenuItems"   pTooltip="{{item.label}}"
+            tooltipPosition="right">
           <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [routerLink]="item.route">
             <i [class]="item.icon"></i>
-            <span class="menu-label">{{ item.label }}</span>
+            <!-- <span class="menu-label">{{ item.label }}</span> -->
           </a>
         </li>
       </ul>

@@ -1,9 +1,9 @@
 <!-- Header -->
 <div
-  class="header invoice-header flex align-items-center justify-content-between mb-4 p-3 bg-primary text-white border-round shadow-2">
-  <img src="olp-logo.png" alt="Logo" height="30" class="mr-3">
-  <h2 style="text-align: center; margin: 10px; padding-left: 100px;">OLP Event Invoices</h2>
-  <small class="italic">Delivering timeless moments beautifully</small>
+  class="olp-users-header flex align-items-center justify-content-between mb-4 p-3 bg-primary text-white border-round shadow-2">
+  <img src="olp-logo.png" alt="Logo" height="30" class="mr-3" />
+  <h2 class="olp-users-title">OLP Invoices</h2>
+  <small class="olp-users-tagline">Delivering timeless moments beautifully</small>
 </div>
 
 <!-- Dynamic Tabs -->
@@ -42,9 +42,8 @@
 
 <!-- Dialog -->
 <p-dialog header="OLP Budget Details" [(visible)]="dialogVisible" [modal]="true" [closable]="true"
-  [dismissableMask]="true" [style]="{ width: '90vw', maxWidth: '1000px' }"
-  [contentStyle]="{ 'max-height': '80vh', 'overflow': 'auto' }" [breakpoints]="{ '960px': '95vw' }"
-  [styleClass]="'animated-dialog slide-in-up border-round-xl shadow-4'">
+  [dismissableMask]="true" [style]="{ width: '90vw', maxWidth: '1000px' }" [styleClass]="'olp-users-dialog'"
+  [contentStyle]="{ 'max-height': '80vh', 'overflow': 'auto' }" [breakpoints]="{ '960px': '95vw' }">
   <form [formGroup]="selectedForm" *ngIf="selectedForm" class="p-4 space-y-4">
 
     <!-- View-only Message -->

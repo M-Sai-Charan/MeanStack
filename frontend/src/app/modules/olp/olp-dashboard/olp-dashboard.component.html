@@ -1,34 +1,33 @@
-<div class="dashboard-container">
-  <!-- Header -->
-  <div class="dashboard-header">
-    <h2>OLP Admin Dashboard</h2>
-    <p>Monitor key business insights in real-time</p>
-  </div>
-
-  <!-- KPI Cards -->
-  <div class="dashboard-kpis">
-    <div class="kpi-card bounce-hover bookings">
+<div
+  class="olp-users-header flex align-items-center justify-content-between mb-4 p-3 bg-primary text-white border-round shadow-2">
+  <img src="olp-logo.png" alt="Logo" height="30" class="mr-3" />
+  <h2 class="olp-users-title">OLP Dashboard</h2>
+  <small class="olp-users-tagline">Monitor key business insights in real-time</small>
+</div>
+<div class="olp-main-dashboard-container">
+  <div class="olp-main-dashboard-kpis">
+    <div class="olp-main-kpi-card bounce-hover bookings">
       <i class="pi pi-calendar-plus"></i>
       <div>
         <h4>Total Bookings</h4>
         <p>{{ bookings }}</p>
       </div>
     </div>
-    <div class="kpi-card bounce-hover revenue">
+    <div class="olp-main-kpi-card bounce-hover revenue">
       <i class="pi pi-dollar"></i>
       <div>
         <h4>Total Earnings</h4>
         <p>${{ revenue }}</p>
       </div>
     </div>
-    <div class="kpi-card bounce-hover events">
+    <div class="olp-main-kpi-card bounce-hover events">
       <i class="pi pi-image"></i>
       <div>
         <h4>Upcoming Events</h4>
         <p>{{ upcomingEvents }}</p>
       </div>
     </div>
-    <div class="kpi-card bounce-hover rating">
+    <div class="olp-main-kpi-card bounce-hover rating">
       <i class="pi pi-star-fill"></i>
       <div>
         <h4>Customer Rating</h4>
@@ -37,10 +36,8 @@
     </div>
   </div>
 
-  <!-- Sections -->
-  <div class="dashboard-sections">
-    <!-- Top Employees -->
-    <div class="dashboard-card">
+  <div class="olp-main-dashboard-sections">
+    <div class="olp-main-dashboard-card">
       <h3>Top Performing Employees</h3>
       <ul>
         <li *ngFor="let emp of topEmployees">
@@ -50,8 +47,7 @@
       </ul>
     </div>
 
-    <!-- Top Locations -->
-    <div class="dashboard-card">
+    <div class="olp-main-dashboard-card">
       <h3>Top Event Locations</h3>
       <ul>
         <li *ngFor="let loc of topLocations">
@@ -61,25 +57,24 @@
       </ul>
     </div>
 
-    <!-- Event Category Breakdown -->
-    <div class="dashboard-card">
+    <div class="olp-main-dashboard-card">
       <h3>Event Type Breakdown</h3>
-      <div class="multi-progress-bar">
+      <div class="olp-main-multi-progress-bar">
         <div *ngFor="let category of eventCategories"
-             class="segment"
+             class="olp-main-segment"
              [ngClass]="category.color"
-             [ngStyle]="{ width: getWidth(category.value) }"></div>
+             [ngStyle]="{ width: getWidth(category.value) }">
+        </div>
       </div>
-      <ul class="target-details">
+      <ul class="olp-main-target-details">
         <li *ngFor="let category of eventCategories">
-          <span class="dot" [ngClass]="category.color"></span>
+          <span class="olp-main-dot" [ngClass]="category.color"></span>
           {{ category.label }} - {{ category.value }}
         </li>
       </ul>
     </div>
 
-    <!-- Chart -->
-    <div class="dashboard-card">
+    <div class="olp-main-dashboard-card">
       <h3>Monthly Earnings</h3>
       <p-chart type="line" [data]="chartData" [options]="chartOptions"></p-chart>
     </div>
