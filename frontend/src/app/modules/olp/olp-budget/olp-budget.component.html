@@ -1,12 +1,13 @@
 <p-toast></p-toast>
 <div
-  class="olp-users-header flex align-items-center justify-content-between mb-4 p-3 bg-primary text-white border-round shadow-2">
-  <img src="olp-logo.png" alt="Logo" height="30" class="mr-3" />
-  <h2 class="olp-users-title">OLP Budgets</h2>
-  <small class="olp-users-tagline">Delivering timeless moments beautifully</small>
+    class="olp-users-header flex align-items-center justify-content-between mb-4 p-3 bg-primary text-white border-round shadow-2">
+    <img src="olp-logo.png" alt="Logo" height="30" class="mr-3" />
+    <h2 class="olp-users-title">OLP Budgets</h2>
+    <small class="olp-users-tagline">Delivering timeless moments beautifully</small>
 </div>
 <p-card>
-    <div class="budget-olp">
+    <div class="olp-budget-container">
+        <!-- Table -->
         <p-table [value]="olpBudgetLists" dataKey="id" responsiveLayout="scroll">
             <ng-template pTemplate="header">
                 <tr>
@@ -19,8 +20,8 @@
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-cust>
-                <tr class="row-fade">
-                    <td>{{ cust.Bride }} & {{cust.Groom}}</td>
+                <tr class="olp-budget-row row-fade">
+                    <td>{{ cust.Bride }} & {{ cust.Groom }}</td>
                     <td>{{ cust.ContactNumber }}</td>
                     <td>{{ cust.Email }}</td>
                     <td>
@@ -30,7 +31,8 @@
                     </td>
                     <td>
                         <p-tag [value]="cust.InvoiceMeta.InvoiceStatus"
-                            [severity]="getStatusSeverity(cust.InvoiceMeta.InvoiceStatus)"></p-tag>
+                            [severity]="getStatusSeverity(cust.InvoiceMeta.InvoiceStatus)">
+                        </p-tag>
                     </td>
                     <td>
                         <ng-container [ngSwitch]="cust.InvoiceMeta.InvoiceStatus">
@@ -38,16 +40,13 @@
                                 class="p-button-text p-ml-2 bounce-hover" pTooltip="Add Budget"
                                 (click)="startBudgeting(cust)">
                             </button>
-
                             <button *ngSwitchCase="'In-progress'" pButton icon="pi pi-search"
                                 class="p-button-text p-ml-2 bounce-hover" pTooltip="Approve/Reject"
-                                (click)="reviewCustomer(cust)" tooltipPosition="top">
+                                tooltipPosition="top" (click)="reviewCustomer(cust)">
                             </button>
-
                             <button *ngSwitchCase="'done'" pButton icon="pi pi-verified"
                                 class="p-button-text p-ml-2 bounce-hover" pTooltip="View" (click)="viewQuote(cust)">
                             </button>
-
                             <button *ngSwitchCase="'rejected'" pButton icon="pi pi-undo"
                                 class="p-button-text p-ml-2 bounce-hover" pTooltip="Undo" (click)="undoReject(cust)">
                             </button>
@@ -56,40 +55,39 @@
                 </tr>
             </ng-template>
         </p-table>
-        <!-- 📸 Photography-themed No Data Message -->
-        <div *ngIf="olpBudgetLists?.length === 0" class="no-data-container">
-            <!-- <svg class="no-data-icon" xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 64 64"
-                fill="none">
-                <path d="M8 20h48v28a4 4 0 01-4 4H12a4 4 0 01-4-4V20z" fill="#F0F0F0" stroke="#3F51B5"
-                    stroke-width="2" />
-                <path d="M24 20l2.667-4h10.666L40 20" fill="#3F51B5" />
-                <circle cx="32" cy="34" r="9" fill="#fff" stroke="#3F51B5" stroke-width="2" />
-                <circle cx="32" cy="34" r="5" fill="#3F51B5" />
-                <rect x="46" y="25" width="6" height="6" rx="1" fill="#3F51B5" />
-                <path d="M8 20l8-10h14l2 2h12l2-2h10l8 10" stroke="#3F51B5" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round" />
-            </svg> -->
 
-            <p class="no-data-text">No budget entries found for any<span style="position: relative;top: 22px;"><img
-                        src="olp-logo.png" alt="Logo" height="60"></span>events.</p>
+        <!-- No Data Message -->
+        <div *ngIf="olpBudgetLists?.length === 0" class="olp-budget-no-data">
+            <i class="pi pi-folder-open no-data-icon" style="font-size: 3rem;"></i>
+            <p class="olp-budget-no-data-text">
+                No budget entries found for any events.
+            </p>
         </div>
-
-        <div *ngIf="selectedCustomer" class="slide-in-form">
+        <!-- Slide-In Form -->
+        <div *ngIf="selectedCustomer" [ngClass]="{ 'olp-budget-slide-in-form': animateSlideIn }"
+            class="olp-budget-form">
             <form [formGroup]="budgetForm" (ngSubmit)="onSubmit()" class="mt-4">
                 <div class="grid">
-                    <div class="col-12 budget-header">
+                    <!-- Form Header -->
+                    <div class="col-12 olp-budget-form-header" style="  background-color:#111827!important;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 6px;
+  text-align: center;">
                         <h4 class="mb-2">
                             {{ formModeTitle }} for
-                            <span style="color: #10b981;">{{ selectedCustomer?.Bride }} & {{
-                                selectedCustomer?.Groom}}</span>
+                            <span class="text-green-500">{{ selectedCustomer?.Bride }} & {{ selectedCustomer?.Groom
+                                }}</span>
                         </h4>
                     </div>
 
+                    <!-- Event Tabs -->
                     <div class="col-12">
-                        <p-tabView>
+                        <p-tabView scrollable>
                             <p-tabPanel *ngFor="let event of selectedCustomer.Events; let i = index"
                                 [header]="event.EventName">
                                 <div class="grid">
+                                    <!-- Budget Input -->
                                     <div class="col-12 md:col-4">
                                         <label for="budget-{{ i }}">Invoice Budget (₹)</label>
                                     </div>
@@ -97,36 +95,39 @@
                                         <p-inputNumber inputId="budget-{{ i }}" [(ngModel)]="event.InvoiceAmount"
                                             mode="currency" currency="INR" locale="en-IN" [step]="1000" [min]="0"
                                             [showButtons]="true" [disabled]="formDisabled" class="w-full"
-                                            (onInput)="calculateTotalBudget()"
-                                            [ngModelOptions]="{ standalone: true }"></p-inputNumber>
+                                            (onInput)="calculateTotalBudget()" [ngModelOptions]="{ standalone: true }">
+                                        </p-inputNumber>
                                     </div>
+
+                                    <!-- Approval Fields -->
                                     <div class="col-12 md:col-4">
-                                        <label for="budget-{{ i }}">Approve / Reject Budget (₹)</label>
+                                        <label for="final-{{ i }}">Approve / Reject Budget (₹)</label>
                                     </div>
                                     <div class="col-12 md:col-4">
                                         <p-inputNumber inputId="final-{{ i }}" [(ngModel)]="event.FinalApprovedAmount"
                                             mode="currency" currency="INR" locale="en-IN" [min]="0" [showButtons]="true"
-                                            class="w-full" [ngModelOptions]="{ standalone: true }"></p-inputNumber>
+                                            class="w-full" [ngModelOptions]="{ standalone: true }">
+                                        </p-inputNumber>
                                     </div>
                                     <div class="col-12 md:col-4">
-                                        <input pInputText id="remarks -{{ i }}" class="w-full"
-                                            placeholder="Enter comments" [ngModelOptions]="{ standalone: true }"
-                                            [(ngModel)]="event.Remarks" />
+                                        <input pInputText id="remarks-{{ i }}" placeholder="Enter comments"
+                                            [(ngModel)]="event.Remarks" class="w-full"
+                                            [ngModelOptions]="{ standalone: true }" />
                                     </div>
                                 </div>
                             </p-tabPanel>
                         </p-tabView>
                     </div>
+
+                    <!-- Footer Action Buttons -->
                     <div class="col-12 text-right">
-                        <span class="mr-3 total-budget pulse">
+                        <span class="mr-3 olp-budget-total pulse">
                             Total Budget: <strong>₹{{ totalBudget | number: '1.2-2' }}</strong>
                         </span>
-
                         <ng-container [ngSwitch]="selectedCustomer.InvoiceMeta.InvoiceStatus">
                             <button *ngSwitchCase="'new'" pButton type="submit" icon="pi pi-check"
-                                label="Generate Quote" [disabled]="!isAllBudgetsEntered()"
-                                class="bounce-hover"></button>
-
+                                label="Generate Quote" class="bounce-hover"
+                                [disabled]="!isAllBudgetsEntered()"></button>
                             <button *ngSwitchCase="'In-progress'" pButton icon="pi pi-check" label="Approve"
                                 class="p-button-success mr-2 bounce-hover" (click)="approve(selectedCustomer)"></button>
                             <button *ngSwitchCase="'In-progress'" pButton icon="pi pi-times" label="Reject"

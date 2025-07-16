@@ -20,7 +20,10 @@ export class OlpBudgetComponent implements OnInit {
   showRejectDialog = false;
 
   olpBudgetLists = [];
-  olpStatusLists = []
+  olpStatusLists = [];
+  animateSlideIn: boolean = false;
+
+
   constructor(private fb: FormBuilder, private messageService: MessageService, private olpService: OlpService) { }
 
   ngOnInit() {
@@ -58,10 +61,15 @@ export class OlpBudgetComponent implements OnInit {
   }
 
   startBudgeting(customer: any) {
+     this.animateSlideIn = false;
+  this.selectedCustomer = null;
+  setTimeout(() => {
     this.selectedCustomer = customer;
     this.formDisabled = false;
     this.budgetForm.reset();
     this.calculateTotalBudget();
+    this.animateSlideIn = true;
+  }, 50);
   }
 
   calculateTotalBudget() {

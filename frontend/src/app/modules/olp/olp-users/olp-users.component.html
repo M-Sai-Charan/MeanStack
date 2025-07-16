@@ -31,11 +31,11 @@
             <p-tag severity="info" value="{{ olpUsers?.length || 0 }}"></p-tag>
             <span class="font-medium">Unread:</span>
             <p-tag severity="danger" value="{{ getUnreadCount() }}"></p-tag>
-            <span class="font-medium">Read:</span>
-            <p-tag severity="success" value="{{olpUsers?.length - getUnreadCount() }}"></p-tag>
-             <p-button icon="pi pi-refresh" (click)="onReloadUsers()" rounded severity="success" [pTooltip]="'Refresh Data'"
+            <!-- <span class="font-medium">Read:</span>
+            <p-tag severity="success" value="{{olpUsers?.length - getUnreadCount() }}"></p-tag> -->
+            <!-- <p-button icon="pi pi-refresh" (click)="onReloadUsers()" rounded severity="success" [pTooltip]="'Refresh Data'"
           tooltipPosition="top" styleClass="p-button-sm p-button-rounded ml-2">
-        </p-button>
+        </p-button> -->
           </div>
         </div>
 

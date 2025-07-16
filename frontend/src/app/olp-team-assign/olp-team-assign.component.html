@@ -81,15 +81,12 @@
       </ng-template>
     </p-table>
 
-    <div *ngIf="OLPEventTeamData?.length === 0" class="no-data-container">
-      <p class="no-data-text">
-        No team assign entries found for any
-        <span style="position: relative; top: 22px">
-          <img src="olp-logo.png" alt="Logo" height="60" />
-        </span>
-        events.
-      </p>
-    </div>
+    <div *ngIf="OLPEventTeamData?.length === 0"  class="olp-budget-no-data">
+            <i class="pi pi-folder-open no-data-icon" style="font-size: 3rem;"></i>
+            <p class="olp-budget-no-data-text">
+                No team assign entries found for any events.
+            </p>
+        </div>
   </p-card>
 </div>
 

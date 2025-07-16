@@ -49,22 +49,22 @@
         <p><i class="pi pi-info-circle"></i> No results found</p>
     </div>
 </div>
-<p-dialog [(visible)]="selectedClient" [modal]="true" [style]="{ width: '90vw' }" [breakpoints]="{ '960px': '95vw' }"
+<p-dialog [(visible)]="selectedClient" [modal]="true" [style]="{ width: '90vw' }" [breakpoints]="{ '960px': '95vw' }" [styleClass]="'olp-users-dialog'"
     header="Client Details" class="olp-dialog" [dismissableMask]="true" (onHide)="selectedClient = null">
     <ng-container *ngIf="selectedClient">
         <!-- Client Info -->
-        <div class="p-grid grid formgrid mb-3">
+        <div class="p-grid grid formgrid mb-3" style="gap: 10px;">
             <div class="p-col-12 sm:p-col-12 md:p-col-6 lg:p-col-4">
-                📍 <b>Location:</b> {{ selectedClient.Location }} |
+                📍 <b>Location:</b> {{ selectedClient.Location }} 
             </div>
             <div class="p-col-12 sm:p-col-12 md:p-col-6 lg:p-col-4">
-                📞 <b>Phone:</b> {{ selectedClient.ContactNumber }} |
+                📞 <b>Phone:</b> {{ selectedClient.ContactNumber }} 
             </div>
             <div class="p-col-12 sm:p-col-12 md:p-col-6 lg:p-col-4">
-                📧 <b>Email:</b> {{ selectedClient.Email }} |
+                📧 <b>Email:</b> {{ selectedClient.Email }} 
             </div>
             <div class="p-col-12 sm:p-col-12 md:p-col-6 lg:p-col-4">
-                📆 <b>Created:</b> {{ selectedClient.createdAt | date:'dd MMM yyyy hh:mm a' }} |
+                📆 <b>Created:</b> {{ selectedClient.createdAt | date:'dd MMM yyyy hh:mm a' }} 
             </div>
             <div class="p-col-12 sm:p-col-12 md:p-col-6 lg:p-col-4">
                 ☎️ <b>Called By:</b> {{ selectedClient.AssignedEmployee }}
