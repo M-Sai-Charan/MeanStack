@@ -46,9 +46,12 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { SkeletonModule } from 'primeng/skeleton';
 import { DatePickerModule } from 'primeng/datepicker';
 import { RadioButtonModule } from 'primeng/radiobutton';
-
+import { CustomToastComponent } from './components/custom-toast/custom-toast.component';
+import { CommonModule } from '@angular/common';
 @NgModule({
-    declarations: [],
+    declarations: [
+        CustomToastComponent
+    ],
     imports: [
         ButtonModule,
         InputTextModule,
@@ -95,9 +98,11 @@ import { RadioButtonModule } from 'primeng/radiobutton';
         FileUploadModule,
         SkeletonModule,
         DatePickerModule,
-        RadioButtonModule
+        RadioButtonModule,
+        CommonModule
     ],
     exports: [
+        CustomToastComponent,
         ButtonModule,
         InputTextModule,
         FormsModule,
@@ -143,7 +148,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
         FileUploadModule,
         SkeletonModule,
         DatePickerModule,
-        RadioButtonModule
+        RadioButtonModule,
     ],
     providers: [HttpService],
     bootstrap: []

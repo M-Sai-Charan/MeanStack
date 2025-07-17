@@ -1,0 +1,9 @@
+<div class="toast-wrapper">
+  <div
+    *ngFor="let toast of toasts"
+    [ngClass]="['toast', toast.severity]"
+    [@toastAnimation]>
+    <strong>{{ toast.summary }}</strong>
+    <p>{{ toast.detail }}</p>
+  </div>
+</div>
