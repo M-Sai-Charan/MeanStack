@@ -57,30 +57,30 @@ export class OlpEnquiryFormComponent implements OnInit {
 
 
   onSubmit() {
-    this.toast.show('success', 'Form Submitted', 'Your response has been recorded!');
-    // if (this.contactForm.valid) {
-    //   const jsonObj = this.convertJson(this.contactForm.value);
-    //   console.log(jsonObj)
-    //   const jsonStr = encodeURIComponent(JSON.stringify(jsonObj));
-    //   // const url = `https://localhost:7167/api/OLP/SetEnquiryDetails?value=${jsonStr}`;
+    // this.toast.show('success', 'Form Submitted', 'Your response has been recorded!');
+    if (this.contactForm.valid) {
+      const jsonObj = this.convertJson(this.contactForm.value);
+      console.log(jsonObj)
+      const jsonStr = encodeURIComponent(JSON.stringify(jsonObj));
+      // const url = `https://localhost:7167/api/OLP/SetEnquiryDetails?value=${jsonStr}`;
 
-    //   this.olpService.saveOLPEnquiry('enquiry', jsonObj).subscribe({
-    //     next: () => {
-    //       this.messageService.add({
-    //         severity: 'success',
-    //         summary: 'Reject',
-    //         detail: 'Enquiry Added successfully.'
-    //       });
-    //     },
-    //     error: () => {
-    //       this.messageService.add({
-    //         severity: 'error',
-    //         summary: 'Failed',
-    //         detail: 'Something went wrong while saving.'
-    //       });
-    //     }
-    //   });
-    // }
+      this.olpService.saveOLPEnquiry('enquiry', jsonObj).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Reject',
+            detail: 'Enquiry Added successfully.'
+          });
+        },
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Failed',
+            detail: 'Something went wrong while saving.'
+          });
+        }
+      });
+    }
   }
 
   convertJson(data: any) {

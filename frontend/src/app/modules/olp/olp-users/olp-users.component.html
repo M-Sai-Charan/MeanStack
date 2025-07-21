@@ -79,7 +79,7 @@
           <span *ngIf="!user.isRead" class="olp-users-dot" pTooltip="New Enquiry" tooltipPosition="left"></span>
           <p-button icon="pi pi-eye" (click)="selectOLP(user)" rounded severity="info" [pTooltip]="'View/Edit Events'"
             tooltipPosition="top" styleClass="p-button-sm p-button-rounded"></p-button>
-          <p-button icon="pi pi-share-alt" (click)="shareInvoiceTemplate(user._id)" rounded severity="success"
+          <p-button *ngIf="user?.InvoiceMeta?.InvoiceStatus === 'Closed'" icon="pi pi-share-alt" (click)="shareInvoiceTemplate(user._id)" rounded severity="success"
             [pTooltip]="'Share Invoice Template'" tooltipPosition="top"
             styleClass="p-button-sm p-button-rounded ml-2"></p-button>
         </td>
@@ -125,7 +125,7 @@
             Call Status
             <span>
               <i style="color: #0a6f4d; font-size: 11px" class="pi pi-info-circle"
-                pTooltip="Change to In-progress status to add Invoice" tooltipPosition="top"></i>
+                pTooltip="Change to Approved status to add Invoice" tooltipPosition="top"></i>
             </span>
           </label>
           <p-select inputId="callStatus" [options]="olpStatusLists" formControlName="callStatus" styleClass="w-full"

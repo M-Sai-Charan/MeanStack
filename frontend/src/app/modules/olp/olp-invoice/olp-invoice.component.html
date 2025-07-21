@@ -75,9 +75,9 @@
         <div class="p-float-label">
           <label for="callStatus">
             Status
-            <span>
+            <span *ngIf="selectedOlp?.InvoiceMeta?.InvoiceStatus === 'New'">
               <i style="color: #0a6f4d; font-size: 11px;" class="pi pi-info-circle"
-                pTooltip="Change to Pending status for Budget Approve." tooltipPosition="top">
+                pTooltip="Change to In-progress status for Budget Approve." tooltipPosition="top">
               </i>
             </span>
           </label>

@@ -27,6 +27,13 @@ const masterData = {
     "Approved",
     "Blocked"
   ],
+  userStatus:[
+    "New",
+    "Pending",
+    "Rejected",
+    "Approved",
+    "Blocked"
+  ],
   callInitiates: [
     "John",
     "Mike",
