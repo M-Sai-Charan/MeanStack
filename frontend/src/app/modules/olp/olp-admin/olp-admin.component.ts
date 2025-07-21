@@ -53,7 +53,7 @@ export class OlpAdminComponent implements OnInit {
   }
   getOLPEmployees() {
     this.loading = true;
-    this.olpService.getAllOLPEnquires('getemployees').subscribe({
+    this.olpService.getAllOLPEnquires('employees').subscribe({
       next: (data: any) => {
         this.olpEmployees = data || [];
       },
@@ -80,7 +80,7 @@ export class OlpAdminComponent implements OnInit {
     this.isSubmitted = true;
     if (this.adminForm.valid) {
       const employeeData = this.convertOLPEmployee(this.adminForm.value, this.olpEmployeeMode);
-      const endpoint = this.olpEmployeeMode === 'Add' ? '/employees' : `/updateEmployees`;
+      const endpoint = this.olpEmployeeMode === 'Add' ? '/employees' : `/employees`;
       this.olpService.saveOLPEmployee(endpoint, employeeData, this.olpEmployeeMode).subscribe(
         (res: any) => {
           this.messageService.add({

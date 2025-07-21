@@ -1,5 +1,3 @@
-// backend/routes/masterdata.routes.js
-
 const express = require('express');
 const router = express.Router();
 const masterdataController = require('../controllers/masterdata.controller');

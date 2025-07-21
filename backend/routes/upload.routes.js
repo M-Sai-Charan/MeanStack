@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const upload = require('../middleware/multer');
-const cloudinary = require('../config/cloudinary'); // ✅ FIXED
+const cloudinary = require('../config/cloudinary');
 const streamifier = require('streamifier');
 
 // POST /api/upload-profile
