@@ -12,7 +12,7 @@
     <ng-template pTemplate="header">
       <div class="flex items-center gap-2">
         <p-tag [value]="status" [severity]="getSeverity(status)"></p-tag>
-        <p-badge [value]="groupedData[status]?.length || 0" severity="contrast" styleClass="ml-2" />
+        <p-badge [value]="groupedData[status].length || 0" severity="contrast" styleClass="ml-2" />
       </div>
     </ng-template>
 
