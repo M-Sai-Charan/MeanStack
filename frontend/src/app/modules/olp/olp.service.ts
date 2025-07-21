@@ -1,17 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpService } from '../../services/http.service';
-
+import { environment } from '../../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class OlpService {
 
-  // private baseUrl = 'https://olp-deploy.azurewebsites.net/api/';
-  // private baseUrl = ' https://localhost:7167/api/OLP';
-  private baseUrl = 'http://localhost:5000/api'
-  // private baseUrl = 'https://onelookphotography.azurewebsites.net/api/olp//';
-
+  private baseUrl = environment.apiUrl
 
   constructor(private httpService: HttpService) { }
 
@@ -47,6 +43,6 @@ export class OlpService {
     return this.httpService.get<any>(`http://localhost:5000/api/clients/${olpid}`);
   }
   uploadProfilePic(url:any,formData: FormData) {
-    return this.httpService.post<any>(`${url}/api/upload-profile`, formData);
+    return this.httpService.post<any>(`${this.baseUrl}/api/upload-profile`, formData);
   }
 }
