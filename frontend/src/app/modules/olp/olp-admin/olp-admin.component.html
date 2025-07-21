@@ -4,6 +4,10 @@
   <h2 class="olp-users-title">OLP Employees</h2>
   <small class="olp-users-tagline">Delivering timeless moments beautifully</small>
 </div>
+<div class="flex justify-between align-items-center gap-4 flex-wrap">
+  <p-button label="Add New Employee" icon="pi pi-user-plus" severity="success" styleClass="w-full md:w-auto"
+    (click)="onAddNewEmployee()"></p-button>
+</div>
 <p-card>
   <ng-container *ngIf="loading; else realTable">
     <div class="table-skeleton">
@@ -26,37 +30,31 @@
       [tableStyle]="{ 'min-width': '65rem' }" responsiveLayout="scroll" [loading]="loading">
 
       <ng-template #caption>
-        <div class="flex justify-between align-items-center gap-4 flex-wrap">
+        <!-- <div class="flex justify-between align-items-center gap-4 flex-wrap">
           <p-button label="Add New Employee" icon="pi pi-user-plus" severity="success" styleClass="w-full md:w-auto"
             (click)="onAddNewEmployee()"></p-button>
-        </div>
+        </div> -->
       </ng-template>
       <ng-template #header>
         <tr>
-          <th>Name</th>
-          <th>Contact</th>
-          <th>Email</th>
-          <th>Role</th>
-          <th>Status</th>
-          <th>Joined On</th>
+          <th class="text-center">Name</th>
+          <th class="text-center">Contact</th>
+          <th class="text-center">Email</th>
+          <th class="text-center">Role</th>
+          <th class="text-center">Joined On</th>
           <th class="text-center">Actions</th>
         </tr>
       </ng-template>
 
       <ng-template #body let-user>
         <tr class="hover:bg-surface-200">
-          <td class="flex align-items-center gap-2">
-            <img [src]="user.profilePic ? user.profilePic : 'assets/default-avatar.png'" alt="Avatar"
-              class="border-circle" style="width: 32px; height: 32px; object-fit: cover;" />
-            <span>{{ user.name }}</span>
+          <td class="text-center">
+            {{ user.name }}
           </td>
-          <td>{{ user.phone }}</td>
-          <td>{{ user.email }}</td>
-          <td>{{ user.role?.name }}</td>
-          <td>
-            <p-tag [value]="user.status" severity="success"></p-tag>
-          </td>
-          <td>{{ user.joiningDate | date:'dd/MM/yyyy' }}</td>
+          <td class="text-center">{{ user.phone }}</td>
+          <td class="text-center">{{ user.email }}</td>
+          <td class="text-center">{{ user.role }}</td>
+          <td class="text-center">{{ user.joiningDate | date:'dd/MM/yyyy' }}</td>
           <td class="text-center">
             <p-button icon="pi pi-pencil" (click)="selectOLPEmployee(user)" rounded severity="info" [pTooltip]="'Edit'"
               tooltipPosition="top" styleClass="p-button-sm p-button-rounded"></p-button>
@@ -99,8 +97,7 @@
 
             <div class="field col-12 md:col-4">
               <label for="gender">Gender</label>
-              <p-dropdown [options]="genders" formControlName="gender" placeholder="Select Gender"
-                optionLabel="name"></p-dropdown>
+              <p-dropdown [options]="genders" formControlName="gender" placeholder="Select Gender"></p-dropdown>
               <p-message *ngIf="isInvalid('gender')" severity="error" text="Gender is Required"></p-message>
             </div>
 
@@ -151,7 +148,7 @@
 
             <div class="field col-12 md:col-4">
               <label>Team</label>
-              <p-dropdown [options]="teams" formControlName="team" optionLabel="name" placeholder="Team"></p-dropdown>
+              <p-dropdown [options]="teams" formControlName="team" placeholder="Team"></p-dropdown>
               <p-message *ngIf="isInvalid('team')" severity="error" text="Team is Required"></p-message>
             </div>
 

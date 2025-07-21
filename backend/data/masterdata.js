@@ -173,7 +173,79 @@ const masterData = {
       role: "Event Coordinator",
       inventory: ["Walkie Talkie", "Schedule Book", "Checklist Clipboard", "Pen Set"]
     }
-  ]
+  ],
+  roles: [
+    {
+      name: "Admin",
+      description: "Full access to all modules and permissions",
+      accessibleRoutes: [
+        "/dashboard",
+        "/users",
+        "/invoice",
+        "/budget",
+        "/team-assign",
+        "/inventory-assign",
+        "/clients",
+        "/admin"
+      ]
+    },
+    {
+      name: "HR",
+      description: "Manages employees, enquiries, invoices",
+      accessibleRoutes: [
+        "/dashboard",
+        "/users",
+        "/invoice",
+        "/clients"
+      ]
+    },
+    {
+      name: "Production Lead",
+      description: "Approves budgets and assigns teams",
+      accessibleRoutes: [
+        "/dashboard",
+        "/budget",
+        "/team-assign",
+        "/inventory-assign"
+      ]
+    },
+    {
+      name: "Photographer",
+      description: "Handles photography tasks",
+      accessibleRoutes: [
+        "/dashboard",
+        "/clients"
+      ]
+    },
+    {
+      name: "Editor",
+      description: "Edits and uploads final deliverables",
+      accessibleRoutes: [
+        "/dashboard"
+      ]
+    },
+    {
+      name: "Coordinator",
+      description: "Handles client interaction and schedule",
+      accessibleRoutes: [
+        "/dashboard",
+        "/clients",
+        "/team-assign"
+      ]
+    }
+  ],
+
+  uiRoutes: [
+    { label: "Dashboard", icon: "pi pi-home", route: "/dashboard" },
+    { label: "Users", icon: "pi pi-users", route: "/users" },
+    { label: "Invoice", icon: "pi pi-receipt", route: "/invoice" },
+    { label: "Budget", icon: "pi pi-wallet", route: "/budget" },
+    { label: "Team Assign", icon: "pi pi-clipboard", route: "/team-assign" },
+    { label: "Inventory Assign", icon: "pi pi-warehouse", route: "/inventory-assign" },
+    { label: "Clients", icon: "pi pi-users", route: "/clients" },
+    { label: "Admin", icon: "pi pi-cog", route: "/admin" }
+  ],
+  teams: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E']
 };
 
 module.exports = masterData;

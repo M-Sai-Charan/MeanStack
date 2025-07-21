@@ -6,6 +6,7 @@ const connectDB = require('./db');
 const app = express();
 const server = http.createServer(app);
 
+// ✅ Middleware
 app.use(cors());
 app.use(express.json());
 
@@ -19,12 +20,17 @@ app.use('/api/invoices', require('./routes/invoice.routes'));
 app.use('/api/team', require('./routes/team.routes'));
 app.use('/api/inventory', require('./routes/inventory.routes'));
 app.use('/api/clients', require('./routes/client.routes'));
+
+const uploadRoute = require('./routes/upload.routes');
+app.use('/api', uploadRoute);
+
+const employeeRoute = require('./routes/employee.routes'); // ✅ new route
+app.use('/api', employeeRoute);
+
 // ✅ Test
 app.get('/', (req, res) => {
   res.send('API is working 🚀');
 });
-
-
 
 const PORT = 5000;
 server.listen(PORT, () => {

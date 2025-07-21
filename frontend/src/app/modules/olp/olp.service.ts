@@ -33,20 +33,20 @@ export class OlpService {
   getEnquiryById(id: string) {
     return this.httpService.get(`${this.baseUrl}/enquiry/${id}`);
   }
-   saveOLPEnquiry(url: string, payload: any): Observable<any> {
+  saveOLPEnquiry(url: string, payload: any): Observable<any> {
     return this.httpService.post<any>(`${this.baseUrl}/${url}`, payload);
   }
   saveOLPEmployee(url: string, payload: any, mode: 'Add' | 'Edit'): Observable<any> {
     if (mode === 'Add') {
       return this.httpService.post<any>(`${this.baseUrl}/${url}`, payload);
     } else {
-      return this.httpService.put<any>(`${this.baseUrl}${url}/${payload.id}`, payload);
+      return this.httpService.put<any>(`${this.baseUrl}${url}/${payload._id}`, payload);
     }
   }
-getClientNameByOLPID(olpid: string) {
-  return this.httpService.get<any>(`http://localhost:5000/api/clients/${olpid}`);
-}
-
-
-
+  getClientNameByOLPID(olpid: string) {
+    return this.httpService.get<any>(`http://localhost:5000/api/clients/${olpid}`);
+  }
+  uploadProfilePic(url:any,formData: FormData) {
+    return this.httpService.post<any>(`${url}/api/upload-profile`, formData);
+  }
 }
