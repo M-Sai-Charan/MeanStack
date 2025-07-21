@@ -27,10 +27,11 @@ app.get('/', (req, res) => {
   res.send('API is working 🚀');
 });
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
  // ✅ Serve Angular static files
 app.use(express.static(path.join(__dirname, '../frontend/dist/olp/browser')));
 
