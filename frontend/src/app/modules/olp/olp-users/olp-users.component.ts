@@ -259,7 +259,26 @@ export class OlpUsersComponent implements OnInit {
     }
   }
   shareInvoiceTemplate(enquiryId: number) {
-    const url = `/clientsTemplate/${enquiryId}`;
-    window.open(url, '_blank'); // Opens in new tab
+    this.olpService.sendInvoiceEmail(enquiryId).subscribe({
+      next: (res) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Updated',
+          detail: '✅ Invoice email sent successfully!'
+        });
+        setTimeout(() => {
+           const url = `/clientsTemplate/${enquiryId}`;
+        window.open(url, '_blank'); // Opens in new tab
+        }, 2000);
+      },
+      error: (err) => {
+        console.error(err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Failed',
+          detail: '❌ Failed to send invoice email'
+        });
+      }
+    });
   }
 }

@@ -42,7 +42,10 @@ export class OlpService {
   getClientNameByOLPID(olpid: string) {
     return this.httpService.get<any>(`http://localhost:5000/api/clients/${olpid}`);
   }
-  uploadProfilePic(url:any,formData: FormData) {
+  uploadProfilePic(url: any, formData: FormData) {
     return this.httpService.post<any>(`${this.baseUrl}/api/upload-profile`, formData);
+  }
+  sendInvoiceEmail(enquiryId: number) {
+    return this.httpService.post(`${this.baseUrl}/enquiry/send-invoice/${enquiryId}`, {});
   }
 }

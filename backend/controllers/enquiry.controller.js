@@ -1,5 +1,7 @@
 const Enquiry = require('../models/enquiry.model');
 const generateOLPID = require('../utils/generateOLPID');
+const nodemailer = require('nodemailer');
+const generateInvoiceTemplate = require('../emailTemplates/invoiceTemplate');
 
 exports.createEnquiry = async (req, res) => {
   try {
@@ -214,5 +216,35 @@ exports.getEnquiryById = async (req, res) => {
   } catch (error) {
     console.error('Error fetching enquiry by ID:', error);
     res.status(500).json({ error: 'Server error fetching enquiry' });
+  }
+};
+
+exports.sendInvoiceTemplate = async (req, res) => {
+  try {
+    const enquiry = await Enquiry.findById(req.params.id);
+    if (!enquiry) return res.status(404).json({ message: 'Enquiry not found' });
+
+    const htmlContent = generateInvoiceTemplate(enquiry);
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_FROM,
+        pass: process.env.EMAIL_PASSWORD
+      }
+    });
+
+    await transporter.sendMail({
+      from: `"OneLook Photography" <${process.env.EMAIL_FROM}>`,
+      to: enquiry.Email,
+      subject: 'Your Wedding Invoice Template 💌',
+      html: htmlContent
+    });
+
+    res.status(200).json({ message: 'Invoice sent successfully' });
+
+  } catch (error) {
+    console.error('Error sending invoice email:', error);
+    res.status(500).json({ error: 'Server error while sending email' });
   }
 };

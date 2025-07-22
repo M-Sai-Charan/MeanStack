@@ -20,4 +20,6 @@ router.put('/update/:id', enquiryController.updateEnquiry);
 // Get enquiry by ID → GET /api/enquiry/:id
 router.get('/:id', enquiryController.getEnquiryById);
 
+router.post('/send-invoice/:id', enquiryController.sendInvoiceTemplate);
+
 module.exports = router;
