@@ -5,9 +5,5 @@ backend/node_modules/
 # Ignore Angular dist folder
 frontend/dist/
 
-# Ignore environment files
-backend/.env
-frontend/src/environments/*.ts
-
 # System files
 .DS_Store

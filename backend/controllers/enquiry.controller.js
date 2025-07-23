@@ -16,9 +16,62 @@ exports.createEnquiry = async (req, res) => {
     });
 
     const saved = await newEnquiry.save();
-    res.status(201).json({ message: 'Enquiry saved', data: saved });
+
+    // ✅ Setup nodemailer transporter
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_FROM,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+
+    // ✅ Email to Company
+    const companyMailOptions = {
+      from: `"OneLook Photography" <${process.env.EMAIL_FROM}>`,
+      to: process.env.COMPANY_EMAIL, // e.g., onelookphotography@gmail.com
+      subject: `📩 New Enquiry from ${data.Name || 'User'}`,
+      html: `
+        <p>Hi <strong>OneLook Photography</strong>,</p>
+        <p>You received a new enquiry from the website.</p>
+        <ul>
+          <li><strong>Name:</strong> ${data.Name}</li>
+          <li><strong>Email:</strong> ${data.Email}</li>
+          <li><strong>Phone:</strong> ${data.Phone}</li>
+        </ul>
+        <p>OLPID: <strong>${olpid}</strong></p>
+        <p>Please respond within 24 hours.</p>
+      `
+    };
+
+    // ✅ Email to User
+    const userMailOptions = {
+      from: `"OneLook Photography" <${process.env.EMAIL_FROM}>`,
+      to: data.Email,
+      subject: `🎉 Thank you for contacting OneLook Photography!`,
+      html: `
+        <p>Hi ${data.Name || 'there'},</p>
+        <p>Thank you for reaching out to OneLook Photography! Our team will get in touch with you within 24 hours.</p>
+        <p>Meanwhile, feel free to check our work and updates on:</p>
+        <ul>
+          <li><a href="https://instagram.com/onelookphotography" target="_blank">Instagram</a></li>
+          <li><a href="mailto:${process.env.COMPANY_EMAIL}">Email Us</a></li>
+        </ul>
+        <br>
+        <p>Best regards,<br/>Team OneLook 📸</p>
+      `
+    };
+
+    // ✅ Send both emails in parallel
+    await Promise.all([
+      transporter.sendMail(companyMailOptions),
+      transporter.sendMail(userMailOptions)
+    ]);
+
+    res.status(201).json({ message: 'Enquiry saved and emails sent', data: saved });
+
   } catch (error) {
-    console.error('Error creating enquiry:', error);
+    console.error('Error creating enquiry or sending emails:', error);
     res.status(500).json({ error: 'Server error' });
   }
 };

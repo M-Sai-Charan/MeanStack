@@ -60,7 +60,6 @@ export class OlpEnquiryFormComponent implements OnInit {
     // this.toast.show('success', 'Form Submitted', 'Your response has been recorded!');
     if (this.contactForm.valid) {
       const jsonObj = this.convertJson(this.contactForm.value);
-      console.log(jsonObj)
       const jsonStr = encodeURIComponent(JSON.stringify(jsonObj));
       // const url = `https://localhost:7167/api/OLP/SetEnquiryDetails?value=${jsonStr}`;
 
@@ -71,6 +70,7 @@ export class OlpEnquiryFormComponent implements OnInit {
             summary: 'Reject',
             detail: 'Enquiry Added successfully.'
           });
+          window.location.reload()
         },
         error: () => {
           this.messageService.add({
