@@ -5,7 +5,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const handlebars = require('handlebars');
-
+const verifyToken = require('../middleware/authMiddleware');
 const Employee = require('../models/Employee');
 const { generateRandomPassword, generateLoginId } = require('../utils/employeeUtils');
 
@@ -102,6 +102,15 @@ router.put('/:id', async (req, res) => {
     console.error('❌ Error updating employee:', error);
     res.status(500).json({ error: 'Failed to update employee', details: error.message });
   }
+});
+// Protected route example
+router.get('/me', verifyToken, async (req, res) => {
+  const userId = req.user.id;
+  const employee = await Employee.findById(userId).select('-password'); // hide password
+  if (!employee) {
+    return res.status(404).json({ message: 'Employee not found' });
+  }
+  res.json(employee);
 });
 
 module.exports = router;

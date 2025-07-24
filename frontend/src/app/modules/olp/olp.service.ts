@@ -11,6 +11,9 @@ export class OlpService {
 
   constructor(private httpService: HttpService) { }
 
+  login(payload: { loginId: string; password: string }): Observable<any> {
+    return this.httpService.post(`${this.baseUrl}/auth/login`, payload);
+  }
   getAllOLPEnquires(url: string): Observable<any[]> {
     return this.httpService.get<any[]>(`${this.baseUrl}/${url}`);
   }

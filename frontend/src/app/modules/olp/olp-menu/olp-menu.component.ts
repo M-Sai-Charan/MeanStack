@@ -2,6 +2,7 @@ import { Component, HostBinding, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { MessageService } from 'primeng/api';
+import { OlpService } from '../olp.service';
 
 @Component({
   selector: 'app-olp-menu',
@@ -13,31 +14,25 @@ import { MessageService } from 'primeng/api';
 export class OlpMenuComponent implements OnInit {
   isDarkMode = false;
   selectedColor: string = '#111827';
-  menuItems = [
-    { label: 'Dashboard', icon: 'pi pi-home', route: '/dashboard' },
-    { label: 'Users', icon: 'pi pi-users', route: '/users' },
-    { label: 'Invoice', icon: 'pi pi-receipt', route: '/invoice' },
-    { label: 'Budget', icon: 'pi pi-wallet', route: '/budget' },
-    { label: 'Team Assign', icon: 'pi pi-clipboard', route: '/team-assign' },
-    { label: 'Inventory Assign', icon: 'pi pi-warehouse', route: '/inventory-assign' },
-    { label: 'Clients', icon: 'pi pi-users', route: '/clients' },
-    { label: 'Admin', icon: 'pi-cog', route: '/admin' },
-    { label: 'Enquiry Form', icon: 'pi-cloud', route: '/enquiry-form' },
-    //  { label: 'Employees', icon: 'pi-cloud', route: '/employees' },
-  ];
+  menuItems = [];
 
   allowedMenuItems: any = [];
   employeeName = '';
   employeeAvatarUrl = 'https://primefaces.org/cdn/primeng/images/demo/avatar/walter.jpg';
   profileDropdownOpen = false;
-  constructor(private router: Router, public authService: AuthService,private messageService:MessageService) { }
+  constructor(private router: Router, public authService: AuthService,private messageService:MessageService,private olpService:OlpService) { }
   ngOnInit(): void {
-    this.allowedMenuItems = this.menuItems.filter(item =>
+    const currentUser = localStorage.getItem('currentUser');
+    this.employeeName = currentUser ? JSON.parse(currentUser)['name'] : '';
+    this.getOLPMasterData()
+  }
+   getOLPMasterData() {
+    this.olpService.getOLPMaster('masterdata').subscribe((res: any) => {
+      this.menuItems = res.data.uiRoutes;
+      this.allowedMenuItems = this.menuItems.filter((item:any) =>
       this.authService.canAccess(item.route)
     );
-    const currentUser = localStorage.getItem('currentUser');
-    this.employeeName = currentUser ? JSON.parse(currentUser)['userName'] : '';
-
+    });
   }
   toggleTheme() {
     this.isDarkMode = !this.isDarkMode;

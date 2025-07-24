@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { MessageService } from 'primeng/api';
+import { OlpService } from '../olp.service';
 
 @Component({
   selector: 'app-olp-login',
@@ -28,7 +29,8 @@ export class OlpLoginComponent implements OnInit {
 
   constructor(private router: Router, private fb: FormBuilder,
     private authService: AuthService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private olpService: OlpService
   ) { }
 
   ngOnInit(): void {
@@ -51,21 +53,33 @@ export class OlpLoginComponent implements OnInit {
     if (this.olpLoginForm?.valid) {
       const { userName, password } = this.olpLoginForm.value;
 
-      const success = this.authService.login(userName, password);
-      if (success) {
-        const allowedRoutes = this.authService.getAllowedRoutes();
-        const redirectTo = allowedRoutes[0] === '*' ? '/dashboard' : allowedRoutes[0];
-        this.router.navigateByUrl(redirectTo);
-      } else {
-       this.messageService.add({
-        severity: 'error',
-        summary: 'Login Failed',
-        detail: 'Invalid Photographer ID or Secret Code',
-        life: 3000
+      this.authService.login({ loginId: userName, password }).subscribe({
+        next: (res) => {
+          // const allowedRoutes = res.employee?.role === 'Admin' ? ['/dashboard'] : ['/dashboard'];
+          // console.log( allowedRoutes[0])
+          // const redirectTo = allowedRoutes[0];
+
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Login Successful',
+            detail: `Welcome, ${res.employee.name}`,
+            life: 3000
+          });
+          this.router.navigateByUrl('/dashboard');
+
+        },
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Login Failed',
+            detail: err.error?.message || 'Invalid login ID or password',
+            life: 3000
+          });
+        }
       });
-      }
     }
   }
+
 
   startSlideshow(): void {
     setInterval(() => {

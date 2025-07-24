@@ -1,47 +1,83 @@
 import { Injectable } from '@angular/core';
-import { USERS } from '../../assets/data/user';
+import { Observable, of } from 'rxjs';
+import { HttpService } from './http.service';
+import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private baseUrl = environment.apiUrl;
   private currentUser: any = null;
 
-  login(photographerId: string, secretCode: string): boolean {
-    const matchedUser = USERS.find(u => u.photographerId === photographerId && u.secretCode === secretCode);
-    if (matchedUser) {
-      this.currentUser = matchedUser;
-      localStorage.setItem('currentUser', JSON.stringify(matchedUser));
-      return true;
-    }
-    return false;
+  constructor(private http: HttpService, private router: Router) {}
+
+  login(credentials: { loginId: string; password: string }): Observable<any> {
+    return new Observable(observer => {
+      this.http.post<any>(`${this.baseUrl}/auth/login`, credentials).subscribe({
+        next: res => {
+          this.currentUser = res.employee;
+          localStorage.setItem('token', res.token);
+          localStorage.setItem('currentUser', JSON.stringify(res.employee));
+          observer.next(res);
+          observer.complete();
+        },
+        error: err => {
+          observer.error(err);
+        }
+      });
+    });
   }
 
   logout(): void {
+    localStorage.removeItem('token');
     localStorage.removeItem('currentUser');
     this.currentUser = null;
+    this.router.navigate(['/login']);
   }
 
   getCurrentUser(): any {
     if (!this.currentUser) {
-      this.currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+      const userStr = localStorage.getItem('currentUser');
+      if (userStr) {
+        this.currentUser = JSON.parse(userStr);
+      }
     }
     return this.currentUser;
   }
 
-  getAllowedRoutes(): string[] {
-    const user = this.getCurrentUser();
-    return user?.allowedRoutes || [];
+  getToken(): string | null {
+    return localStorage.getItem('token');
   }
 
-  canAccess(route: string): boolean {
-    const allowedRoutes = this.getAllowedRoutes();
-    return allowedRoutes.includes('*') || allowedRoutes.includes(route);
+  getUserRole(): string {
+    return this.getCurrentUser()?.role || '';
   }
 
   getUserName(): string {
     return this.getCurrentUser()?.name || '';
   }
 
-  getUserRole(): string {
-    return this.getCurrentUser()?.role || '';
+  isLoggedIn(): boolean {
+    return !!this.getToken();
   }
+
+  // Optional: Role or route-based access
+  canAccess(route: string): boolean {
+    // Modify this logic as needed
+    // const allowedRoles = ['Admin', 'HR', 'Production'];
+    // return allowedRoles.includes(this.getUserRole());/
+    return true
+  }
+  //   canAccess(route: string): boolean {
+  //   const role = this.getUserRole();
+
+  //   const allowedRoutes: Record<string, string[]> = {
+  //     Admin: ['/dashboard', '/dashboard/users', '/dashboard/settings'],
+  //     HR: ['/dashboard', '/dashboard/employees'],
+  //     Production: ['/dashboard', '/dashboard/tasks']
+  //   };
+
+  //   return allowedRoutes[role]?.includes(route) ?? false;
+  // }
+
 }

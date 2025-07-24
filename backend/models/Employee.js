@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const employeeSchema = new mongoose.Schema({
   name: String,
   loginId: String,
-  password: String, 
+  password: String,
   email: String,
   phone: String,
   address: String,
@@ -28,7 +28,24 @@ const employeeSchema = new mongoose.Schema({
     relation: String,
     phone: String
   },
-  profilePic: String  // ✅ Cloudinary URL
+  profilePic: String,  // ✅ Cloudinary URL
+  lastLogin: Date,
+  sessionCount: {
+    type: Number,
+    default: 0
+  },
+  loginHistory: [
+    {
+      loginTime: Date,
+      ipAddress: String,
+      userAgent: String,
+    }
+  ],
+  isActive: {
+    type: Boolean,
+    default: true
+  }
+
 });
 
 module.exports = mongoose.model('Employee', employeeSchema);

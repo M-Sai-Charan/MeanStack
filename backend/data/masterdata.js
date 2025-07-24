@@ -250,7 +250,8 @@ const masterData = {
     { label: "Team Assign", icon: "pi pi-clipboard", route: "/team-assign" },
     { label: "Inventory Assign", icon: "pi pi-warehouse", route: "/inventory-assign" },
     { label: "Clients", icon: "pi pi-users", route: "/clients" },
-    { label: "Admin", icon: "pi pi-cog", route: "/admin" }
+    { label: "Admin", icon: "pi pi-cog", route: "/admin" },
+    { label: "Enquiry Form", icon: "pi-cloud", route: "/enquiry-form" },
   ],
   teams: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E']
 };

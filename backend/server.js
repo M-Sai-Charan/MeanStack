@@ -22,6 +22,8 @@ app.use('/api/inventory', require('./routes/inventory.routes'));
 app.use('/api/clients', require('./routes/client.routes'));
 app.use('/api', require('./routes/upload.routes'));
 app.use('/api/employees', require('./routes/employee.routes'));
+const authRoutes = require('./routes/auth.routes');
+app.use('/api/auth', authRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is working 🚀');

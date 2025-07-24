@@ -48,6 +48,10 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { CustomToastComponent } from './components/custom-toast/custom-toast.component';
 import { CommonModule } from '@angular/common';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from '../interceptors/auth.interceptor';
+import { AuthService } from '../services/auth.service';
+import { RoleGuard } from '../guards/role.guard';
 @NgModule({
     declarations: [
         CustomToastComponent
@@ -150,7 +154,12 @@ import { CommonModule } from '@angular/common';
         DatePickerModule,
         RadioButtonModule,
     ],
-    providers: [HttpService],
+    providers: [HttpService, AuthService,RoleGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }],
     bootstrap: []
 })
 export class SharedModule { }
