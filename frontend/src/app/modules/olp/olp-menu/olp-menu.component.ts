@@ -18,12 +18,15 @@ export class OlpMenuComponent implements OnInit {
 
   allowedMenuItems: any = [];
   employeeName = '';
-  employeeAvatarUrl = 'https://primefaces.org/cdn/primeng/images/demo/avatar/walter.jpg';
+  employeeAvatarUrl = '';
   profileDropdownOpen = false;
   constructor(private router: Router, public authService: AuthService,private messageService:MessageService,private olpService:OlpService) { }
   ngOnInit(): void {
     const currentUser = localStorage.getItem('currentUser');
     this.employeeName = currentUser ? JSON.parse(currentUser)['name'] : '';
+     this.employeeAvatarUrl = currentUser? JSON.parse(currentUser)['data']['profilePic'] : 'https://primefaces.org/cdn/primeng/images/demo/avatar/walter.jpg';
+    // this.allowedMenuItems = currentUser? JSON.parse(currentUser)['data']['allowedRoutes'] : [];
+
     this.getOLPMasterData()
   }
    getOLPMasterData() {

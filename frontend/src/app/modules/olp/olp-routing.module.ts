@@ -17,6 +17,7 @@ import { RoleGuard } from '../../guards/role.guard';
 import { OlpClientTemplateComponent } from './olp-client-template/olp-client-template.component';
 import { OlpEnquiryFormComponent } from './olp-enquiry-form/olp-enquiry-form.component';
 import { OlpChatComponent } from './olp-chat/olp-chat.component';
+import { OlpSettingsComponent } from './olp-settings/olp-settings.component';
 const routes: Routes = [
   { path: '', component: OlpLoginComponent },
   { path: 'login', component: OlpLoginComponent },
@@ -39,6 +40,7 @@ const routes: Routes = [
       // { path: 'clientsTemplate/:id', component: OlpClientTemplateComponent, canActivate: [RoleGuard] },
       { path: 'enquiry-form', component: OlpEnquiryFormComponent, canActivate: [RoleGuard] },
       { path: 'chat', component: OlpChatComponent, canActivate: [RoleGuard] },
+      { path: 'settings', component: OlpSettingsComponent, canActivate: [RoleGuard] },
       { path: '', redirectTo: 'login', pathMatch: 'full' }
     ]
   }

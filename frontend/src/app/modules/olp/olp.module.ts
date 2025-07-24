@@ -30,6 +30,7 @@ import { MatTableModule } from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { OlpChatComponent } from './olp-chat/olp-chat.component';
 import { FilterByOLPIDPipe } from './pipes/filter-by-olpid.pipe';
+import { OlpSettingsComponent } from './olp-settings/olp-settings.component';
 @NgModule({
   declarations: [
     OlpDashboardComponent,
@@ -48,6 +49,7 @@ import { FilterByOLPIDPipe } from './pipes/filter-by-olpid.pipe';
     OlpClientTemplateComponent,
     OlpEnquiryFormComponent,
     OlpChatComponent,
+    OlpSettingsComponent,    
     FilterByOLPIDPipe
   ],
   imports: [

@@ -53,7 +53,7 @@
             </div>
 
             <!-- Submit Button -->
-            <div class="p-field" *ngIf="!olpLoginForm.invalid">
+            <div class="p-field">
               <button
                 pButton
                 type="submit"
@@ -61,7 +61,7 @@
                 (mouseleave)="isHovered = false"
                 class="login-button p-button-rounded p-button-primary w-full animate-button-hover"
               >
-                Enter Studio
+                {{isSumbitted ? 'Entering Studio...' : 'Enter Studio'}}
               </button>
             </div>
           </div>
