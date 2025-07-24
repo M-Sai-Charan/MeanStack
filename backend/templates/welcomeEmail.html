@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: #f6f9fc;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: auto;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .header {
+            background-color: #222;
+            color: #fff;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
+
+        .body {
+            padding: 24px;
+        }
+
+        .body h2 {
+            margin-top: 0;
+            color: #1e88e5;
+        }
+
+        .credentials {
+            background: #f1f3f5;
+            padding: 16px;
+            border-radius: 6px;
+            font-family: monospace;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #1e88e5;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 13px;
+            padding: 16px;
+            color: #888;
+            background-color: #fafafa;
+        }
+
+        .social-icons img {
+            width: 24px;
+            margin: 0 6px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>Welcome to OneLook</h1>
+            <p style="margin: 8px 0 0;">Delivering timeless moments beautifully.</p>
+        </div>
+        <div class="body">
+            <h2>👋 Hello {{name}},</h2>
+            <p>We are thrilled to welcome you aboard OneLook.
+                Your employee profile has been successfully created. You
+                can now access the employee portal using the credentials below:</p>
+
+            <div class="credentials">
+                <p><strong>Login ID:</strong> {{loginId}}</p>
+                <p><strong>Temporary Password:</strong> {{password}}</p>
+            </div>
+
+            <p>Here’s what you can do on the portal:</p>
+            <ul>
+                <li>🧑‍💼 Manage your profile & documents</li>
+                <li>📆 View events and schedules</li>
+                <li>📊 Monitor activity logs and updates</li>
+                <li>📥 Receive internal notifications</li>
+            </ul>
+
+            <a href="https://mean-stack-sigma.vercel.app/" class="button" target="_blank">Login to Employee Portal</a>
+
+            <p style="margin-top: 32px;">If you have any questions, feel free to reply to this email or contact HR at <a
+                    href="mailto:support@onelookphotography.com">support@onelookphotography.com</a>.</p>
+            <p style="margin-top: 24px;">— Team OneLook</p>
+        </div>
+        <div class="footer">
+            <p>Stay connected</p>
+            <div class="social-icons">
+                <a href="https://instagram.com/yourcompany" target="_blank">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1384/1384015.png" alt="Instagram" />
+                </a>
+                <a href="https://facebook.com/yourcompany" target="_blank">
+                    <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" />
+                </a>
+                <a href="https://linkedin.com/company/yourcompany" target="_blank">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1384/1384014.png" alt="LinkedIn" />
+                </a>
+            </div>
+            <p>© 2025 OneLook Photography. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+
+</html>

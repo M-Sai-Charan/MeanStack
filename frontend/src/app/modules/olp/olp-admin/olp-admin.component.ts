@@ -80,7 +80,7 @@ export class OlpAdminComponent implements OnInit {
     this.isSubmitted = true;
     if (this.adminForm.valid) {
       const employeeData = this.convertOLPEmployee(this.adminForm.value, this.olpEmployeeMode);
-      const endpoint = this.olpEmployeeMode === 'Add' ? '/employees' : `/employees`;
+      const endpoint = this.olpEmployeeMode === 'Add' ? 'employees' : `employees`;
       this.olpService.saveOLPEmployee(endpoint, employeeData, this.olpEmployeeMode).subscribe(
         (res: any) => {
           this.messageService.add({
