@@ -1304,6 +1304,21 @@ body.dark-mode .sidebar a:hover {
 
 
 // admin screen
+.status-circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-dot-online .status-circle {
+  background-color: #22c55e; /* green */
+}
+
+.status-dot-offline .status-circle {
+  background-color: #ef4444; /* red */
+}
+
 .profile-preview {
   width: 100px;
   height: 100px;

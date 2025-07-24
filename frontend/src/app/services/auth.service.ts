@@ -3,13 +3,14 @@ import { Observable, of } from 'rxjs';
 import { HttpService } from './http.service';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
+import { SocketService } from '../services/socket.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private baseUrl = environment.apiUrl;
   private currentUser: any = null;
 
-  constructor(private http: HttpService, private router: Router) {}
+  constructor(private http: HttpService, private router: Router,private socketService: SocketService) {}
 
   login(credentials: { loginId: string; password: string }): Observable<any> {
     return new Observable(observer => {
@@ -18,6 +19,9 @@ export class AuthService {
           this.currentUser = res.employee;
           localStorage.setItem('token', res.token);
           localStorage.setItem('currentUser', JSON.stringify(res.employee));
+          console.log('Emitting online with ID:', res.employee?.id); 
+           // ✅ Emit online status to socket
+          this.socketService.emitOnline(res.employee.id);
           observer.next(res);
           observer.complete();
         },

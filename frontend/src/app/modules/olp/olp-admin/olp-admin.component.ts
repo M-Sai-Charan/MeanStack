@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { OlpService } from '../olp.service';
 import { MessageService } from 'primeng/api';
+import { SocketService } from '../../../services/socket.service';
 
 @Component({
   selector: 'app-olp-admin',
@@ -25,7 +26,9 @@ export class OlpAdminComponent implements OnInit {
   selectedUserData: any;
   olpEmployeeMode: any = 'Add';
   loading: boolean = false;
-  constructor(private fb: FormBuilder, private olpService: OlpService, private messageService: MessageService) {
+  onlineEmployeeIds: string[] = [];
+  constructor(private fb: FormBuilder, private olpService: OlpService, private messageService: MessageService,
+    private socketService: SocketService) {
     this.adminForm = this.fb.group({
       profilePic: [''],
       name: ['', Validators.required],
@@ -50,13 +53,37 @@ export class OlpAdminComponent implements OnInit {
   ngOnInit(): void {
     this.getOLPEmployees();
     this.getOLPMasterData();
+    this.socketService.onEmployeeOnline((id: string) => {
+      console.log('📶 Online event received for:', id);
+      const emp = this.olpEmployees.find((e: any) => e._id === id);
+      if (emp) {
+        emp.isOnline = true;
+      } else {
+        // Store temporarily if employee list not ready
+        this.onlineEmployeeIds.push(id);
+      }
+    });
+
+    this.socketService.onEmployeeOffline((id: string) => {
+      console.log('📴 Offline event received for:', id);
+      const emp = this.olpEmployees.find((e: any) => e._id === id);
+      if (emp) emp.isOnline = false;
+    });
   }
   getOLPEmployees() {
     this.loading = true;
     this.olpService.getAllOLPEnquires('employees').subscribe({
       next: (data: any) => {
         this.olpEmployees = data || [];
-      },
+
+        // Set online flags for any already-emitted socket events
+        this.onlineEmployeeIds.forEach((id) => {
+          const emp = this.olpEmployees.find((e: any) => e._id === id);
+          if (emp) emp.isOnline = true;
+        });
+        this.onlineEmployeeIds = [];
+      }
+      ,
       error: (err) => {
         console.error('Error fetching employees:', err);
       },
@@ -65,6 +92,7 @@ export class OlpAdminComponent implements OnInit {
       }
     });
   }
+
   getOLPMasterData() {
     this.olpService.getOLPMaster('masterdata').subscribe((res: any) => {
       this.roles = res.data.roles;
