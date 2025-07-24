@@ -84,7 +84,7 @@
             <!-- Submit Button -->
             <div class="field col-12 text-center">
                 <button pButton type="submit" label="Submit Enquiry" class="p-button-rounded p-button-success" 
-                    (click)="onSubmit()"></button>
+                    (click)="onSubmit()" [disabled]="contactForm.invalid"></button>
             </div>
         </form>
     </div>
