@@ -51,4 +51,7 @@ export class OlpService {
   sendInvoiceEmail(enquiryId: number) {
     return this.httpService.post(`${this.baseUrl}/enquiry/send-invoice/${enquiryId}`, {});
   }
+  updateEmployeeSettings(id: any, payload: any) {
+    return this.httpService.put<any>(`${this.baseUrl}/employees/${id}/settings`, payload);
+  }
 }

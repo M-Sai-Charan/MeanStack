@@ -24,6 +24,9 @@ app.use('/api', require('./routes/upload.routes'));
 app.use('/api/employees', require('./routes/employee.routes'));
 const authRoutes = require('./routes/auth.routes');
 app.use('/api/auth', authRoutes);
+const settingsRoutes = require('./routes/employeeSettings.routes');
+app.use('/api/employees', settingsRoutes);
+
 
 app.get('/', (req, res) => {
   res.send('API is working 🚀');

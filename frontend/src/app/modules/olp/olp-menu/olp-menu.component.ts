@@ -20,14 +20,16 @@ export class OlpMenuComponent implements OnInit {
   employeeName = '';
   employeeAvatarUrl = '';
   profileDropdownOpen = false;
+  userId: string = '';
   constructor(private router: Router, public authService: AuthService,private messageService:MessageService,private olpService:OlpService) { }
   ngOnInit(): void {
     const currentUser = localStorage.getItem('currentUser');
     this.employeeName = currentUser ? JSON.parse(currentUser)['name'] : '';
      this.employeeAvatarUrl = currentUser? JSON.parse(currentUser)['data']['profilePic'] : 'https://primefaces.org/cdn/primeng/images/demo/avatar/walter.jpg';
-    // this.allowedMenuItems = currentUser? JSON.parse(currentUser)['data']['allowedRoutes'] : [];
+     this.userId = currentUser ? JSON.parse(currentUser)['id'] : ''
+    this.allowedMenuItems = currentUser? JSON.parse(currentUser)['data']['allowedRoutes'] : [];
 
-    this.getOLPMasterData()
+    // this.getOLPMasterData()
   }
    getOLPMasterData() {
     this.olpService.getOLPMaster('masterdata').subscribe((res: any) => {
@@ -63,5 +65,8 @@ export class OlpMenuComponent implements OnInit {
 
   applyThemeColor(): void {
     document.documentElement.style.setProperty('--main', this.selectedColor);
+  }
+  onSettings(){
+    this.router.navigate([`/settings/${this.userId}`]);
   }
 }

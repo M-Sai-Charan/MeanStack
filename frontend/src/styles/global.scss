@@ -3071,3 +3071,89 @@ textarea {
 
 // custom toast
 // end
+
+// employee settings screen
+// start
+.olp-settings-container {
+  max-width: 450px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #1e1e2f;
+  color: #fff;
+  border-radius: 10px;
+}
+
+.olp-settings-avatar-wrapper {
+  position: relative;
+  width: 120px;
+  margin: 0 auto 1.5rem;
+}
+
+.olp-settings-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #4fc3f7;
+}
+
+.olp-settings-upload-icon {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: #4fc3f7;
+  border-radius: 50%;
+  padding: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #fff;
+}
+
+.form-field {
+  margin-bottom: 1.2rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: 500;
+}
+
+input[type='text'],
+input[type='password'] {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background-color: #2a2a3d;
+  color: #fff;
+}
+
+.password-input-wrapper {
+  position: relative;
+}
+
+.eye-btn {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+button[type='submit'] {
+  background-color: #4fc3f7;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+  font-weight: 500;
+}
+
+// employee settings screen
+// end

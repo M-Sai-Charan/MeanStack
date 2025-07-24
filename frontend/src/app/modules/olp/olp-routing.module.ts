@@ -40,7 +40,7 @@ const routes: Routes = [
       // { path: 'clientsTemplate/:id', component: OlpClientTemplateComponent, canActivate: [RoleGuard] },
       { path: 'enquiry-form', component: OlpEnquiryFormComponent, canActivate: [RoleGuard] },
       { path: 'chat', component: OlpChatComponent, canActivate: [RoleGuard] },
-      { path: 'settings', component: OlpSettingsComponent, canActivate: [RoleGuard] },
+      { path: 'settings/:id', component: OlpSettingsComponent, canActivate: [RoleGuard] },
       { path: '', redirectTo: 'login', pathMatch: 'full' }
     ]
   }

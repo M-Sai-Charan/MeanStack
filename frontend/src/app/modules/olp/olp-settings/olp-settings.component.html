@@ -1,1 +1,40 @@
-<p>olp-settings works!</p>
+<div class="olp-settings-container">
+    <h2>Update Settings</h2>
+
+    <div
+        class="flex flex-column align-items-center gap-3 border-1 border-dashed border-primary border-round p-3 shadow-2 bg-white">
+
+        <!-- Preview -->
+        <img *ngIf="profilePicPreview" [src]="profilePicPreview" alt="Profile Preview" class="border-circle shadow-3"
+            style="width: 120px; height: 120px; object-fit: cover;" />
+
+        <div *ngIf="!profilePicPreview"
+            class="w-6rem h-6rem border-circle bg-gray-200 flex align-items-center justify-content-center text-500">
+            <i class="pi pi-user" style="font-size: 2rem;"></i>
+        </div>
+
+        <!-- Upload Button -->
+        <p-fileUpload name="profilePic" accept="image/*" mode="basic" [auto]="true"
+            (uploadHandler)="onProfilePicUpload($event)" chooseLabel="Choose" customUpload="true"
+            class="w-full"></p-fileUpload>
+    </div>
+
+    <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()">
+        <div class="form-field">
+            <label for="loginId">Login ID</label>
+            <input id="loginId" type="text" formControlName="loginId" />
+        </div>
+
+        <div class="form-field password-field">
+            <label for="password">New Password</label>
+            <div class="password-input-wrapper">
+                <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password" />
+                <button type="button" class="eye-btn" (click)="togglePasswordVisibility()" type="button">
+                    <i class="pi" [ngClass]="showPassword ? 'pi-eye-slash' : 'pi-eye'"></i>
+                </button>
+            </div>
+        </div>
+
+        <button type="submit">Save Changes</button>
+    </form>
+</div>
