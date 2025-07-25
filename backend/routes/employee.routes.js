@@ -105,12 +105,14 @@ router.put('/:id', async (req, res) => {
 });
 // Protected route example
 router.get('/me', verifyToken, async (req, res) => {
-  const userId = req.user.id;
-  const employee = await Employee.findById(userId).select('-password'); // hide password
-  if (!employee) {
-    return res.status(404).json({ message: 'Employee not found' });
+  try {
+    const employee = await Employee.findById(req.user.id).select('-password');
+    if (!employee) return res.status(404).json({ message: 'Not found' });
+    res.json({ employee });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
   }
-  res.json(employee);
 });
+
 
 module.exports = router;

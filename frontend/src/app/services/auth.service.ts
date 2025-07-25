@@ -10,7 +10,7 @@ export class AuthService {
   private baseUrl = environment.apiUrl;
   private currentUser: any = null;
 
-  constructor(private http: HttpService, private router: Router,private socketService: SocketService) {}
+  constructor(private http: HttpService, private router: Router, private socketService: SocketService) { }
 
   login(credentials: { loginId: string; password: string }): Observable<any> {
     return new Observable(observer => {
@@ -19,8 +19,8 @@ export class AuthService {
           this.currentUser = res.employee;
           localStorage.setItem('token', res.token);
           localStorage.setItem('currentUser', JSON.stringify(res.employee));
-          console.log('Emitting online with ID:', res.employee?.id); 
-           // ✅ Emit online status to socket
+          console.log('Emitting online with ID:', res.employee?.id);
+          // ✅ Emit online status to socket
           this.socketService.emitOnline(res.employee.id);
           observer.next(res);
           observer.complete();
@@ -37,6 +37,12 @@ export class AuthService {
     localStorage.removeItem('currentUser');
     this.currentUser = null;
     this.router.navigate(['/login']);
+  }
+  getLoggedInEmployee(): Observable<any> {
+    const token = this.getToken();
+    if (!token) return of(null); // not logged in
+
+    return this.http.get<any>(`${this.baseUrl}/auth/me`);
   }
 
   getCurrentUser(): any {

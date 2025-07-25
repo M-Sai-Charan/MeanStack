@@ -11,7 +11,7 @@ export class SocketService {
     private socket: Socket;
 
     constructor() {
-        this.socket = io('http://localhost:5000', {
+        this.socket = io(environment.apiUrl.replace(/\/api\/?$/, ''), {
             transports: ['websocket'], // optional but helps in production
         });
 

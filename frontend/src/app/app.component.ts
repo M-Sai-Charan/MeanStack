@@ -15,13 +15,20 @@ export class AppComponent implements OnInit {
     private socketService: SocketService
   ) {}
 
-  ngOnInit(): void {
-    // Emit online status again after hard refresh
-    const user = this.authService.getCurrentUser();
-    if (user) {
-      this.socketService.emitOnline( user.id);
+ ngOnInit(): void {
+  this.authService.getLoggedInEmployee().subscribe({
+    next: (res) => {
+      if (res?.employee?.id) {
+        this.socketService.emitOnline(res.employee.id);
+      }
+    },
+    error: (err) => {
+      console.log('❌ Not logged in or token invalid');
+      // optionally navigate to login or do nothing
     }
-  }
+  });
+}
+
 
   @HostListener('window:beforeunload')
   beforeUnloadHandler() {
