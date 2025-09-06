@@ -37,7 +37,7 @@ const routes: Routes = [
       { path: 'invoice', component: OlpInvoiceComponent, canActivate: [RoleGuard] },
       { path: 'tasks', component: OlpTasksComponent, canActivate: [RoleGuard] },
       { path: 'clients', component: OlpClientDetailsComponent, canActivate: [RoleGuard] },
-      // { path: 'clientsTemplate/:id', component: OlpClientTemplateComponent, canActivate: [RoleGuard] },
+      { path: 'clientsTemplate/:id', component: OlpClientTemplateComponent, canActivate: [RoleGuard] },
       { path: 'enquiry-form', component: OlpEnquiryFormComponent, canActivate: [RoleGuard] },
       { path: 'chat', component: OlpChatComponent, canActivate: [RoleGuard] },
       { path: 'settings/:id', component: OlpSettingsComponent, canActivate: [RoleGuard] },

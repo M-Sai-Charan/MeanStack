@@ -9,7 +9,7 @@ import { OlpService } from '../olp.service';
   templateUrl: './olp-menu.component.html',
   styleUrl: './olp-menu.component.css',
   standalone: false,
-  providers:[MessageService]
+  providers: [MessageService]
 })
 export class OlpMenuComponent implements OnInit {
   isDarkMode = false;
@@ -21,22 +21,22 @@ export class OlpMenuComponent implements OnInit {
   employeeAvatarUrl = '';
   profileDropdownOpen = false;
   userId: string = '';
-  constructor(private router: Router, public authService: AuthService,private messageService:MessageService,private olpService:OlpService) { }
+  constructor(private router: Router, public authService: AuthService, private messageService: MessageService, private olpService: OlpService) { }
   ngOnInit(): void {
     const currentUser = localStorage.getItem('currentUser');
     this.employeeName = currentUser ? JSON.parse(currentUser)['name'] : '';
-     this.employeeAvatarUrl = currentUser? JSON.parse(currentUser)['data']['profilePic'] : 'https://primefaces.org/cdn/primeng/images/demo/avatar/walter.jpg';
-     this.userId = currentUser ? JSON.parse(currentUser)['id'] : ''
-    this.allowedMenuItems = currentUser? JSON.parse(currentUser)['data']['allowedRoutes'] : [];
+    this.employeeAvatarUrl = currentUser ? JSON.parse(currentUser)['data']['profilePic'] : 'https://primefaces.org/cdn/primeng/images/demo/avatar/walter.jpg';
+    this.userId = currentUser ? JSON.parse(currentUser)['id'] : ''
+    this.allowedMenuItems = currentUser ? JSON.parse(currentUser)['data']['allowedRoutes'] : [];
 
     // this.getOLPMasterData()
   }
-   getOLPMasterData() {
+  getOLPMasterData() {
     this.olpService.getOLPMaster('masterdata').subscribe((res: any) => {
       this.menuItems = res.data.uiRoutes;
-      this.allowedMenuItems = this.menuItems.filter((item:any) =>
-      this.authService.canAccess(item.route)
-    );
+      this.allowedMenuItems = this.menuItems.filter((item: any) =>
+        this.authService.canAccess(item.route)
+      );
     });
   }
   toggleTheme() {
@@ -54,19 +54,14 @@ export class OlpMenuComponent implements OnInit {
   }
 
   logout() {
-    localStorage.removeItem('currentUser');
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Logged Out',
-      detail: 'You have been successfully logged out.'
-    });
+    localStorage.clear();
     this.router.navigateByUrl('/login')
   }
 
   applyThemeColor(): void {
     document.documentElement.style.setProperty('--main', this.selectedColor);
   }
-  onSettings(){
+  onSettings() {
     this.router.navigate([`/settings/${this.userId}`]);
   }
 }

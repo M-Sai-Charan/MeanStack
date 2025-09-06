@@ -268,7 +268,7 @@ export class OlpUsersComponent implements OnInit {
         });
         setTimeout(() => {
            const url = `/clientsTemplate/${enquiryId}`;
-        window.open(url, '_blank'); // Opens in new tab
+            window.open(url, '_blank'); // Opens in new tab
         }, 2000);
       },
       error: (err) => {

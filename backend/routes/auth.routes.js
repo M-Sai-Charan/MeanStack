@@ -31,7 +31,6 @@ router.post('/login', async (req, res) => {
         role: employee.role,
         loginId: employee.loginId,
         name: employee.name,
-        data:employee
       },
       JWT_SECRET,
       { expiresIn: '8h' }
