@@ -17,7 +17,7 @@ export class OlpClientDetailsComponent implements OnInit {
   selectedClient: any = null;
   searchOLPID: string = '';
   searchControl: FormControl = new FormControl();
-
+  loadingClients: boolean = false;
   toggleExpanded(index: number): void {
     this.expanded[index] = !this.expanded[index];
   }
@@ -32,11 +32,21 @@ export class OlpClientDetailsComponent implements OnInit {
     });
   }
   getOLPClients() {
-    this.olpService.getAllOLPEnquires('clients/final-approved').subscribe((data: any) => {
-      this.clients = data.data;
-      this.filteredClients = data.data;
-    });
-  }
+  this.loadingClients = true;
+  this.olpService.getAllOLPEnquires('clients/final-approved').subscribe({
+    next: (data: any) => {
+      this.clients = data.data || [];
+      this.filteredClients = data.data || [];
+      this.loadingClients = false;
+    },
+    error: (err) => {
+      console.error('API Error', err);
+      this.clients = [];
+      this.filteredClients = [];
+      this.loadingClients = false;
+    }
+  });
+}
   filterClients(query: string): void {
     if (!query || query.trim() === '') {
       this.filteredClients = this.clients;

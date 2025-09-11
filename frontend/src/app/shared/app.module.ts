@@ -22,6 +22,7 @@ import { ChartModule } from 'primeng/chart';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { InputTextarea } from 'primeng/inputtextarea';
 import { MessageModule } from 'primeng/message';
+import { MessagesModule  } from 'primeng/messages';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule } from 'primeng/calendar';
 import { ToastModule } from 'primeng/toast';
@@ -103,7 +104,8 @@ import { RoleGuard } from '../guards/role.guard';
         SkeletonModule,
         DatePickerModule,
         RadioButtonModule,
-        CommonModule
+        CommonModule,
+        MessagesModule
     ],
     exports: [
         CustomToastComponent,
@@ -153,6 +155,7 @@ import { RoleGuard } from '../guards/role.guard';
         SkeletonModule,
         DatePickerModule,
         RadioButtonModule,
+        MessagesModule
     ],
     providers: [HttpService, AuthService,RoleGuard,
     {

@@ -18,10 +18,12 @@ import { OlpClientTemplateComponent } from './olp-client-template/olp-client-tem
 import { OlpEnquiryFormComponent } from './olp-enquiry-form/olp-enquiry-form.component';
 import { OlpChatComponent } from './olp-chat/olp-chat.component';
 import { OlpSettingsComponent } from './olp-settings/olp-settings.component';
+import { OlpForgotPasswordComponent } from './olp-forgot-password/olp-forgot-password.component';
 const routes: Routes = [
   { path: '', component: OlpLoginComponent },
   { path: 'login', component: OlpLoginComponent },
    { path: 'clientsTemplate/:id', component: OlpClientTemplateComponent },
+    { path: 'forgot-password', component: OlpForgotPasswordComponent},
   {
     path: '',
     component: OlpMenuComponent,

@@ -10,7 +10,7 @@ import { OlpService } from '../olp.service';
   templateUrl: './olp-login.component.html',
   styleUrl: './olp-login.component.css',
   standalone: false,
-  providers: [MessageService]
+  providers: [MessageService],
 })
 export class OlpLoginComponent implements OnInit {
   olpLoginForm: FormGroup | undefined;
@@ -23,16 +23,17 @@ export class OlpLoginComponent implements OnInit {
     'olp-slider1.jpg',
     'olp-slider2.webp',
     'olp-slider3.jpg',
-    'olp-slider4.jpg'
+    'olp-slider4.jpg',
   ];
 
   @ViewChild('bgMusic') bgMusicRef!: ElementRef<HTMLAudioElement>;
 
-  constructor(private router: Router, private fb: FormBuilder,
+  constructor(
+    private router: Router,
+    private fb: FormBuilder,
     private authService: AuthService,
-    private messageService: MessageService,
-    private olpService: OlpService
-  ) { }
+    private messageService: MessageService
+  ) {}
 
   ngOnInit(): void {
     this.initFormValidation();
@@ -54,7 +55,8 @@ export class OlpLoginComponent implements OnInit {
     if (this.olpLoginForm?.valid) {
       this.isSumbitted = true;
       const { userName, password } = this.olpLoginForm.value;
-
+      localStorage.clear();
+      console.log('LocalStorage cleared on app load');
       this.authService.login({ loginId: userName, password }).subscribe({
         next: (res) => {
           // const allowedRoutes = res.employee?.role === 'Admin' ? ['/dashboard'] : ['/dashboard'];
@@ -64,10 +66,9 @@ export class OlpLoginComponent implements OnInit {
             severity: 'success',
             summary: 'Login Successful',
             detail: `Welcome, ${res.employee.name}`,
-            life: 3000
+            life: 3000,
           });
           this.router.navigateByUrl('/dashboard');
-
         },
         error: (err) => {
           this.isSumbitted = false;
@@ -75,13 +76,12 @@ export class OlpLoginComponent implements OnInit {
             severity: 'error',
             summary: 'Login Failed',
             detail: err.error?.message || 'Invalid login ID or password',
-            life: 3000
+            life: 3000,
           });
-        }
+        },
       });
     }
   }
-
 
   startSlideshow(): void {
     setInterval(() => {

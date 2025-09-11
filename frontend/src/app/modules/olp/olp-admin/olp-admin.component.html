@@ -5,7 +5,7 @@
   <small class="olp-users-tagline">Delivering timeless moments beautifully</small>
 </div>
 <div class="flex justify-between align-items-center gap-4 flex-wrap" style="margin: 5px;">
-  <p-button label="Add New Employee" icon="pi pi-user-plus" severity="success" styleClass="w-full md:w-auto"
+  <p-button label="Add New Employee" icon="pi pi-user-plus" severity="info" styleClass="w-full md:w-auto"
     (click)="onAddNewEmployee()"></p-button>
 </div>
 <p-card>
@@ -35,7 +35,6 @@
           <th class="text-center">Email</th>
           <th class="text-center">Role</th>
           <th class="text-center">Joined On</th>
-          <th class="text-center">Status</th>
           <th class="text-center">Actions</th>
         </tr>
       </ng-template>
@@ -49,13 +48,6 @@
           <td class="text-center">{{ user.email }}</td>
           <td class="text-center">{{ user.role }}</td>
           <td class="text-center">{{ user.joiningDate | date:'dd/MM/yyyy' }}</td>
-          <td class="text-center">
-            <i class="pi" [ngClass]="user.isOnline ? 'pi-circle-fill text-green-500' : 'pi-circle-fill text-red-400'"
-              pTooltip="{{ user.isOnline ? 'Online' : 'Offline' }}" tooltipPosition="top">
-            </i>
-          </td>
-
-
           <td class="text-center">
             <p-button icon="pi pi-pencil" (click)="selectOLPEmployee(user)" rounded severity="info" [pTooltip]="'Edit'"
               tooltipPosition="top" styleClass="p-button-sm p-button-rounded"></p-button>

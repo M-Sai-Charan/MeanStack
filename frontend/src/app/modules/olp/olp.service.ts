@@ -54,4 +54,15 @@ export class OlpService {
   updateEmployeeSettings(id: any, payload: any) {
     return this.httpService.put<any>(`${this.baseUrl}/employees/${id}/settings`, payload);
   }
+
+  forgortPassword(email: string) {
+    return this.httpService.post<any>(`${this.baseUrl}/employees/forgot-password`, { email });
+  }
+   forgotPassword(email: string): Observable<any> {
+   return this.httpService.post<any>(`${this.baseUrl}/employees/forgot-password`, { email });
+  }
+
+  resetPassword(id: string, newPassword: string): Observable<any> {
+    return this.httpService.post<any>(`${this.baseUrl}/employees/reset-password`, { id, newPassword });
+  }
 }

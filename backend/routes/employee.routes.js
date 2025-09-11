@@ -115,4 +115,47 @@ router.get('/me', verifyToken, async (req, res) => {
 });
 
 
+// POST: Forgot Password (Check user by email)
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await Employee.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found with this email' });
+    }
+
+    // Send username + id so frontend can proceed
+    res.status(200).json({
+      message: 'User found',
+      username: user.loginId,   // or user.username if you use that
+      id: user._id,
+    });
+  } catch (error) {
+    console.error('❌ Error in forgot-password:', error);
+    res.status(500).json({ error: 'Server error', details: error.message });
+  }
+});
+
+// POST: Reset Password
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { id, newPassword } = req.body;
+
+    const user = await Employee.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    await user.save();
+
+    res.status(200).json({ message: 'Password updated successfully' });
+  } catch (error) {
+    console.error('❌ Error in reset-password:', error);
+    res.status(500).json({ error: 'Server error', details: error.message });
+  }
+});
+
 module.exports = router;

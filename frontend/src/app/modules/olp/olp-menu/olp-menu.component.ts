@@ -54,7 +54,7 @@ export class OlpMenuComponent implements OnInit {
   }
 
   logout() {
-    localStorage.removeItem('currentUser');
+    localStorage.clear();
     this.messageService.add({
       severity: 'info',
       summary: 'Logged Out',

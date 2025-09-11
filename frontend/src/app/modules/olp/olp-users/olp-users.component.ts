@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   templateUrl: './olp-users.component.html',
   styleUrls: ['./olp-users.component.css'],
   standalone: false,
-  providers: [MessageService]
+  providers: [MessageService],
 })
 export class OlpUsersComponent implements OnInit {
   @ViewChild('dt2') dt2!: Table;
@@ -32,10 +32,15 @@ export class OlpUsersComponent implements OnInit {
   olpEmployeesLists: any = [];
   olpEventsTimes: any = [];
 
-  olpUsers: any = []
-  openedEnquiryIds: number[] = []
-
-  constructor(private router: Router, private fb: FormBuilder, private messageService: MessageService, private olpService: OlpService) { }
+  olpUsers: any = [];
+  openedEnquiryIds: number[] = [];
+  loadingUsers: boolean = false;
+  constructor(
+    private router: Router,
+    private fb: FormBuilder,
+    private messageService: MessageService,
+    private olpService: OlpService
+  ) {}
   ngOnInit(): void {
     this.filteredUsers = [...this.olpUsers];
     this.getOLPEnquires();
@@ -43,23 +48,30 @@ export class OlpUsersComponent implements OnInit {
   }
 
   getOLPEnquires() {
-    this.olpService.getAllOLPEnquires('enquiry/getallenquires').subscribe((data: any) => {
-      if (data) {
-        this.olpUsers = data
-      }
-    })
+    this.loadingUsers = true; // start loading
+    this.olpService.getAllOLPEnquires('enquiry/getallenquires').subscribe({
+      next: (data: any) => {
+        this.olpUsers = data || [];
+        this.loadingUsers = false; // stop loading
+      },
+      error: (err) => {
+        console.error('API Error', err);
+        this.olpUsers = [];
+        this.loadingUsers = false; // stop loading
+      },
+    });
   }
   onReloadUsers() {
-    this.getOLPEnquires()
+    this.getOLPEnquires();
   }
   getOLPData(data: any) {
     data.EnquiryDetails.forEach((element: any) => {
       const matchingEvents = data.EventDetails.filter((event: any) => {
-        return event.EnquiryID === element.EnquiryID
-      })
-      element.events = matchingEvents
+        return event.EnquiryID === element.EnquiryID;
+      });
+      element.events = matchingEvents;
     });
-    return data
+    return data;
   }
   getOLPMasterData() {
     this.olpService.getOLPMaster('masterdata').subscribe((res: any) => {
@@ -86,35 +98,41 @@ export class OlpUsersComponent implements OnInit {
 
   getSeverity(status: string): string {
     switch (status) {
-      case 'New': return 'info';
-      case 'Pending': return 'secondary';
-      case 'Rejected': return 'danger';
-      case 'Approved': return 'success';
-      case 'Blocked': return 'secondary';
-      default: return '';
+      case 'New':
+        return 'info';
+      case 'Pending':
+        return 'secondary';
+      case 'Rejected':
+        return 'danger';
+      case 'Approved':
+        return 'success';
+      case 'Blocked':
+        return 'secondary';
+      default:
+        return '';
     }
   }
 
   selectOLP(user: any) {
-    console.log(user)
+    console.log(user);
     this.visible = true;
     this.getOLPMasterData();
     this.olpuserId = user.OLPID;
     this.selectedUser = user;
     // ✅ Call API to mark as read
-    console.log(user._id)
+    console.log(user._id);
     if (!user.isRead) {
       this.olpService.markEnquiryAsRead(user._id).subscribe({
         next: () => {
           user.isRead = true; // update UI immediately
         },
-        error: err => {
+        error: (err) => {
           this.messageService.add({
             severity: 'warn',
             summary: 'Sync Failed',
-            detail: 'Could not mark enquiry as read in DB.'
+            detail: 'Could not mark enquiry as read in DB.',
           });
-        }
+        },
       });
     }
     this.initEventForm(user.Events || []);
@@ -132,9 +150,13 @@ export class OlpUsersComponent implements OnInit {
   initEventForm(events: any[]) {
     this.eventForm = this.fb.group({
       calledBy: [this.selectedUser.AssignedEmployee || null],
-      callDate: [this.selectedUser.CallInitiatedOn ? new Date(this.selectedUser.CallInitiatedOn) : new Date()],
+      callDate: [
+        this.selectedUser.CallInitiatedOn
+          ? new Date(this.selectedUser.CallInitiatedOn)
+          : new Date(),
+      ],
       callStatus: [this.selectedUser.CallStatus || null],
-      events: this.fb.array(events.map((e: any) => this.createEventGroup(e)))
+      events: this.fb.array(events.map((e: any) => this.createEventGroup(e))),
     });
   }
 
@@ -142,26 +164,33 @@ export class OlpUsersComponent implements OnInit {
     return this.fb.group({
       _id: [event?._id || 0],
       eventName: [event?.EventName || null, Validators.required],
-      eventDate: [event?.EventDate ? new Date(event.EventDate) : null, Validators.required],
+      eventDate: [
+        event?.EventDate ? new Date(event.EventDate) : null,
+        Validators.required,
+      ],
       eventLocation: [event?.EventLocation || '', Validators.required],
       eventTime: [event?.EventTime || null, Validators.required],
-      eventGuests: [event?.EventGuests ? +event.EventGuests : null, [Validators.required, Validators.min(1)]],
+      eventGuests: [
+        event?.EventGuests ? +event.EventGuests : null,
+        [Validators.required, Validators.min(1)],
+      ],
     });
   }
-
 
   get eventsFormArray(): FormArray {
     return this.eventForm.get('events') as FormArray;
   }
 
   addEvent() {
-    this.eventsFormArray.push(this.createEventGroup({
-      eventName: null,
-      eventDate: null,
-      eventLocation: '',
-      eventTime: null,
-      eventGuests: null
-    }));
+    this.eventsFormArray.push(
+      this.createEventGroup({
+        eventName: null,
+        eventDate: null,
+        eventLocation: '',
+        eventTime: null,
+        eventGuests: null,
+      })
+    );
   }
 
   removeEvent(index: number) {
@@ -187,7 +216,7 @@ export class OlpUsersComponent implements OnInit {
       EventDate: formEvent.eventDate,
       EventLocation: formEvent.eventLocation,
       EventTime: formEvent.eventTime || {},
-      EventGuests: String(formEvent.eventGuests || '')
+      EventGuests: String(formEvent.eventGuests || ''),
     }));
 
     const updatedUser = {
@@ -195,45 +224,53 @@ export class OlpUsersComponent implements OnInit {
       AssignedEmployee: this.eventForm.value.calledBy,
       CallInitiatedOn: this.eventForm.value.callDate,
       CallStatus: this.eventForm.value.callStatus,
-      Events: updatedEvents
+      Events: updatedEvents,
     };
-    this.olpService.updateOlPEnquiries(this.selectedUser._id, updatedUser).subscribe({
-      next: () => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Updated',
-          detail: 'Enquiry updated successfully'
-        });
-        this.visible = false;
-        this.getOLPEnquires();
-      },
-      error: () => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Failed',
-          detail: 'Something went wrong while saving.'
-        });
-      }
-    });
+    this.olpService
+      .updateOlPEnquiries(this.selectedUser._id, updatedUser)
+      .subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Updated',
+            detail: 'Enquiry updated successfully',
+          });
+          this.visible = false;
+          this.getOLPEnquires();
+        },
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Failed',
+            detail: 'Something went wrong while saving.',
+          });
+        },
+      });
   }
 
   downloadPDF() {
     const doc = new jsPDF();
-    doc.text(`OLP Events - ${this.selectedUser.bride} & ${this.selectedUser.groom}`, 10, 10);
+    doc.text(
+      `OLP Events - ${this.selectedUser.bride} & ${this.selectedUser.groom}`,
+      10,
+      10
+    );
     const eventData = this.selectedUser.events.map((e: any, i: number) => [
       i + 1,
       e.eventName?.name || '',
       e.eventDate || '',
       e.eventLocation,
       e.eventTime || '',
-      e.eventGuests
+      e.eventGuests,
     ]);
     autoTable(doc, {
       head: [['#', 'Event Name', 'Date', 'Location', 'Time', 'Guests']],
       body: eventData,
-      startY: 20
+      startY: 20,
     });
-    doc.save(`${this.selectedUser.bride}_${this.selectedUser.groom}_Events.pdf`);
+    doc.save(
+      `${this.selectedUser.bride}_${this.selectedUser.groom}_Events.pdf`
+    );
   }
 
   trackByIndex(index: number): number {
@@ -241,12 +278,15 @@ export class OlpUsersComponent implements OnInit {
   }
 
   getUnreadCount(): number {
-    return this.olpUsers?.filter((user: any) => user.isRead === false).length || 0;
+    return (
+      this.olpUsers?.filter((user: any) => user.isRead === false).length || 0
+    );
   }
 
   getReadPercentage(): number {
     const total = this.olpUsers?.length || 0;
-    const read = this.olpUsers?.filter((user: any) => user.isRead === true).length || 0;
+    const read =
+      this.olpUsers?.filter((user: any) => user.isRead === true).length || 0;
     return total ? Math.round((read / total) * 100) : 0;
   }
   getProgressBarClass(value: number): string {
@@ -264,11 +304,11 @@ export class OlpUsersComponent implements OnInit {
         this.messageService.add({
           severity: 'success',
           summary: 'Updated',
-          detail: '✅ Invoice email sent successfully!'
+          detail: '✅ Invoice email sent successfully!',
         });
         setTimeout(() => {
-           const url = `/clientsTemplate/${enquiryId}`;
-        window.open(url, '_blank'); // Opens in new tab
+          const url = `/clientsTemplate/${enquiryId}`;
+          window.open(url, '_blank'); // Opens in new tab
         }, 2000);
       },
       error: (err) => {
@@ -276,9 +316,9 @@ export class OlpUsersComponent implements OnInit {
         this.messageService.add({
           severity: 'error',
           summary: 'Failed',
-          detail: '❌ Failed to send invoice email'
+          detail: '❌ Failed to send invoice email',
         });
-      }
+      },
     });
   }
 }

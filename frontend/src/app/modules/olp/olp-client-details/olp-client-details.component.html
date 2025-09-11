@@ -1,11 +1,11 @@
 <div
-  class="olp-users-header flex align-items-center justify-content-between mb-4 p-3 bg-primary text-white border-round shadow-2">
-  <img src="olp-logo.png" alt="Logo" height="30" class="mr-3" />
-  <h2 class="olp-users-title">OLP Clients</h2>
-  <small class="olp-users-tagline">Delivering timeless moments beautifully</small>
+    class="olp-users-header flex align-items-center justify-content-between mb-4 p-3 bg-primary text-white border-round shadow-2">
+    <img src="olp-logo.png" alt="Logo" height="30" class="mr-3" />
+    <h2 class="olp-users-title">OLP Clients</h2>
+    <small class="olp-users-tagline">Delivering timeless moments beautifully</small>
 </div>
 
-<div class="p-inputgroup mb-4 px-3">
+<div class="p-inputgroup mb-4 px-3" *ngIf="!loadingClients">
     <input type="text" pInputText [formControl]="searchControl"
         placeholder="Search by OLPID, Bride, Groom, or Contact Number" />
     <button pButton type="button" icon="pi pi-times" class="p-button-sm p-button-text"
@@ -13,58 +13,76 @@
     </button>
 </div>
 
-<!-- Client Card Grid -->
-<div class="olp-client-list p-grid">
-    <div class="final-client-wrapper">
-  <div *ngFor="let client of filteredClients" class="final-client-card">
+<!-- Skeleton loader -->
+<div *ngIf="loadingClients" class="final-client-grid">
+  <div *ngFor="let i of [1,2,3,4,5,6]" class="final-client-card skeleton-card">
     <div class="card-inner">
-      <!-- Front Face -->
-      <div class="card-front">
-        <!-- <img src="/olp-logo.png" alt="OLP Logo" class="final-client-logo" /> -->
-        <div class="final-client-names">
-          {{ client.Bride[0].toUpperCase() }} ❤️ {{ client.Groom[0].toUpperCase() }}
-        </div>
-         <div class="final-client-ids">
-         {{ client.OLPID }}
-        </div>
+
+      <!-- Front Face Skeleton -->
+      <div class="card-front flex flex-col items-center justify-center p-3">
+        <p-skeleton shape="circle" size="50px"></p-skeleton>
+        <p-skeleton width="60%" height="1rem" class="mt-2"></p-skeleton>
+        <p-skeleton width="40%" height="1rem" class="mt-1"></p-skeleton>
       </div>
 
-      <!-- Back Face -->
-      <div class="card-back">
-        <h3>{{ client.Bride }} ❤️ {{ client.Groom }}</h3>
-        <p><strong>Phone:</strong> {{ client.ContactNumber }}</p>
-        <!-- <p>
-          <strong>Status:</strong>
-          <span class="status-badge" [ngClass]="client.CallStatus.toLowerCase()">
-            {{ client.CallStatus }}
-          </span>
-        </p> -->
-        <button class="final-client-btn" (click)="selectedClient = client">Show Details</button>
+      <!-- Back Face Skeleton -->
+      <div class="card-back flex flex-col items-center justify-center p-3">
+        <p-skeleton width="70%" height="1rem" class="mb-2"></p-skeleton>
+        <p-skeleton width="50%" height="1rem" class="mb-2"></p-skeleton>
+        <p-skeleton width="40%" height="2rem" class="mt-2"></p-skeleton>
       </div>
+
     </div>
   </div>
 </div>
 
-    <div *ngIf="filteredClients?.length === 0" class="p-col-12 text-center text-gray-500 p-4">
+<!-- Client Card Grid -->
+<div class="olp-client-list p-grid">
+    <div class="final-client-wrapper" *ngIf="!loadingClients">
+        <div *ngFor="let client of filteredClients" class="final-client-card">
+            <div class="card-inner">
+                <!-- Front Face -->
+                <div class="card-front">
+                    <!-- <img src="/olp-logo.png" alt="OLP Logo" class="final-client-logo" /> -->
+                    <div class="final-client-names">
+                        {{ client.Bride[0].toUpperCase() }} ❤️ {{ client.Groom[0].toUpperCase() }}
+                    </div>
+                    <div class="final-client-ids">
+                        {{ client.OLPID }}
+                    </div>
+                </div>
+
+                <!-- Back Face -->
+                <div class="card-back">
+                    <h3>{{ client.Bride }} ❤️ {{ client.Groom }}</h3>
+                    <p><strong>Phone:</strong> {{ client.ContactNumber }}</p>
+                    <button class="final-client-btn" (click)="selectedClient = client">Show Details</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!loadingClients && filteredClients?.length === 0" class="p-col-12 text-center text-gray-500 p-4">
         <p><i class="pi pi-info-circle"></i> No results found</p>
     </div>
 </div>
-<p-dialog [(visible)]="selectedClient" [modal]="true" [style]="{ width: '90vw' }" [breakpoints]="{ '960px': '95vw' }" [styleClass]="'olp-users-dialog'"
-    header="Client Details" class="olp-dialog" [dismissableMask]="true" (onHide)="selectedClient = null">
+<p-dialog [(visible)]="selectedClient" [modal]="true" [style]="{ width: '90vw' }" [breakpoints]="{ '960px': '95vw' }"
+    [styleClass]="'olp-users-dialog'" header="Client Details" class="olp-dialog" [dismissableMask]="true"
+    (onHide)="selectedClient = null">
     <ng-container *ngIf="selectedClient">
         <!-- Client Info -->
         <div class="p-grid grid formgrid mb-3" style="gap: 10px;">
             <div class="p-col-12 sm:p-col-12 md:p-col-6 lg:p-col-4">
-                📍 <b>Location:</b> {{ selectedClient.Location }} 
+                📍 <b>Location:</b> {{ selectedClient.Location }}
             </div>
             <div class="p-col-12 sm:p-col-12 md:p-col-6 lg:p-col-4">
-                📞 <b>Phone:</b> {{ selectedClient.ContactNumber }} 
+                📞 <b>Phone:</b> {{ selectedClient.ContactNumber }}
             </div>
             <div class="p-col-12 sm:p-col-12 md:p-col-6 lg:p-col-4">
-                📧 <b>Email:</b> {{ selectedClient.Email }} 
+                📧 <b>Email:</b> {{ selectedClient.Email }}
             </div>
             <div class="p-col-12 sm:p-col-12 md:p-col-6 lg:p-col-4">
-                📆 <b>Created:</b> {{ selectedClient.createdAt | date:'dd MMM yyyy hh:mm a' }} 
+                📆 <b>Created:</b> {{ selectedClient.createdAt | date:'dd MMM yyyy hh:mm a' }}
             </div>
             <div class="p-col-12 sm:p-col-12 md:p-col-6 lg:p-col-4">
                 ☎️ <b>Called By:</b> {{ selectedClient.AssignedEmployee }}

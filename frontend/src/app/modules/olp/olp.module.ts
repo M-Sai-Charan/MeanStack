@@ -31,6 +31,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import { OlpChatComponent } from './olp-chat/olp-chat.component';
 import { FilterByOLPIDPipe } from './pipes/filter-by-olpid.pipe';
 import { OlpSettingsComponent } from './olp-settings/olp-settings.component';
+import { OlpForgotPasswordComponent } from './olp-forgot-password/olp-forgot-password.component';
 @NgModule({
   declarations: [
     OlpDashboardComponent,
@@ -49,7 +50,8 @@ import { OlpSettingsComponent } from './olp-settings/olp-settings.component';
     OlpClientTemplateComponent,
     OlpEnquiryFormComponent,
     OlpChatComponent,
-    OlpSettingsComponent,    
+    OlpSettingsComponent,  
+    OlpForgotPasswordComponent,
     FilterByOLPIDPipe
   ],
   imports: [

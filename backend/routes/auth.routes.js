@@ -31,10 +31,13 @@ router.post('/login', async (req, res) => {
         role: employee.role,
         loginId: employee.loginId,
         name: employee.name,
-        data:employee
+        data:{
+          allowedRoutes: employee.allowedRoutes,
+          profilePic: employee.profilePic,
+        }
       },
       JWT_SECRET,
-      { expiresIn: '8h' }
+      { expiresIn: '2h' }
     );
 
     // Track session
