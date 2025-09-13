@@ -307,8 +307,8 @@ export class OlpUsersComponent implements OnInit {
           detail: '✅ Invoice email sent successfully!',
         });
         setTimeout(() => {
-          const url = `/clientsTemplate/${enquiryId}`;
-          window.open(url, '_blank'); // Opens in new tab
+           const url = `/clientsTemplate/${enquiryId}`;
+            window.open(url, '_blank'); // Opens in new tab
         }, 2000);
       },
       error: (err) => {

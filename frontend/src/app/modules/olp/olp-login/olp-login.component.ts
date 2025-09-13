@@ -18,6 +18,7 @@ export class OlpLoginComponent implements OnInit {
   isHovered: boolean = false;
   loading: boolean = true;
   isSumbitted: boolean = false;
+  sumbitted: boolean = false;
   currentSlide = 0;
   slideshowImages: string[] = [
     'olp-slider1.jpg',
@@ -52,16 +53,15 @@ export class OlpLoginComponent implements OnInit {
     });
   }
   onLogin(): void {
+    this.sumbitted = true;
     if (this.olpLoginForm?.valid) {
       this.isSumbitted = true;
+      this.sumbitted = false;
       const { userName, password } = this.olpLoginForm.value;
       localStorage.clear();
       console.log('LocalStorage cleared on app load');
       this.authService.login({ loginId: userName, password }).subscribe({
         next: (res) => {
-          // const allowedRoutes = res.employee?.role === 'Admin' ? ['/dashboard'] : ['/dashboard'];
-          // console.log( allowedRoutes[0])
-          // const redirectTo = allowedRoutes[0];
           this.messageService.add({
             severity: 'success',
             summary: 'Login Successful',
@@ -72,6 +72,7 @@ export class OlpLoginComponent implements OnInit {
         },
         error: (err) => {
           this.isSumbitted = false;
+          this.sumbitted = false;
           this.messageService.add({
             severity: 'error',
             summary: 'Login Failed',

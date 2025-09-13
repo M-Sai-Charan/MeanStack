@@ -10,7 +10,7 @@
     <!-- Left: Slideshow Images only -->
     <div class="login-left slideshow">
       <div class="slideshow-image" *ngFor="let image of slideshowImages; let i = index" [class.active]="i === currentSlide">
-        <img [src]="image" alt="Photography Slide {{ i + 1 }}" />
+        <img [src]="image" alt="Photography Slide {{ i + 1 }}" loading="lazy" />
       </div>
     </div>
 

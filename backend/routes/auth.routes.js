@@ -31,10 +31,6 @@ router.post('/login', async (req, res) => {
         role: employee.role,
         loginId: employee.loginId,
         name: employee.name,
-        data:{
-          allowedRoutes: employee.allowedRoutes,
-          profilePic: employee.profilePic,
-        }
       },
       JWT_SECRET,
       { expiresIn: '2h' }
