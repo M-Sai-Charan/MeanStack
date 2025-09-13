@@ -14,14 +14,6 @@ const issues = [
     issueId: "0001",
     solutions: [
       {
-        solutionType: "CANCEL",
-        legNo: 1001,
-        legDelayTime: 30,
-        legAdjustedDeparture: "2024-01-27T10:00:00Z",
-        legAdjustedArrival: "2024-01-27T10:00:00Z",
-        legState: "CNL",
-      },
-      {
         solutionType: "DELAY",
         legNo: 2001,
         legDelayTime: 45,
@@ -29,19 +21,19 @@ const issues = [
         legAdjustedArrival: "2024-01-27T12:00:00Z",
         legState: "DLY",
       },
+      {
+        solutionType: "CANCEL",
+        legNo: 1001,
+        legDelayTime: 30,
+        legAdjustedDeparture: "2024-01-27T10:00:00Z",
+        legAdjustedArrival: "2024-01-27T10:00:00Z",
+        legState: "CNL",
+      },
     ],
   },
   {
     issueId: "0002",
     solutions: [
-      {
-        solutionType: "CANCEL",
-        legNo: 1002,
-        legDelayTime: 40,
-        legAdjustedDeparture: "2024-01-27T10:30:00Z",
-        legAdjustedArrival: "2024-01-27T10:30:00Z",
-        legState: "CNL",
-      },
       {
         solutionType: "DELAY",
         legNo: 2002,
@@ -50,19 +42,19 @@ const issues = [
         legAdjustedArrival: "2024-01-27T13:30:00Z",
         legState: "DLY",
       },
+      {
+        solutionType: "CANCEL",
+        legNo: 1002,
+        legDelayTime: 40,
+        legAdjustedDeparture: "2024-01-27T10:30:00Z",
+        legAdjustedArrival: "2024-01-27T10:30:00Z",
+        legState: "CNL",
+      },
     ],
   },
   {
     issueId: "0003",
     solutions: [
-      {
-        solutionType: "CANCEL",
-        legNo: 1003,
-        legDelayTime: 50,
-        legAdjustedDeparture: "2024-01-27T11:00:00Z",
-        legAdjustedArrival: "2024-01-27T11:00:00Z",
-        legState: "CNL",
-      },
       {
         solutionType: "DELAY",
         legNo: 2003,
@@ -71,19 +63,19 @@ const issues = [
         legAdjustedArrival: "2024-01-27T14:15:00Z",
         legState: "DLY",
       },
+      {
+        solutionType: "CANCEL",
+        legNo: 1003,
+        legDelayTime: 50,
+        legAdjustedDeparture: "2024-01-27T11:00:00Z",
+        legAdjustedArrival: "2024-01-27T11:00:00Z",
+        legState: "CNL",
+      },
     ],
   },
   {
     issueId: "0004",
     solutions: [
-      {
-        solutionType: "CANCEL",
-        legNo: 1004,
-        legDelayTime: 35,
-        legAdjustedDeparture: "2024-01-27T11:30:00Z",
-        legAdjustedArrival: "2024-01-27T11:30:00Z",
-        legState: "CNL",
-      },
       {
         solutionType: "DELAY",
         legNo: 2004,
@@ -92,19 +84,19 @@ const issues = [
         legAdjustedArrival: "2024-01-27T15:00:00Z",
         legState: "DLY",
       },
+      {
+        solutionType: "CANCEL",
+        legNo: 1004,
+        legDelayTime: 35,
+        legAdjustedDeparture: "2024-01-27T11:30:00Z",
+        legAdjustedArrival: "2024-01-27T11:30:00Z",
+        legState: "CNL",
+      },
     ],
   },
   {
     issueId: "0005",
     solutions: [
-      {
-        solutionType: "CANCEL",
-        legNo: 1005,
-        legDelayTime: 25,
-        legAdjustedDeparture: "2024-01-27T12:00:00Z",
-        legAdjustedArrival: "2024-01-27T12:00:00Z",
-        legState: "CNL",
-      },
       {
         solutionType: "DELAY",
         legNo: 2005,
@@ -113,19 +105,19 @@ const issues = [
         legAdjustedArrival: "2024-01-27T15:40:00Z",
         legState: "DLY",
       },
+      {
+        solutionType: "CANCEL",
+        legNo: 1005,
+        legDelayTime: 25,
+        legAdjustedDeparture: "2024-01-27T12:00:00Z",
+        legAdjustedArrival: "2024-01-27T12:00:00Z",
+        legState: "CNL",
+      },
     ],
   },
   {
     issueId: "0006",
     solutions: [
-      {
-        solutionType: "CANCEL",
-        legNo: 1006,
-        legDelayTime: 45,
-        legAdjustedDeparture: "2024-01-27T12:30:00Z",
-        legAdjustedArrival: "2024-01-27T12:30:00Z",
-        legState: "CNL",
-      },
       {
         solutionType: "DELAY",
         legNo: 2006,
@@ -134,19 +126,19 @@ const issues = [
         legAdjustedArrival: "2024-01-27T16:20:00Z",
         legState: "DLY",
       },
+      {
+        solutionType: "CANCEL",
+        legNo: 1006,
+        legDelayTime: 45,
+        legAdjustedDeparture: "2024-01-27T12:30:00Z",
+        legAdjustedArrival: "2024-01-27T12:30:00Z",
+        legState: "CNL",
+      },
     ],
   },
   {
     issueId: "0007",
     solutions: [
-      {
-        solutionType: "CANCEL",
-        legNo: 1007,
-        legDelayTime: 55,
-        legAdjustedDeparture: "2024-01-27T13:00:00Z",
-        legAdjustedArrival: "2024-01-27T13:00:00Z",
-        legState: "CNL",
-      },
       {
         solutionType: "DELAY",
         legNo: 2007,
@@ -155,19 +147,19 @@ const issues = [
         legAdjustedArrival: "2024-01-27T16:35:00Z",
         legState: "DLY",
       },
+      {
+        solutionType: "CANCEL",
+        legNo: 1007,
+        legDelayTime: 55,
+        legAdjustedDeparture: "2024-01-27T13:00:00Z",
+        legAdjustedArrival: "2024-01-27T13:00:00Z",
+        legState: "CNL",
+      },
     ],
   },
   {
     issueId: "0008",
     solutions: [
-      {
-        solutionType: "CANCEL",
-        legNo: 1008,
-        legDelayTime: 65,
-        legAdjustedDeparture: "2024-01-27T13:30:00Z",
-        legAdjustedArrival: "2024-01-27T13:30:00Z",
-        legState: "CNL",
-      },
       {
         solutionType: "DELAY",
         legNo: 2008,
@@ -176,19 +168,19 @@ const issues = [
         legAdjustedArrival: "2024-01-27T16:50:00Z",
         legState: "DLY",
       },
+      {
+        solutionType: "CANCEL",
+        legNo: 1008,
+        legDelayTime: 65,
+        legAdjustedDeparture: "2024-01-27T13:30:00Z",
+        legAdjustedArrival: "2024-01-27T13:30:00Z",
+        legState: "CNL",
+      },
     ],
   },
   {
     issueId: "0009",
     solutions: [
-      {
-        solutionType: "CANCEL",
-        legNo: 1009,
-        legDelayTime: 20,
-        legAdjustedDeparture: "2024-01-27T14:00:00Z",
-        legAdjustedArrival: "2024-01-27T14:00:00Z",
-        legState: "CNL",
-      },
       {
         solutionType: "DELAY",
         legNo: 2009,
@@ -197,19 +189,19 @@ const issues = [
         legAdjustedArrival: "2024-01-27T17:45:00Z",
         legState: "DLY",
       },
+      {
+        solutionType: "CANCEL",
+        legNo: 1009,
+        legDelayTime: 20,
+        legAdjustedDeparture: "2024-01-27T14:00:00Z",
+        legAdjustedArrival: "2024-01-27T14:00:00Z",
+        legState: "CNL",
+      },
     ],
   },
   {
     issueId: "0010",
     solutions: [
-      {
-        solutionType: "CANCEL",
-        legNo: 1010,
-        legDelayTime: 70,
-        legAdjustedDeparture: "2024-01-27T14:30:00Z",
-        legAdjustedArrival: "2024-01-27T14:30:00Z",
-        legState: "CNL",
-      },
       {
         solutionType: "DELAY",
         legNo: 2010,
@@ -218,19 +210,19 @@ const issues = [
         legAdjustedArrival: "2024-01-27T18:25:00Z",
         legState: "DLY",
       },
+      {
+        solutionType: "CANCEL",
+        legNo: 1010,
+        legDelayTime: 70,
+        legAdjustedDeparture: "2024-01-27T14:30:00Z",
+        legAdjustedArrival: "2024-01-27T14:30:00Z",
+        legState: "CNL",
+      },
     ],
   },
   {
     issueId: "0011",
     solutions: [
-      {
-        solutionType: "CANCEL",
-        legNo: 1011,
-        legDelayTime: 85,
-        legAdjustedDeparture: "2024-01-27T15:00:00Z",
-        legAdjustedArrival: "2024-01-27T15:00:00Z",
-        legState: "CNL",
-      },
       {
         solutionType: "DELAY",
         legNo: 2011,
@@ -239,19 +231,19 @@ const issues = [
         legAdjustedArrival: "2024-01-27T19:10:00Z",
         legState: "DLY",
       },
+      {
+        solutionType: "CANCEL",
+        legNo: 1011,
+        legDelayTime: 85,
+        legAdjustedDeparture: "2024-01-27T15:00:00Z",
+        legAdjustedArrival: "2024-01-27T15:00:00Z",
+        legState: "CNL",
+      },
     ],
   },
   {
     issueId: "0012",
     solutions: [
-      {
-        solutionType: "CANCEL",
-        legNo: 1012,
-        legDelayTime: 95,
-        legAdjustedDeparture: "2024-01-27T15:30:00Z",
-        legAdjustedArrival: "2024-01-27T15:30:00Z",
-        legState: "CNL",
-      },
       {
         solutionType: "DELAY",
         legNo: 2012,
@@ -259,6 +251,14 @@ const issues = [
         legAdjustedDeparture: "2024-01-27T17:30:00Z",
         legAdjustedArrival: "2024-01-27T19:50:00Z",
         legState: "DLY",
+      },
+      {
+        solutionType: "CANCEL",
+        legNo: 1012,
+        legDelayTime: 95,
+        legAdjustedDeparture: "2024-01-27T15:30:00Z",
+        legAdjustedArrival: "2024-01-27T15:30:00Z",
+        legState: "CNL",
       },
     ],
   },
