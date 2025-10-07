@@ -64,7 +64,6 @@ export class OlpLoginComponent implements OnInit {
         next: (res) => {
           this.messageService.add({
             severity: 'success',
-            summary: 'Login Successful',
             detail: `Welcome, ${res.employee.name}`,
             life: 3000,
           });

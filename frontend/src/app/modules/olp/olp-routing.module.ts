@@ -29,7 +29,7 @@ const routes: Routes = [
     component: OlpMenuComponent,
     children: [
       { path: 'dashboard', component: OlpDashboardComponent, canActivate: [RoleGuard] },
-      { path: 'users', component: OlpUsersComponent, canActivate: [RoleGuard] },
+      { path: 'enquiries', component: OlpUsersComponent, canActivate: [RoleGuard] },
       { path: 'employees', component: OlpEmployeesComponent, canActivate: [RoleGuard] },
       { path: 'admin', component: OlpAdminComponent, canActivate: [RoleGuard] },
       { path: 'budget', component: OlpBudgetComponent, canActivate: [RoleGuard] },

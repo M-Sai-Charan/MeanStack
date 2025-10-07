@@ -244,7 +244,7 @@ const masterData = {
 
   uiRoutes: [
     { label: "Dashboard", icon: "pi pi-home", route: "/dashboard" },
-    { label: "Users", icon: "pi pi-users", route: "/users" },
+    { label: "Enquiries", icon: "pi pi-users", route: "/enquiries" },
     { label: "Invoice", icon: "pi pi-receipt", route: "/invoice" },
     { label: "Budget", icon: "pi pi-wallet", route: "/budget" },
     { label: "Team Assign", icon: "pi pi-clipboard", route: "/team-assign" },
