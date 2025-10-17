@@ -162,6 +162,14 @@ const issues = [
         legAdjustedArrival: "2024-01-27T13:30:00Z",
         legState: "DLY",
       },
+       {
+        solutionType: "DELAY",
+        legNo: 203,
+        legDelayTime: 60,
+        legAdjustedDeparture: "2024-01-27T12:00:00Z",
+        legAdjustedArrival: "2024-01-27T13:30:00Z",
+        legState: "DLY",
+      },
       {
         solutionType: "CANCEL",
         legNo: 1002,
