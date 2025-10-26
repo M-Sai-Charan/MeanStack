@@ -11,7 +11,7 @@ const app = express();
 const server = http.createServer(app);
 const issues = [
   {
-    issueId: '0001',
+    issueId: '0084901',
     solutions: [
       {
         id: 1,
@@ -152,30 +152,40 @@ const issues = [
     ],
   },
   {
-    issueId: "0002",
+    issueId: "1",
     solutions: [
+      {
+        solutionType: "CANCEL",
+        legNo: 1002,
+        legState: "CNL",
+      },
       {
         solutionType: "DELAY",
         legNo: 2002,
         legDelayTime: 60,
         legAdjustedDeparture: "2024-01-27T12:00:00Z",
         legAdjustedArrival: "2024-01-27T13:30:00Z",
-        legState: "DLY",
+        legState: "ETD",
       },
        {
         solutionType: "DELAY",
-        legNo: 203,
+        legNo: 2003,
         legDelayTime: 60,
         legAdjustedDeparture: "2024-01-27T12:00:00Z",
         legAdjustedArrival: "2024-01-27T13:30:00Z",
-        legState: "DLY",
+        legState: "ETD",
+      },
+      {
+        solutionType: "DELAY",
+        legNo: 2004,
+        legDelayTime: 60,
+        legAdjustedDeparture: "2024-01-27T12:00:00Z",
+        legAdjustedArrival: "2024-01-27T13:30:00Z",
+        legState: "ETD",
       },
       {
         solutionType: "CANCEL",
-        legNo: 1002,
-        legDelayTime: 40,
-        legAdjustedDeparture: "2024-01-27T10:30:00Z",
-        legAdjustedArrival: "2024-01-27T10:30:00Z",
+        legNo: 1003,
         legState: "CNL",
       },
     ],
