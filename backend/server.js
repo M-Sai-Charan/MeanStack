@@ -177,7 +177,7 @@ const issues = [
       },
       {
         solutionType: "DELAY",
-        legNo: 2004,
+        legNo: 2009,
         legDelayTime: 60,
         legAdjustedDeparture: "2024-01-27T12:00:00Z",
         legAdjustedArrival: "2024-01-27T13:30:00Z",
