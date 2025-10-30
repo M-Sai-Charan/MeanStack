@@ -12,7 +12,7 @@ const server = http.createServer(app);
 const issues = [
   {
     "issueId":"1993",
-    "legs":[
+    "solutions" : {"legs":[
         {
             "legNo":12345,
             "flightCarrier":"LH",
@@ -60,7 +60,8 @@ const issues = [
                 }
             ]
         }
-    ]
+    ]},
+    
 },
   {
     issueId:"123",
