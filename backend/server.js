@@ -12,7 +12,8 @@ const server = http.createServer(app);
 const issues = [
   {
     "issueId":"1993",
-    "solutions" : {"legs":[
+    "solutions" : {
+    "legs":[
         {
             "legNo":12345,
             "flightCarrier":"LH",
@@ -38,14 +39,9 @@ const issues = [
             "solutionActions":[
                 {
                     "actionId":1,
-                    "actionType":"CANCEL",
-                    "legNo":12345
-                },
-                {
-                    "actionId":2,
                     "actionType":"DELAY",
-                    "delayMinutes":90,
-                    "legNo":98765
+                    "delayMinutes":75,
+                    "legNo":12345
                 }
             ]
         },
@@ -53,14 +49,99 @@ const issues = [
             "solutionId":2,
             "solutionActions":[
                 {
-                    "actionId":1,
+                    "actionId":2,
                     "actionType":"DELAY",
-                    "delayMinutes":45,
+                    "delayMinutes":35,
                     "legNo":12345
                 }
             ]
+        },
+         {
+            "solutionId":3,
+            "solutionActions":[
+                {
+                    "actionId":1,
+                    "actionType":"DELAY",
+                    "delayMinutes":90,
+                    "legNo":12345
+                },
+                {
+                    "actionId":2,
+                    "actionType":"DELAY",
+                    "delayMinutes":35,
+                    "legNo":98765
+                }
+            ]
+        },
+        {
+            "solutionId":4,
+            "solutionActions":[
+                {
+                    "actionId":1,
+                    "actionType":"CANCEL",
+                    "legNo":12345
+                }
+            ]
+        },
+        {
+            "solutionId":5,
+            "solutionActions":[
+                {
+                    "actionId":1,
+                    "actionType":"CANCEL",
+                    "legNo":98765
+                }
+            ]
+        },
+         {
+            "solutionId":6,
+            "solutionActions":[
+                {
+                    "actionId":1,
+                    "actionType":"CANCEL",
+                    "legNo":12345
+                },
+                {
+                    "actionId":2,
+                    "actionType":"DELAY",
+                    "delayMinutes":35,
+                    "legNo":98765
+                }
+            ]
+        },
+        {
+            "solutionId":7,
+            "solutionActions":[
+                {
+                    "actionId":1,
+                    "actionType":"DELAY",
+                    "delayMinutes":90,
+                    "legNo":12345
+                },
+                {
+                    "actionId":2,
+                    "actionType":"CANCEL",
+                    "legNo":98765
+                }
+            ]
+        },
+        {
+            "solutionId":8,
+            "solutionActions":[
+                {
+                    "actionId":1,
+                    "actionType":"CANCEL",
+                    "legNo":12345
+                },
+                {
+                    "actionId":2,
+                    "actionType":"CANCEL",
+                    "legNo":98765
+                }
+            ]
         }
-    ]},
+    ]
+},
     
 },
   {
