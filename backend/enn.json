@@ -2,10 +2,10 @@
     "legs": [
         {
             "legNo": 12345,
-            "flightCarrier": "LH",
+            "flightCarrier": "sdfsdf",
             "departureAirport": "dsf",
             "arrivalAirport": "sdfsd",
-            "flightNo": 101,
+            "flightNo": 10002,
             "scheduledDepartureDate": "2024-01-27T08:00:00Z",
             "scheduledArrivalDate": "2024-01-27T09:30:00Z"
         },
