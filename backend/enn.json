@@ -3,8 +3,8 @@
         {
             "legNo": 12345,
             "flightCarrier": "LH",
-            "departureAirport": "LHR",
-            "arrivalAirport": "ABE",
+            "departureAirport": "dsf",
+            "arrivalAirport": "sdfsd",
             "flightNo": 101,
             "scheduledDepartureDate": "2024-01-27T08:00:00Z",
             "scheduledArrivalDate": "2024-01-27T09:30:00Z"
