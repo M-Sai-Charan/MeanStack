@@ -11,281 +11,322 @@ const app = express();
 const server = http.createServer(app);
 const issues = [
   {
-    "issueId":"1993",
-    "solutions" : {
-    "legs":[
+    "issueId": "1993",
+    "solutions": {
+      "legs": [
         {
-            "legNo":12345,
-            "flightCarrier":"LH",
-            "departureAirport":"LHR",
-            "arrivalAirport":"ABE",
-            "flightNo":101,
-            "scheduledDepartureDate":"2024-01-27T08:00:00Z",
-            "scheduledArrivalDate":"2024-01-27T09:30:00Z"
+          "legNo": 12345,
+          "flightCarrier": "LH",
+          "departureAirport": "LHR",
+          "arrivalAirport": "ABE",
+          "flightNo": 101,
+          "scheduledDepartureDate": "2024-01-27T08:00:00Z",
+          "scheduledArrivalDate": "2024-01-27T09:30:00Z"
         },
-         {
-            "legNo":98765,
-            "flightCarrier":"LH",
-            "departureAirport":"ABE",
-            "arrivalAirport":"MUN",
-            "flightNo":102,
-            "scheduledDepartureDate":"2024-01-27T10:00:00Z",
-            "scheduledArrivalDate":"2024-01-27T12:00:00Z"
+        {
+          "legNo": 98765,
+          "flightCarrier": "LH",
+          "departureAirport": "ABE",
+          "arrivalAirport": "MUN",
+          "flightNo": 102,
+          "scheduledDepartureDate": "2024-01-27T10:00:00Z",
+          "scheduledArrivalDate": "2024-01-27T12:00:00Z"
         }
-    ],
-    "solutions":[
+      ],
+      "solutions": [
         {
-            "solutionId":1,
-            "solutionActions":[
-                {
-                    "actionId":1,
-                    "actionType":"DELAY",
-                    "delayMinutes":75,
-                    "legNo":12345
-                }
-            ]
-        },
-        {
-            "solutionId":2,
-            "solutionActions":[
-                {
-                    "actionId":2,
-                    "actionType":"DELAY",
-                    "delayMinutes":35,
-                    "legNo":12345
-                }
-            ]
-        },
-         {
-            "solutionId":3,
-            "solutionActions":[
-                {
-                    "actionId":1,
-                    "actionType":"DELAY",
-                    "delayMinutes":90,
-                    "legNo":12345
-                },
-                {
-                    "actionId":2,
-                    "actionType":"DELAY",
-                    "delayMinutes":35,
-                    "legNo":98765
-                }
-            ]
+          "solutionId": 1,
+          "solutionActions": [
+            {
+              "actionId": 1,
+              "actionType": "DELAY",
+              "delayMinutes": 75,
+              "legNo": 12345
+            },
+            {
+              "actionId": 2,
+              "actionType": "WAIT"
+            }
+          ]
         },
         {
-            "solutionId":4,
-            "solutionActions":[
-                {
-                    "actionId":1,
-                    "actionType":"CANCEL",
-                    "legNo":12345
-                }
-            ]
+          "solutionId": 2,
+          "solutionActions": [
+            {
+              "actionId": 1,
+              "actionType": "WAIT"
+            },
+            {
+              "actionId": 2,
+              "actionType": "DELAY",
+              "delayMinutes": 35,
+              "legNo": 12345
+            }
+          ]
         },
         {
-            "solutionId":5,
-            "solutionActions":[
-                {
-                    "actionId":1,
-                    "actionType":"CANCEL",
-                    "legNo":98765
-                }
-            ]
-        },
-         {
-            "solutionId":6,
-            "solutionActions":[
-                {
-                    "actionId":1,
-                    "actionType":"CANCEL",
-                    "legNo":12345
-                },
-                {
-                    "actionId":2,
-                    "actionType":"DELAY",
-                    "delayMinutes":35,
-                    "legNo":98765
-                }
-            ]
+          "solutionId": 3,
+          "solutionActions": [
+            {
+              "actionId": 1,
+              "actionType": "DELAY",
+              "delayMinutes": 90,
+              "legNo": 12345
+            },
+            {
+              "actionId": 3,
+              "actionType": "WAIT"
+            },
+            {
+              "actionId": 2,
+              "actionType": "DELAY",
+              "delayMinutes": 35,
+              "legNo": 98765
+            }
+          ]
         },
         {
-            "solutionId":7,
-            "solutionActions":[
-                {
-                    "actionId":1,
-                    "actionType":"DELAY",
-                    "delayMinutes":90,
-                    "legNo":12345
-                },
-                {
-                    "actionId":2,
-                    "actionType":"CANCEL",
-                    "legNo":98765
-                }
-            ]
+          "solutionId": 4,
+          "solutionActions": [
+            {
+              "actionId": 1,
+              "actionType": "CANCEL",
+              "legNo": 12345
+            },
+            {
+              "actionId": 2,
+              "actionType": "WAIT"
+            }
+          ]
         },
         {
-            "solutionId":8,
-            "solutionActions":[
-                {
-                    "actionId":1,
-                    "actionType":"CANCEL",
-                    "legNo":12345
-                },
-                {
-                    "actionId":2,
-                    "actionType":"CANCEL",
-                    "legNo":98765
-                }
-            ]
+          "solutionId": 5,
+          "solutionActions": [
+            {
+              "actionId": 1,
+              "actionType": "CANCEL",
+              "legNo": 98765
+            }
+          ]
+        },
+        {
+          "solutionId": 6,
+          "solutionActions": [
+            {
+              "actionId": 1,
+              "actionType": "CANCEL",
+              "legNo": 12345
+            },
+            {
+              "actionId": 2,
+              "actionType": "DELAY",
+              "delayMinutes": 35,
+              "legNo": 98765
+            },
+             {
+              "actionId": 3,
+              "actionType": "WAIT"
+            },
+          ]
+        },
+        {
+          "solutionId": 7,
+          "solutionActions": [
+             {
+              "actionId": 1,
+              "actionType": "WAIT"
+            },
+            {
+              "actionId": 3,
+              "actionType": "DELAY",
+              "delayMinutes": 90,
+              "legNo": 12345
+            },
+            {
+              "actionId": 2,
+              "actionType": "CANCEL",
+              "legNo": 98765
+            }
+          ]
+        },
+        {
+          "solutionId": 8,
+          "solutionActions": [
+            {
+              "actionId": 1,
+              "actionType": "CANCEL",
+              "legNo": 12345
+            },
+            {
+              "actionId": 2,
+              "actionType": "CANCEL",
+              "legNo": 98765
+            }
+          ]
+        },
+        {
+          "solutionId": 9,
+          "solutionActions": [
+            {
+              "actionId": 1,
+              "actionType": "WAIT"
+            },
+            {
+              "actionId": 2,
+              "actionType": "WAIT"
+            },
+            {
+              "actionId": 3,
+              "actionType": "WAIT"
+            }
+          ]
         }
-    ]
-},
-    
-},
+      ]
+    },
+
+  },
   {
-    issueId:"123",
-    solutions:[
+    issueId: "123",
+    solutions: [
       {
-        solutionId:1,
-        solutionActions:[
+        solutionId: 1,
+        solutionActions: [
           {
-            actionType:"DELAY",
-            flightCarrier:"LH",
-            delayMinutes:75,
-            flightNo:"001",
-            departureAirport:"LHR",
-            arrivalAirport:"ABE",
-            legNo:1234
+            actionType: "DELAY",
+            flightCarrier: "LH",
+            delayMinutes: 75,
+            flightNo: "001",
+            departureAirport: "LHR",
+            arrivalAirport: "ABE",
+            legNo: 1234
           }
         ]
       },
       {
-        solutionId:2,
-        solutionActions:[
+        solutionId: 2,
+        solutionActions: [
           {
-            actionType:"DELAY",
-            flightCarrier:"LH",
-            delayMinutes:35,
-            flightNo:"001",
-            departureAirport:"LHR",
-            arrivalAirport:"ABE",
-            legNo:2345
+            actionType: "DELAY",
+            flightCarrier: "LH",
+            delayMinutes: 35,
+            flightNo: "001",
+            departureAirport: "LHR",
+            arrivalAirport: "ABE",
+            legNo: 2345
           }
         ]
       },
       {
-        solutionId:3,
-        solutionActions:[
+        solutionId: 3,
+        solutionActions: [
           {
-            actionType:"DELAY",
-            flightCarrier:"LH",
-            flightNo:"001",
-            delayMinutes:75,
-            departureAirport:"LHR",
-            arrivalAirport:"ABE",
-            legNo:1234
+            actionType: "DELAY",
+            flightCarrier: "LH",
+            flightNo: "001",
+            delayMinutes: 75,
+            departureAirport: "LHR",
+            arrivalAirport: "ABE",
+            legNo: 1234
           },
           {
-            actionType:"DELAY",
-            delayMinutes:35,
-            legNo:2345,
-            flightNo:"001",
-            departureAirport:"LHR",
-            arrivalAirport:"ABE",
-            flightCarrier:"LH",
-          }
-        ]
-      },
-       {
-        solutionId:4,
-        solutionActions:[
-          {
-            actionType:"CANCEL",
-            flightCarrier:"LH",
-            flightNo:"001",
-            departureAirport:"LHR",
-            arrivalAirport:"ABE",
-            legNo:1234
+            actionType: "DELAY",
+            delayMinutes: 35,
+            legNo: 2345,
+            flightNo: "001",
+            departureAirport: "LHR",
+            arrivalAirport: "ABE",
+            flightCarrier: "LH",
           }
         ]
       },
       {
-        solutionId:5,
-        solutionActions:[
+        solutionId: 4,
+        solutionActions: [
           {
-            actionType:"CANCEL",
-            flightCarrier:"LH",
-            flightNo:"001",
-            departureAirport:"LHR",
-            arrivalAirport:"ABE",
-            legNo:2345
+            actionType: "CANCEL",
+            flightCarrier: "LH",
+            flightNo: "001",
+            departureAirport: "LHR",
+            arrivalAirport: "ABE",
+            legNo: 1234
           }
         ]
       },
       {
-        solutionId:6,
-        solutionActions:[
+        solutionId: 5,
+        solutionActions: [
           {
-            actionType:"CANCEL",
-            flightCarrier:"LH",
-            flightNo:"001",
-            departureAirport:"LHR",
-            arrivalAirport:"ABE",
-            legNo:1234
+            actionType: "CANCEL",
+            flightCarrier: "LH",
+            flightNo: "001",
+            departureAirport: "LHR",
+            arrivalAirport: "ABE",
+            legNo: 2345
+          }
+        ]
+      },
+      {
+        solutionId: 6,
+        solutionActions: [
+          {
+            actionType: "CANCEL",
+            flightCarrier: "LH",
+            flightNo: "001",
+            departureAirport: "LHR",
+            arrivalAirport: "ABE",
+            legNo: 1234
           },
           {
-            actionType:"DELAY",
-            flightCarrier:"LH",
-            delayMinutes:35,
-            flightNo:"001",
-            departureAirport:"LHR",
-            arrivalAirport:"ABE",
-            legNo:2345
+            actionType: "DELAY",
+            flightCarrier: "LH",
+            delayMinutes: 35,
+            flightNo: "001",
+            departureAirport: "LHR",
+            arrivalAirport: "ABE",
+            legNo: 2345
           }
         ]
       },
       {
-        solutionId:7,
-        solutionActions:[
+        solutionId: 7,
+        solutionActions: [
           {
-            actionType:"DELAY",
-            flightCarrier:"LH",
-            flightNo:"001",
-            delayMinutes:75,
-            departureAirport:"LHR",
-            arrivalAirport:"ABE",
-            legNo:1234
+            actionType: "DELAY",
+            flightCarrier: "LH",
+            flightNo: "001",
+            delayMinutes: 75,
+            departureAirport: "LHR",
+            arrivalAirport: "ABE",
+            legNo: 1234
           },
           {
-            actionType:"CANCEL",
-            flightCarrier:"LH",
-            flightNo:"001",
-            departureAirport:"LHR",
-            arrivalAirport:"ABE",
-            legNo:2345
+            actionType: "CANCEL",
+            flightCarrier: "LH",
+            flightNo: "001",
+            departureAirport: "LHR",
+            arrivalAirport: "ABE",
+            legNo: 2345
           }
         ]
       },
       {
-        solutionId:8,
-        solutionActions:[
+        solutionId: 8,
+        solutionActions: [
           {
-            actionType:"CANCEL",
-            flightCarrier:"LH",
-            flightNo:"001",
-            departureAirport:"LHR",
-            arrivalAirport:"ABE",
-            legNo:1234
+            actionType: "CANCEL",
+            flightCarrier: "LH",
+            flightNo: "001",
+            departureAirport: "LHR",
+            arrivalAirport: "ABE",
+            legNo: 1234
           },
           {
-            actionType:"CANCEL",
-            flightCarrier:"LH",
-            flightNo:"001",
-            departureAirport:"LHR",
-            arrivalAirport:"ABE",
-            legNo:2345
+            actionType: "CANCEL",
+            flightCarrier: "LH",
+            flightNo: "001",
+            departureAirport: "LHR",
+            arrivalAirport: "ABE",
+            legNo: 2345
           }
         ]
       },
@@ -448,7 +489,7 @@ const issues = [
         legAdjustedArrival: "2024-01-27T13:30:00Z",
         legState: "ETD",
       },
-       {
+      {
         solutionType: "DELAY",
         legNo: 2003,
         legDelayTime: 60,
